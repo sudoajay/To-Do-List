@@ -33,14 +33,25 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.444"
-        app:srcCompat="@drawable/nothing_icon" />
+        app:srcCompat="@drawable/nothing_icon"
+        android:contentDescription="TODO" />
 
-    <Switch
-        android:id="@+id/switch1"
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/floatingActionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Switch"
-        tools:layout_editor_absoluteX="185dp"
-        tools:layout_editor_absoluteY="97dp" />
+        android:clickable="true"
+        app:backgroundTint="@color/colorPrimary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.901"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.938"
+        android:layout_gravity="bottom|end"
+        app:elevation="6dp"
+        app:pressedTranslationZ="12dp"
+        app:srcCompat="@drawable/plus_icon"
+        android:focusable="true" />
 
 </android.support.constraint.ConstraintLayout>

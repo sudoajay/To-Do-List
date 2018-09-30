@@ -4,4 +4,5 @@
     // nothing to show
 
     <string name="nothing_Text">Nothing To Do</string>
+    <string name="new_Task">New Task</string>
 </resources>
