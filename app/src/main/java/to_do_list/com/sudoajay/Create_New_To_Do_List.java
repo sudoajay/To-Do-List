@@ -1,25 +1,28 @@
 package to_do_list.com.sudoajay;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.speech.RecognizerIntent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.applandeo.materialcalendarview.CalendarView;
 import com.applandeo.materialcalendarview.DatePicker;
 import com.applandeo.materialcalendarview.builders.DatePickerBuilder;
 import com.applandeo.materialcalendarview.listeners.OnSelectDateListener;
 import com.jaredrummler.materialspinner.MaterialSpinner;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -30,7 +33,7 @@ public class Create_New_To_Do_List extends AppCompatActivity implements Material
     private ImageView mic_Image_View;
     private EditText enter_Task_Edit_Task,date_Edit_Text;
     private MaterialSpinner materialSpinner;
-    private OnSelectDateListener listener;
+   // private OnSelectDateListener listener;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,6 +69,16 @@ public class Create_New_To_Do_List extends AppCompatActivity implements Material
     public void On_Click_Process(View view){
         switch (view.getId()){
             case R.id.back_Image_View:onBackPressed();
+                break;
+            case R.id.save_Image_View:
+                if(date_Edit_Text.getText() == null || enter_Task_Edit_Task.getText().toString().equals("")){
+                        Toast.makeText(Create_New_To_Do_List.this,"Enter Task" ,Toast.LENGTH_SHORT).show();
+                }
+                else if(date_Edit_Text.getText() == null || date_Edit_Text.getText().toString().equals(""))
+                    Call_Custom_Dailog("Are You Sure To Save The Task ? With Today Date ?");
+                else{
+                    Call_Custom_Dailog("Are You Sure To Save The Task ?");
+                }
                 break;
             case R.id.date_Edit_Text:
             case R.id.calendar_Image_View:
@@ -118,29 +131,19 @@ public class Create_New_To_Do_List extends AppCompatActivity implements Material
     @SuppressLint("SimpleDateFormat")
     private void Calendar_Date_Setup(){
 
-        final DatePickerBuilder builder = new DatePickerBuilder(this, listener)
+         DatePickerBuilder builder = new DatePickerBuilder(this, listener)
                 .pickerType(CalendarView.ONE_DAY_PICKER)
                 .date(Calendar.getInstance());
 
         DatePicker datePicker = builder.build();
 
-
-        listener = new OnSelectDateListener() {
-            @Override
-            public void onSelect(List<Calendar> calendars) {
-                for (Calendar text:calendars){
-                    Log.i("messageit" , text+"" );
-                }
-                date_Edit_Text.setText(calendars.get(0)+"");
-            }
-        };
-
         datePicker.show();
+
     }
 
     private void Setup_Spinner(){
         List<String> dataset = new LinkedList<>(Arrays.asList(
-                "Once", "Daily", "Mon to fri", "Sat and Sun", "Custom"));
+                "Once", "Daily", "Mon to fri", "Sat and Sun"));
         materialSpinner.setItems(dataset);
         materialSpinner.setOnItemSelectedListener(this);
     }
@@ -149,5 +152,52 @@ public class Create_New_To_Do_List extends AppCompatActivity implements Material
     public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
         Toast.makeText(this , position+"",Toast.LENGTH_LONG).show();
     }
+    private OnSelectDateListener listener = new OnSelectDateListener() {
+        @Override
+        public void onSelect(List<Calendar> calendars) {
 
+            Calendar current_Time = Calendar.getInstance();
+            int current_Day = current_Time.get(Calendar.DAY_OF_MONTH);
+
+            int last_Modified_Day = calendars.get(0).get(Calendar.DAY_OF_MONTH);
+
+                if (current_Day == last_Modified_Day) date_Edit_Text.setText(getResources().getString(R.string.today_Date));
+                else if (current_Day == (last_Modified_Day - 1)) date_Edit_Text.setText(getResources().getString(R.string.yesterday_Date));
+                else {
+                @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+
+                Date find_Date = calendars.get(0).getTime();
+
+                String date = sdf.format(find_Date);
+                date_Edit_Text.setText(date);
+            }
+        }
+    };
+
+    public void Call_Custom_Dailog(String Message) {
+
+        final Dialog dialog = new Dialog(this);
+        dialog.setCancelable(true);
+        dialog.setContentView(R.layout.activity_custom_save_dialog);
+        TextView text_Message = dialog.findViewById(R.id.text_Message);
+        text_Message.setText(Message);
+        TextView button_No = dialog.findViewById(R.id.button_No);
+        TextView button_Yes = dialog.findViewById(R.id.button_Yes);
+        // if button is clicked, close the custom dialog
+
+        button_Yes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                    onBackPressed();
+                dialog.dismiss();
+            }
+        });
+        button_No.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+    }
 }

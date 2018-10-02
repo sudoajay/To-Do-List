@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#f7f6f6"
+    android:background="#f2f2f2"
     tools:context=".Create_New_To_Do_List">
 
     <android.support.v7.widget.Toolbar
@@ -51,7 +51,7 @@
                 tools:ignore="RtlSymmetry" />
 
             <ImageView
-                android:id="@+id/back_Image_View2"
+                android:id="@+id/save_Image_View"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
