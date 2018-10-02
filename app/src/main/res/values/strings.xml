@@ -11,8 +11,15 @@
     <string name="Enter_Task_Question">What is new Task ? </string>
     <string name="Enter_Task_Answer">Enter New Task</string>
     <string name="Enter_Date_Question">What will be the Date ? (Optional)</string>
+    <string name="repeat_Question">You Want To Repeat ? (Optional)</string>
     <string name="Enter_Date_Answer">Set Date</string>
     <string name="calender_icon">Calender_icon</string>
+
+    // Edit Date Text
+    <string name="today_Date">Today</string>
+
+    // spinner heading
+    <string name="spinner_title">Repeat Spinner</string>
 
     // calendar picker
     <string name="material_calendar_monday">M</string>

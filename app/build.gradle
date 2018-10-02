@@ -29,4 +29,6 @@ dependencies {
 
     //outside Library
     implementation 'com.applandeo:material-calendar-view:1.4.0'
+    implementation 'com.jaredrummler:material-spinner:1.2.5'
+
 }

@@ -7,31 +7,30 @@ import android.speech.RecognizerIntent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
-
 import com.applandeo.materialcalendarview.CalendarView;
 import com.applandeo.materialcalendarview.DatePicker;
-import com.applandeo.materialcalendarview.EventDay;
 import com.applandeo.materialcalendarview.builders.DatePickerBuilder;
-import com.applandeo.materialcalendarview.listeners.OnDayClickListener;
 import com.applandeo.materialcalendarview.listeners.OnSelectDateListener;
-
-import java.text.SimpleDateFormat;
+import com.jaredrummler.materialspinner.MaterialSpinner;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
-public class Create_New_To_Do_List extends AppCompatActivity {
-
-    public static final int VOICE_RECOGNITION_REQUEST_CODE = 1234;
+public class Create_New_To_Do_List extends AppCompatActivity implements MaterialSpinner.OnItemSelectedListener {
 
     // Globally Variable
+    public static final int VOICE_RECOGNITION_REQUEST_CODE = 1234;
     private ImageView mic_Image_View;
     private EditText enter_Task_Edit_Task,date_Edit_Text;
+    private MaterialSpinner materialSpinner;
+    private OnSelectDateListener listener;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +57,10 @@ public class Create_New_To_Do_List extends AppCompatActivity {
             Toast.makeText(this , "Recognizer not present" , Toast.LENGTH_LONG).show();
         }
 
+        // Setup Custom Spinner
+        Setup_Spinner();
+
+
     }
     // all on click bustton come here .. or you say on click Listener
     public void On_Click_Process(View view){
@@ -70,14 +73,26 @@ public class Create_New_To_Do_List extends AppCompatActivity {
                 break;
         }
     }
-    public void Reference(){
+    @SuppressLint("ClickableViewAccessibility")
+    private void Reference(){
         // all id Reference here
         mic_Image_View = findViewById(R.id.mic_Image_View);
         enter_Task_Edit_Task = findViewById(R.id.enter_Task_Edit_Task);
         date_Edit_Text = findViewById(R.id.date_Edit_Text);
+        materialSpinner = findViewById(R.id.materialSpinner);
+
+        // date edit task seton touch
+        date_Edit_Text.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                Calendar_Date_Setup();
+                return true;
+            }
+        });
+
     }
 
-    public void startVoiceRecognitionActivity() {
+    private void startVoiceRecognitionActivity() {
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
                 RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
@@ -95,35 +110,44 @@ public class Create_New_To_Do_List extends AppCompatActivity {
             // could have heard
             ArrayList matches = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
             enter_Task_Edit_Task.setText(matches.get(0)+ "");
-            // matches is the result of voice input. It is a list of what the
-            // user possibly said.
-            // Using an if statement for the keyword you want to use allows the
-            // use of any activity if keywords match
-            // it is possible to set up multiple keywords to use the same
-            // activity so more than one word will allow the user
-            // to use the activity (makes it so the user doesn't have to
-            // memorize words from a list)
-            // to use an activity from the voice input information simply use
-            // the following format;
-            // if (matches.contains("keyword here") { startActivity(new
-            // Intent("name.of.manifest.ACTIVITY")
+
 
 
         }
     }
     @SuppressLint("SimpleDateFormat")
-    public void Calendar_Date_Setup(){
+    private void Calendar_Date_Setup(){
 
         final DatePickerBuilder builder = new DatePickerBuilder(this, listener)
-                .pickerType(CalendarView.ONE_DAY_PICKER);
+                .pickerType(CalendarView.ONE_DAY_PICKER)
+                .date(Calendar.getInstance());
+
         DatePicker datePicker = builder.build();
+
+
+        listener = new OnSelectDateListener() {
+            @Override
+            public void onSelect(List<Calendar> calendars) {
+                for (Calendar text:calendars){
+                    Log.i("messageit" , text+"" );
+                }
+                date_Edit_Text.setText(calendars.get(0)+"");
+            }
+        };
+
         datePicker.show();
-
     }
-    private OnSelectDateListener listener = new OnSelectDateListener() {
-        @Override
-        public void onSelect(List<Calendar> calendars) {
 
-        }
-    };
+    private void Setup_Spinner(){
+        List<String> dataset = new LinkedList<>(Arrays.asList(
+                "Once", "Daily", "Mon to fri", "Sat and Sun", "Custom"));
+        materialSpinner.setItems(dataset);
+        materialSpinner.setOnItemSelectedListener(this);
+    }
+
+    @Override
+    public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
+        Toast.makeText(this , position+"",Toast.LENGTH_LONG).show();
+    }
+
 }

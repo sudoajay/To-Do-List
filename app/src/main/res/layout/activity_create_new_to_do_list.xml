@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#f7f6f6"
     tools:context=".Create_New_To_Do_List">
 
     <android.support.v7.widget.Toolbar
@@ -41,7 +42,7 @@
                 android:layout_gravity="start"
                 android:layout_marginEnd="150dp"
                 android:layout_marginRight="150dp"
-                android:fontFamily="serif"
+                android:fontFamily="sans-serif"
                 android:paddingEnd="30dp"
                 android:paddingRight="30dp"
                 android:text="@string/new_Task"
@@ -73,6 +74,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:text="@string/Enter_Task_Question"
+        android:textColor="#000"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -88,6 +90,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:text="@string/Enter_Date_Question"
+        android:textColor="#000"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -95,6 +98,22 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.415" />
+
+    <TextView
+        android:id="@+id/date_Text_View2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:text="@string/repeat_Question"
+        android:textColor="#000"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.645" />
 
     <EditText
         android:id="@+id/enter_Task_Edit_Task"
@@ -120,6 +139,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="2dp"
         android:ems="10"
@@ -131,8 +151,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.479"
-        android:layout_marginLeft="16dp" />
+        app:layout_constraintVertical_bias="0.479" />
 
     <ImageView
         android:id="@+id/mic_Image_View"
@@ -162,5 +181,32 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.482"
         app:srcCompat="@drawable/calendar_icon" />
+
+    <ImageView
+        android:id="@+id/empty_Image_View"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="On_Click_Process"
+        android:padding="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.722" />
+
+    <com.jaredrummler.materialspinner.MaterialSpinner
+        android:id="@+id/materialSpinner"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/empty_Image_View"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.734"
+        android:layout_marginLeft="16dp" />
 
 </android.support.constraint.ConstraintLayout>
