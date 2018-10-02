@@ -2,7 +2,43 @@
     <string name="app_name">To Do List</string>
 
     // nothing to show
-
     <string name="nothing_Text">Nothing To Do</string>
+
+    // Create New To do Class
     <string name="new_Task">New Task</string>
+    <string name="back">Back Image</string>
+    <string name="done">Done Image</string>
+    <string name="Enter_Task_Question">What is new Task ? </string>
+    <string name="Enter_Task_Answer">Enter New Task</string>
+    <string name="Enter_Date_Question">What will be the Date ? (Optional)</string>
+    <string name="Enter_Date_Answer">Set Date</string>
+    <string name="calender_icon">Calender_icon</string>
+
+    // calendar picker
+    <string name="material_calendar_monday">M</string>
+    <string name="material_calendar_tuesday">T</string>
+    <string name="material_calendar_wednesday">W</string>
+    <string name="material_calendar_thursday">T</string>
+    <string name="material_calendar_friday">F</string>
+    <string name="material_calendar_saturday">S</string>
+    <string name="material_calendar_sunday">S</string>
+
+    <array name="material_calendar_months_array">
+        <item>January</item>
+        <item>February</item>
+        <item>March</item>
+        <item>April</item>
+        <item>May</item>
+        <item>June</item>
+        <item>July</item>
+        <item>August</item>
+        <item>September</item>
+        <item>October</item>
+        <item>November</item>
+        <item>December</item>
+    </array>
+
+    <string name="material_calendar_today_button">Today</string>
+    <string name="material_calendar_positive_button">OK</string>
+    <string name="material_calendar_negative_button">Cancel</string>
 </resources>

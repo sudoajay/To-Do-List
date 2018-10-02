@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // use Intent to pass on Create new Activity
-                Intent intent = new Intent(getApplicationContext(),Create_New_To_Do_Lsit.class);
+                Intent intent = new Intent(getApplicationContext(),Create_New_To_Do_List.class);
                 startActivity(intent);
 
             }
