@@ -25,6 +25,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import to_do_list.com.sudoajay.DataBase.DataBase;
 
 public class Create_New_To_Do_List extends AppCompatActivity implements MaterialSpinner.OnItemSelectedListener {
 
@@ -33,6 +34,9 @@ public class Create_New_To_Do_List extends AppCompatActivity implements Material
     private ImageView mic_Image_View;
     private EditText enter_Task_Edit_Task,date_Edit_Text;
     private MaterialSpinner materialSpinner;
+    private DataBase dataBase;
+    private List<String> dataset_For_Repeat;
+    private int repeat_Count=0;
    // private OnSelectDateListener listener;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +98,10 @@ public class Create_New_To_Do_List extends AppCompatActivity implements Material
         date_Edit_Text = findViewById(R.id.date_Edit_Text);
         materialSpinner = findViewById(R.id.materialSpinner);
 
+        // create object of database
+        dataBase= new DataBase(this);
+
+
         // date edit task seton touch
         date_Edit_Text.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -142,15 +150,16 @@ public class Create_New_To_Do_List extends AppCompatActivity implements Material
     }
 
     private void Setup_Spinner(){
-        List<String> dataset = new LinkedList<>(Arrays.asList(
+         dataset_For_Repeat = new LinkedList<>(Arrays.asList(
                 "Once", "Daily", "Mon to fri", "Sat and Sun"));
-        materialSpinner.setItems(dataset);
+
+        materialSpinner.setItems(dataset_For_Repeat);
         materialSpinner.setOnItemSelectedListener(this);
     }
 
     @Override
     public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
-        Toast.makeText(this , position+"",Toast.LENGTH_LONG).show();
+        repeat_Count =position;
     }
     private OnSelectDateListener listener = new OnSelectDateListener() {
         @Override
@@ -188,6 +197,9 @@ public class Create_New_To_Do_List extends AppCompatActivity implements Material
         button_Yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // fill in database
+                if(date_Edit_Text.getText().toString().equals(""))date_Edit_Text.setText(getResources().getString(R.string.today_Date));
+                dataBase.Fill_It(enter_Task_Edit_Task.getText().toString(),date_Edit_Text.getText().toString(),get_Repeat());
                     onBackPressed();
                 dialog.dismiss();
             }
@@ -200,4 +212,14 @@ public class Create_New_To_Do_List extends AppCompatActivity implements Material
         });
         dialog.show();
     }
+    public String get_Repeat(){
+        switch (repeat_Count){
+            case 0:return dataset_For_Repeat.get(0);
+            case 1:return dataset_For_Repeat.get(1);
+            case 2:return dataset_For_Repeat.get(2);
+            case 3:return dataset_For_Repeat.get(3);
+        }
+        return null;
+    }
+
 }
