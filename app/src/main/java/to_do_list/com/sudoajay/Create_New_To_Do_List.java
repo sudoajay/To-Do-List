@@ -37,6 +37,7 @@ public class Create_New_To_Do_List extends AppCompatActivity implements Material
     private DataBase dataBase;
     private List<String> dataset_For_Repeat;
     private int repeat_Count=0;
+    private  String set_Date;
    // private OnSelectDateListener listener;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -169,16 +170,15 @@ public class Create_New_To_Do_List extends AppCompatActivity implements Material
             int current_Day = current_Time.get(Calendar.DAY_OF_MONTH);
 
             int last_Modified_Day = calendars.get(0).get(Calendar.DAY_OF_MONTH);
+            @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 
+            Date find_Date = calendars.get(0).getTime();
+
+            set_Date = sdf.format(find_Date);
                 if (current_Day == last_Modified_Day) date_Edit_Text.setText(getResources().getString(R.string.today_Date));
                 else if (current_Day == (last_Modified_Day - 1)) date_Edit_Text.setText(getResources().getString(R.string.yesterday_Date));
                 else {
-                @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-
-                Date find_Date = calendars.get(0).getTime();
-
-                String date = sdf.format(find_Date);
-                date_Edit_Text.setText(date);
+                date_Edit_Text.setText(set_Date);
             }
         }
     };
@@ -198,7 +198,7 @@ public class Create_New_To_Do_List extends AppCompatActivity implements Material
             @Override
             public void onClick(View v) {
                 // fill in database
-                if(date_Edit_Text.getText().toString().equals(""))date_Edit_Text.setText(getResources().getString(R.string.today_Date));
+                date_Edit_Text.setText(set_Date);
                 dataBase.Fill_It(enter_Task_Edit_Task.getText().toString(),date_Edit_Text.getText().toString(),get_Repeat());
                     onBackPressed();
                 dialog.dismiss();
@@ -221,5 +221,4 @@ public class Create_New_To_Do_List extends AppCompatActivity implements Material
         }
         return null;
     }
-
 }

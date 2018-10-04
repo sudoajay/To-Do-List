@@ -11,6 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="serif"
+        android:onClick="On_Click_Process"
         android:text="@string/nothing_Text"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -23,35 +24,48 @@
         app:layout_constraintVertical_bias="0.576" />
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/nothing_Image_View"
         android:layout_width="117dp"
         android:layout_height="72dp"
         android:alpha="0.6"
+        android:contentDescription="TODO"
+        android:onClick="On_Click_Process"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.444"
-        app:srcCompat="@drawable/nothing_icon"
-        android:contentDescription="TODO" />
+        app:srcCompat="@drawable/nothing_icon" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/floatingActionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
         android:clickable="true"
+        android:focusable="true"
+        android:onClick="On_Click_Process"
         app:backgroundTint="@color/colorPrimary"
+        app:elevation="6dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.901"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.938"
-        android:layout_gravity="bottom|end"
-        app:elevation="6dp"
         app:pressedTranslationZ="12dp"
-        app:srcCompat="@drawable/plus_icon"
-        android:focusable="true" />
+        app:srcCompat="@drawable/plus_icon" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_View"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
 </android.support.constraint.ConstraintLayout>
