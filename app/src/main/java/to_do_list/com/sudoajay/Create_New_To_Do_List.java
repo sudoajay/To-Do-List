@@ -68,6 +68,8 @@ public class Create_New_To_Do_List extends AppCompatActivity implements Material
         // Setup Custom Spinner
         Setup_Spinner();
 
+        // Setup Current Date
+        Setup_Current();
 
     }
     // all on click bustton come here .. or you say on click Listener
@@ -90,6 +92,17 @@ public class Create_New_To_Do_List extends AppCompatActivity implements Material
                 Calendar_Date_Setup();
                 break;
         }
+    }
+    private void Setup_Current(){
+
+        Calendar current_Time = Calendar.getInstance();
+
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+
+        Date find_Date = current_Time.getTime();
+
+        set_Date = sdf.format(find_Date);
+
     }
     @SuppressLint("ClickableViewAccessibility")
     private void Reference(){
@@ -175,6 +188,7 @@ public class Create_New_To_Do_List extends AppCompatActivity implements Material
             Date find_Date = calendars.get(0).getTime();
 
             set_Date = sdf.format(find_Date);
+            Toast.makeText(Create_New_To_Do_List.this, set_Date+"",Toast.LENGTH_LONG).show();
                 if (current_Day == last_Modified_Day) date_Edit_Text.setText(getResources().getString(R.string.today_Date));
                 else if (current_Day == (last_Modified_Day - 1)) date_Edit_Text.setText(getResources().getString(R.string.yesterday_Date));
                 else {
