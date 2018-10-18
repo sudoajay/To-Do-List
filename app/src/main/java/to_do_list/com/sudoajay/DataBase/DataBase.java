@@ -61,13 +61,17 @@ public class DataBase extends SQLiteOpenHelper {
         SQLiteDatabase db=this.getWritableDatabase();
         return db.delete(DATABASE_TABLE_NAME,"ID = ?",new String[] {id});
     }
-    public Cursor Specified_Row(String id){
+    public Cursor Get_The_Value_From_Id(String id){
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         return sqLiteDatabase.rawQuery("select * from Database_Table WHERE ID ="+id,null);
     }
     public Cursor Get_All_Data(){
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         return sqLiteDatabase.rawQuery("select * from Database_Table",null);
+    }
+    public Cursor Specified_Row(int id){
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        return sqLiteDatabase.rawQuery("select Date from Database_Table ",null);
     }
 
     public void Update_The_Table(String id , String Task , String Date ,String  Repeat  ){
@@ -79,5 +83,6 @@ public class DataBase extends SQLiteOpenHelper {
         contentValues.put(col_4,Repeat);
         sqLiteDatabase.update(DATABASE_TABLE_NAME,contentValues,"ID = ?",new String[] { id });
     }
+
 
 }

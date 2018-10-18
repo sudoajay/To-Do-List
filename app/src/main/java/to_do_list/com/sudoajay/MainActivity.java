@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
         check_Box_Array= new ArrayList<>();
 
         // Grab & Setup
-        Grab_And_Setup_Database();
+      //  Grab_And_Setup_Database();
     }
     private void Grab_And_Setup_Database() {
 
@@ -140,10 +140,10 @@ public class MainActivity extends AppCompatActivity {
             return date_Array;
         }
         private void  Fill_The_Adapter(int id){
-            Cursor cursor = dataBase.Specified_Row(id+"");
-            if(cursor.moveToFirst()) {
-                task_Name.add( cursor.getString(1)+"");
-                check_Box_Array.add(false);
-            }
+//            Cursor cursor = dataBase.Specified_Row(id+"");
+//            if(cursor.moveToFirst()) {
+//                task_Name.add( cursor.getString(1)+"");
+//                check_Box_Array.add(false);
+//            }
         }
 }

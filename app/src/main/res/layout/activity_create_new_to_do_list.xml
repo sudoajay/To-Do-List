@@ -102,7 +102,7 @@
     <TextView
         android:id="@+id/date_Text_View2"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="22dp"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:text="@string/repeat_Question"
@@ -113,7 +113,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.645" />
+        app:layout_constraintVertical_bias="0.721" />
 
     <EditText
         android:id="@+id/enter_Task_Edit_Task"
@@ -124,6 +124,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:ems="10"
+        android:focusable="false"
         android:hint="@string/Enter_Task_Answer"
         android:inputType="textPersonName"
         android:onClick="On_Click_Process"
@@ -143,7 +144,8 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="2dp"
         android:ems="10"
-        android:hint="@string/Enter_Date_Answer"
+        android:focusable="false"
+        android:hint="@string/Enter_Day_Answer"
         android:inputType="text|number|datetime|date|time"
         android:onClick="On_Click_Process"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -152,6 +154,25 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.479" />
+
+    <EditText
+        android:id="@+id/time_Edit_Text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="2dp"
+        android:ems="10"
+        android:hint="@string/Enter_Date_Answer"
+        android:inputType="text|number|datetime|date|time"
+        android:onClick="On_Click_Process"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/calendar_Image_View"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.587" />
 
     <ImageView
         android:id="@+id/mic_Image_View"
@@ -174,6 +195,7 @@
         android:layout_marginRight="10dp"
         android:contentDescription="@string/calender_icon"
         android:onClick="On_Click_Process"
+        android:padding="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
@@ -181,6 +203,25 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.482"
         app:srcCompat="@drawable/calendar_icon" />
+
+    <ImageView
+        android:id="@+id/time_Image_View"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="10dp"
+        android:contentDescription="@string/timer_icon"
+        android:onClick="On_Click_Process"
+        android:paddingLeft="10dp"
+        android:paddingTop="5dp"
+        android:paddingRight="5dp"
+        android:paddingBottom="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.58"
+        app:srcCompat="@drawable/time_icon" />
 
     <ImageView
         android:id="@+id/empty_Image_View"
@@ -193,20 +234,21 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.722" />
+        app:layout_constraintVertical_bias="0.814" />
 
-    <com.jaredrummler.materialspinner.MaterialSpinner
-        android:id="@+id/materialSpinner"
-        android:layout_width="0dp"
+
+    <com.dpro.widgets.WeekdaysPicker
+        android:id="@+id/weekdays"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
+        android:layout_marginBottom="16dp"
+        app:enabled="true"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/empty_Image_View"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.346"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.734"
-        android:layout_marginLeft="16dp" />
+        app:layout_constraintVertical_bias="0.839"
+        app:sunday_first_day="false" />
 
 </android.support.constraint.ConstraintLayout>
