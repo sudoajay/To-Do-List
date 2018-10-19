@@ -124,7 +124,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:ems="10"
-        android:focusable="false"
+        android:focusable="true"
         android:hint="@string/Enter_Task_Answer"
         android:inputType="textPersonName"
         android:onClick="On_Click_Process"
@@ -163,6 +163,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="2dp"
+        android:focusable="false"
         android:ems="10"
         android:hint="@string/Enter_Date_Answer"
         android:inputType="text|number|datetime|date|time"
@@ -223,32 +224,19 @@
         app:layout_constraintVertical_bias="0.58"
         app:srcCompat="@drawable/time_icon" />
 
-    <ImageView
-        android:id="@+id/empty_Image_View"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="On_Click_Process"
-        android:padding="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.814" />
-
 
     <com.dpro.widgets.WeekdaysPicker
         android:id="@+id/weekdays"
-        android:layout_width="wrap_content"
+        android:layout_width="299dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         app:enabled="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.346"
+        app:layout_constraintHorizontal_bias="0.17"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.839"
+        app:layout_constraintVertical_bias="0.829"
         app:sunday_first_day="false" />
 
 </android.support.constraint.ConstraintLayout>

@@ -36,8 +36,9 @@ public class Create_New_To_Do_List extends AppCompatActivity {
     private ImageView mic_Image_View;
     private EditText enter_Task_Edit_Task,time_Edit_Text,date_Edit_Text;
     private DataBase dataBase;
-    private List<String> dataset_For_Repeat;
-    private int repeat_Position=0;
+    private WeekdaysPicker weekdays;
+    private String get_Selected_Date;
+
 
     // private OnSelectDateListener listener;
     @Override
@@ -65,15 +66,6 @@ public class Create_New_To_Do_List extends AppCompatActivity {
             mic_Image_View.setEnabled(false);
             Toast.makeText(this , "Recognizer not present" , Toast.LENGTH_LONG).show();
         }
-
-        // Setup Custom Spinner
-          Setup_Spinner();
-
-        WeekdaysPicker widget =  findViewById(R.id.weekdays);
-        List<Integer> days = Arrays.asList(Calendar.SUNDAY, Calendar.SATURDAY);
-
-        widget.setSelectedDays(days);
-
 
     }
     // all on click bustton come here .. or you say on click Listener
@@ -109,28 +101,21 @@ public class Create_New_To_Do_List extends AppCompatActivity {
                             public void onDateSet(DatePicker view, int year,
                                                   int monthOfYear, int dayOfMonth) {
 
-                                        String set_Date = dayOfMonth+"-"+monthOfYear+"-"+year;
-                                        Toast.makeText(Create_New_To_Do_List.this, set_Date+"",Toast.LENGTH_LONG).show();
+                                         get_Selected_Date = dayOfMonth+"-"+monthOfYear+"-"+year;
+                                            date_Edit_Text.setText(get_Selected_Date);
                                         if((mYear ==year) && (mMonth ==monthOfYear)) {
                                             if (mDay == dayOfMonth)
                                                 date_Edit_Text.setText(getResources().getString(R.string.today_Date));
-                                            else if (mDay == (dayOfMonth - 1))
+                                            else if ((mDay-1) == dayOfMonth)
                                                 date_Edit_Text.setText(getResources().getString(R.string.yesterday_Date));
-                                        }  else {
-                                            date_Edit_Text.setText(set_Date);
                                         }
-
-                                date_Edit_Text.setText(dayOfMonth+"-"+monthOfYear+"-"+year);
-
+                                Toast.makeText(Create_New_To_Do_List.this, date_Edit_Text.getText().toString(),Toast.LENGTH_LONG).show();
                             }
                         }, mYear, mMonth, mDay);
                 datePickerDialog.setIcon(R.drawable.done_icon);
                 datePickerDialog.setTitle("Please select Date.");
 
                 datePickerDialog.show();
-
-
-
 
                 break;
             case R.id.time_Edit_Text:
@@ -177,8 +162,14 @@ public class Create_New_To_Do_List extends AppCompatActivity {
         enter_Task_Edit_Task = findViewById(R.id.enter_Task_Edit_Task);
         date_Edit_Text = findViewById(R.id.date_Edit_Text);
         time_Edit_Text = findViewById(R.id.time_Edit_Text);
+        weekdays =  findViewById(R.id.weekdays);
+
         // create object of database
         dataBase= new DataBase(this);
+
+        // setup weekdays selector
+        List<Integer> days = Arrays.asList(Calendar.SUNDAY, Calendar.SATURDAY);
+        weekdays.setSelectedDays(days);
 
     }
 
@@ -205,13 +196,6 @@ public class Create_New_To_Do_List extends AppCompatActivity {
 
         }
     }
-    private void Setup_Spinner(){
-         dataset_For_Repeat = new LinkedList<>(Arrays.asList(
-                "Once", "Daily", "Mon to fri", "Sat and Sun","Custom"));
-
-    }
-
-
 
     public void Call_Custom_Dailog(String Message) {
 
@@ -228,7 +212,8 @@ public class Create_New_To_Do_List extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // fill in database
-                dataBase.Fill_It(enter_Task_Edit_Task.getText().toString(),date_Edit_Text.getText().toString(),get_Repeat());
+                dataBase.Fill_It(enter_Task_Edit_Task.getText().toString(),get_Selected_Date,
+                        time_Edit_Text.getText().toString(),get_Repeat());
                     onBackPressed();
                 dialog.dismiss();
             }
@@ -242,15 +227,12 @@ public class Create_New_To_Do_List extends AppCompatActivity {
         dialog.show();
     }
     public String get_Repeat(){
-        switch (repeat_Position){
-            case 0:return dataset_For_Repeat.get(0);
-            case 1:return dataset_For_Repeat.get(1);
-            case 2:return dataset_For_Repeat.get(2);
-            case 3:return dataset_For_Repeat.get(3);
-            case 4:return dataset_For_Repeat.get(4);
-
+        List<Integer> weekday = weekdays.getSelectedDays();
+        String join="";
+        for(Integer week: weekday){
+            join+=week+"";
         }
-        return null;
+        return join;
     }
 
 

@@ -51,4 +51,12 @@
     <string name="material_calendar_today_button">Today</string>
     <string name="material_calendar_positive_button">OK</string>
     <string name="material_calendar_negative_button">Cancel</string>
+
+    // bottom navigation view
+    <string name="overdue_Bottom_Navigation">Overdue</string>
+    <string name="today_Bottom_Navigation">Today</string>
+    <string name="overdo_Bottom_Navigation">Overdo</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
