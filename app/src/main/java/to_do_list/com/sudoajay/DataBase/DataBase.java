@@ -19,6 +19,8 @@ public class DataBase extends SQLiteOpenHelper {
     public static final String col_3 = "Date";
     public static final String col_4 = "Time";
     public static final String col_5 = "Repeat";
+    public static final String col_6 = "Finish_Date";
+
 
     public DataBase(Context context  )
     {
@@ -28,7 +30,7 @@ public class DataBase extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("create table " + DATABASE_TABLE_NAME + "(ID INTEGER PRIMARY KEY AUTOINCREMENT , " +
-                "Task TEXT,Date Text,Time Text,Repeat Text)");
+                "Task TEXT,Date Text,Time Text,Repeat Text , Finish_Date Text)");
 
     }
 
@@ -37,13 +39,14 @@ public class DataBase extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + DATABASE_TABLE_NAME);
         onCreate(db);
     }
-    public void Fill_It(String Task , String Date ,String Time ,String  Repeat ){
+    public void Fill_It(String Task , String Date ,String Time ,String  Repeat ,String Finish_Date){
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(col_2,Task);
         contentValues.put(col_3,Date);
         contentValues.put(col_4,Time);
         contentValues.put(col_5,Repeat);
+        contentValues.put(col_6,Finish_Date);
         sqLiteDatabase.insert(DATABASE_TABLE_NAME,null,contentValues);
     }
     public boolean check_For_Empty(){
@@ -77,7 +80,7 @@ public class DataBase extends SQLiteOpenHelper {
         return sqLiteDatabase.rawQuery("select Date from Database_Table ",null);
     }
 
-    public void Update_The_Table(String id , String Task , String Date,String Time ,String  Repeat  ){
+    public void Update_The_Table(String id , String Task , String Date,String Time ,String  Repeat,String Finish_Date  ){
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(col_1,id);
@@ -85,6 +88,7 @@ public class DataBase extends SQLiteOpenHelper {
         contentValues.put(col_3,Date);
         contentValues.put(col_4,Time);
         contentValues.put(col_5,Repeat);
+        contentValues.put(col_6,Finish_Date);
         sqLiteDatabase.update(DATABASE_TABLE_NAME,contentValues,"ID = ?",new String[] { id });
     }
 

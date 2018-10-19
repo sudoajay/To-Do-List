@@ -108,6 +108,8 @@ public class Create_New_To_Do_List extends AppCompatActivity {
                                                 date_Edit_Text.setText(getResources().getString(R.string.today_Date));
                                             else if ((mDay-1) == dayOfMonth)
                                                 date_Edit_Text.setText(getResources().getString(R.string.yesterday_Date));
+                                            else if ((mDay+1) == dayOfMonth)
+                                                date_Edit_Text.setText(getResources().getString(R.string.tomorrow_Date));
                                         }
                                 Toast.makeText(Create_New_To_Do_List.this, date_Edit_Text.getText().toString(),Toast.LENGTH_LONG).show();
                             }
@@ -211,9 +213,16 @@ public class Create_New_To_Do_List extends AppCompatActivity {
         button_Yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // if date and time is empty
+                final Calendar c = Calendar.getInstance();
+                if(date_Edit_Text.getText().toString().equals(""))
+                    get_Selected_Date = c.get(Calendar.DAY_OF_MONTH) + "-" + c.get(Calendar.MONTH) + "-" + c.get(Calendar.YEAR);
+                if(time_Edit_Text.getText().toString().equals(""))
+                    time_Edit_Text.setText(null);
+
                 // fill in database
                 dataBase.Fill_It(enter_Task_Edit_Task.getText().toString(),get_Selected_Date,
-                        time_Edit_Text.getText().toString(),get_Repeat());
+                        time_Edit_Text.getText().toString(),get_Repeat(),null);
                     onBackPressed();
                 dialog.dismiss();
             }

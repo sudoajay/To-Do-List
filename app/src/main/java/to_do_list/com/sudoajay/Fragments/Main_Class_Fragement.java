@@ -18,11 +18,13 @@ public class Main_Class_Fragement extends Fragment {
 
     // global variable
     private MainActivity main_Activity;
+    private String which_Tab;
     public Main_Class_Fragement() {
         // Required empty public constructor
     }
-    public Main_Class_Fragement createInstance(MainActivity main_Activity  ) {
+    public Main_Class_Fragement createInstance(MainActivity main_Activity ,String which_Tab ) {
         this.main_Activity = main_Activity;
+        this.which_Tab = which_Tab;
         return this;
     }
 

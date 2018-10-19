@@ -20,6 +20,7 @@
     // Edit Date Text
     <string name="today_Date">Today</string>
     <string name="yesterday_Date">Yesterday</string>
+    <string name="tomorrow_Date">Tomorrow</string>
 
     // spinner heading
     <string name="spinner_title">Repeat Spinner</string>
