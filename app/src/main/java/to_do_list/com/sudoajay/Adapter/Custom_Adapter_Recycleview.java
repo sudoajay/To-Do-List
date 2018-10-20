@@ -33,7 +33,8 @@ public class Custom_Adapter_Recycleview extends RecyclerView.Adapter<Custom_Adap
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, @SuppressLint("RecyclerView") final int position) {
         // set the data in items
-        holder.text_View.setText(task_Name.get(position));
+        holder.task_Name_Text_View.setText(task_Name.get(position));
+        holder.task_Info_Text_View.setText("Sunday , 10-oct-18 , 1:32 pm ");
         holder.check_Box.setChecked(check_Box_Array.get(position));
         // implement setOnClickListener event on item view.
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -49,12 +50,13 @@ public class Custom_Adapter_Recycleview extends RecyclerView.Adapter<Custom_Adap
         return task_Name.size();
     }
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        private TextView text_View;// init the item view's
+        private TextView task_Name_Text_View,task_Info_Text_View;// init the item view's
         private CheckBox check_Box;
         public MyViewHolder(View itemView) {
             super(itemView);
             // get the reference of item view's
-            text_View = itemView.findViewById(R.id.text_View);
+            task_Name_Text_View = itemView.findViewById(R.id.task_Name_Text_View);
+            task_Info_Text_View = itemView.findViewById(R.id.task_Info_Text_View);
             check_Box= itemView.findViewById(R.id.check_Box);
         }
     }

@@ -93,29 +93,38 @@ public class Create_New_To_Do_List extends AppCompatActivity {
                 final int mDay = c.get(Calendar.DAY_OF_MONTH);
 
 
-                DatePickerDialog datePickerDialog = new DatePickerDialog(this,android.R.style.Theme_Holo_Dialog,
-                        new DatePickerDialog.OnDateSetListener() {
+                DatePickerDialog datePickerDialog;
+                int theme;
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                        theme = android.R.style.Theme_Material_Light_Dialog;
+                }else{
+                        theme = android.R.style.Theme_Holo_Dialog;
+                }
+                    datePickerDialog = new DatePickerDialog(this,theme,
+                            new DatePickerDialog.OnDateSetListener() {
 
-                            @SuppressLint("SetTextI18n")
-                            @Override
-                            public void onDateSet(DatePicker view, int year,
-                                                  int monthOfYear, int dayOfMonth) {
+                                @SuppressLint("SetTextI18n")
+                                @Override
+                                public void onDateSet(DatePicker view, int year,
+                                                      int monthOfYear, int dayOfMonth) {
+                                             get_Selected_Date = dayOfMonth+"-"+monthOfYear+"-"+year;
+                                                date_Edit_Text.setText(get_Selected_Date);
+                                            if((mYear ==year) && (mMonth ==monthOfYear)) {
+                                                if (mDay == dayOfMonth)
+                                                    date_Edit_Text.setText(getResources().getString(R.string.today_Date));
+                                                else if ((mDay-1) == dayOfMonth)
+                                                    date_Edit_Text.setText(getResources().getString(R.string.yesterday_Date));
+                                                else if ((mDay+1) == dayOfMonth)
+                                                    date_Edit_Text.setText(getResources().getString(R.string.tomorrow_Date));
+                                            }
+                                    Toast.makeText(Create_New_To_Do_List.this, date_Edit_Text.getText().toString(),Toast.LENGTH_LONG).show();
+                                }
+                            }, mYear, mMonth, mDay);
 
-                                         get_Selected_Date = dayOfMonth+"-"+monthOfYear+"-"+year;
-                                            date_Edit_Text.setText(get_Selected_Date);
-                                        if((mYear ==year) && (mMonth ==monthOfYear)) {
-                                            if (mDay == dayOfMonth)
-                                                date_Edit_Text.setText(getResources().getString(R.string.today_Date));
-                                            else if ((mDay-1) == dayOfMonth)
-                                                date_Edit_Text.setText(getResources().getString(R.string.yesterday_Date));
-                                            else if ((mDay+1) == dayOfMonth)
-                                                date_Edit_Text.setText(getResources().getString(R.string.tomorrow_Date));
-                                        }
-                                Toast.makeText(Create_New_To_Do_List.this, date_Edit_Text.getText().toString(),Toast.LENGTH_LONG).show();
-                            }
-                        }, mYear, mMonth, mDay);
-                datePickerDialog.setIcon(R.drawable.done_icon);
-                datePickerDialog.setTitle("Please select Date.");
+                if (android.os.Build.VERSION.SDK_INT <= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                    datePickerDialog.setIcon(R.drawable.done_icon);
+                    datePickerDialog.setTitle("Please select Date.");
+                }
 
                 datePickerDialog.show();
 
@@ -170,8 +179,8 @@ public class Create_New_To_Do_List extends AppCompatActivity {
         dataBase= new DataBase(this);
 
         // setup weekdays selector
-        List<Integer> days = Arrays.asList(Calendar.SUNDAY, Calendar.SATURDAY);
-        weekdays.setSelectedDays(days);
+        // no day select default
+        weekdays.selectDay(0);
 
     }
 

@@ -21,8 +21,6 @@ public class MainActivity extends AppCompatActivity {
     // global variable
     private DataBase dataBase;
     private Main_Class_Fragement main_class_fragement;
-    private ArrayList<String> task_Name;
-    private ArrayList<Boolean> check_Box_Array;
 
     private Fragment fragment;
     private BottomNavigationView bottom_Navigation_View;
@@ -33,14 +31,6 @@ public class MainActivity extends AppCompatActivity {
 
         // Reference here
         Reference();
-
-        task_Name.add("fill");
-        task_Name.add("fillit");
-        task_Name.add("fillit");
-
-        check_Box_Array.add(false);
-        check_Box_Array.add(false);
-        check_Box_Array.add(false);
 
         // bottom navigation setup
 
@@ -77,15 +67,14 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(),Create_New_To_Do_List.class);
                 startActivity(intent);
                 break;
+
         }
 
     }
     private void Reference(){
         dataBase= new DataBase(this);
         bottom_Navigation_View = findViewById(R.id.bottom_Navigation_View);
-        // array start
-        task_Name = new ArrayList<>();
-        check_Box_Array= new ArrayList<>();
+
 
         // create object of a class
         main_class_fragement = new Main_Class_Fragement();
