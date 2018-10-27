@@ -60,4 +60,8 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    // Action Mode
+    <string name="done_Action_Mode">Done</string>
+    <string name="delete_Action_Mode">Delete</string>
 </resources>

@@ -10,9 +10,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
 
 import to_do_list.com.sudoajay.DataBase.DataBase;
 import to_do_list.com.sudoajay.Fragments.Main_Class_Fragement;
@@ -20,10 +23,10 @@ import to_do_list.com.sudoajay.Fragments.Main_Class_Fragement;
 public class MainActivity extends AppCompatActivity {
     // global variable
     private DataBase dataBase;
-    private Main_Class_Fragement main_class_fragement;
-
+    private  final ArrayList<String> places = new ArrayList<>(Arrays.asList("Overdue", "Today", "Overdo"));
     private Fragment fragment;
     private BottomNavigationView bottom_Navigation_View;
+    private int MYCODE=1000;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,29 +38,37 @@ public class MainActivity extends AppCompatActivity {
         // bottom navigation setup
 
         bottom_Navigation_View.setSelectedItemId(R.id.today_Tab);
-        fragment = main_class_fragement.createInstance(this,"Today");
+         Main_Class_Fragement main_class_fragement = new Main_Class_Fragement();
+        fragment = main_class_fragement.createInstance(this,places.get(1));
         Replace_Fragments();
 
-        bottom_Navigation_View.setOnNavigationItemReselectedListener(new BottomNavigationView.OnNavigationItemReselectedListener() {
+        bottom_Navigation_View.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public void onNavigationItemReselected(@NonNull MenuItem menuItem) {
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 
                 switch (menuItem.getItemId()) {
                     case R.id.overdue_Tab:
-                        fragment = main_class_fragement.createInstance(MainActivity.this,"Overdue");
-                        break;
+                        Main_Class_Fragement main_class_fragement1 = new Main_Class_Fragement();
+                        fragment = main_class_fragement1.createInstance(MainActivity.this,places.get(0));
+                        Replace_Fragments();
+                        return true;
 
                     case R.id.today_Tab:
-                        fragment = main_class_fragement.createInstance(MainActivity.this,"Today");
-                        break;
+                        Main_Class_Fragement main_class_fragement2 = new Main_Class_Fragement();
+                        fragment = main_class_fragement2.createInstance(MainActivity.this,places.get(1));
+                        Replace_Fragments();
+                        return true;
                     case R.id.overdo_Tab:
-                        fragment =main_class_fragement.createInstance(MainActivity.this,"Overdo");
-                        break;
+                        Main_Class_Fragement main_class_fragement3 = new Main_Class_Fragement();
+                        fragment =main_class_fragement3.createInstance(MainActivity.this,places.get(2));
+                        Replace_Fragments();
+                        return true;
                 }
-                Replace_Fragments();
+
+
+                return false;
             }
         });
-
     }
 
 
@@ -76,9 +87,6 @@ public class MainActivity extends AppCompatActivity {
         bottom_Navigation_View = findViewById(R.id.bottom_Navigation_View);
 
 
-        // create object of a class
-        main_class_fragement = new Main_Class_Fragement();
-
     }
     // Replace Fragments
     public void Replace_Fragments(){
@@ -89,4 +97,5 @@ public class MainActivity extends AppCompatActivity {
             ft.commit();
         }
     }
+
 }

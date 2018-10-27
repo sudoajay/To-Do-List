@@ -38,6 +38,7 @@ public class Create_New_To_Do_List extends AppCompatActivity {
     private DataBase dataBase;
     private WeekdaysPicker weekdays;
     private String get_Selected_Date;
+    private int original_Time;
 
 
     // private OnSelectDateListener listener;
@@ -143,7 +144,7 @@ public class Create_New_To_Do_List extends AppCompatActivity {
                             @Override
                             public void onTimeSet(TimePicker view, int hourOfDay,
                                                   int minute) {
-
+                                original_Time = hourOfDay;
                                 String set_Time = Convert_Into(hourOfDay,minute);
                                 Toast.makeText(Create_New_To_Do_List.this, set_Time+"",Toast.LENGTH_LONG).show();
                                 time_Edit_Text.setText(set_Time);
@@ -231,8 +232,12 @@ public class Create_New_To_Do_List extends AppCompatActivity {
 
                 // fill in database
                 dataBase.Fill_It(enter_Task_Edit_Task.getText().toString(),get_Selected_Date,
-                        time_Edit_Text.getText().toString(),get_Repeat(),null);
-                    onBackPressed();
+                        time_Edit_Text.getText().toString(),get_Repeat(),0,original_Time);
+
+                // intent to open main activity class
+                Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                startActivity(intent);
+
                 dialog.dismiss();
             }
         });
@@ -252,7 +257,5 @@ public class Create_New_To_Do_List extends AppCompatActivity {
         }
         return join;
     }
-
-
 
 }

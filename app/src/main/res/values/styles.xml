@@ -6,6 +6,8 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="actionModeBackground">@color/colorPrimary</item>
+
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -14,9 +16,9 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="NumberPickerStyle">
-        <item name="android:textSize">22dp</item>
-        <item name="android:textColorPrimary">@color/colorAccent</item>
-        <item name="android:colorControlNormal" tools:targetApi="lollipop">@color/colorAccent</item>
-    </style>
+    <!--<style name="NumberPickerStyle">-->
+        <!--<item name="android:textSize">22dp</item>-->
+        <!--<item name="android:textColorPrimary">@color/colorAccent</item>-->
+        <!--<item name="android:colorControlNormal" tools:targetApi="lollipop">@color/colorAccent</item>-->
+    <!--</style>-->
 </resources>
