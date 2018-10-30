@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/done_More_Option"
+        android:title="@string/done_More_Option" />
+
+    <item
+        android:id="@+id/edit_More_Option"
+        android:title="@string/edit_More_Option" />
+
+    <item
+        android:id="@+id/delete_More_Option"
+        android:title="@string/delete_Action_Mode" />
+
+</menu>

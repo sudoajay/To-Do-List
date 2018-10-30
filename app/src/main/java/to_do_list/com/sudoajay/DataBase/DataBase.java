@@ -62,9 +62,9 @@ public class DataBase extends SQLiteOpenHelper {
             }
         return true;
     }
-    public Cursor Get_All_Date_And_ID_Done(){
+    public Cursor Get_All_Date_And_ID_Done_Week(){
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
-        return sqLiteDatabase.rawQuery("select Date ,ID ,Done from Database_Table ORDER BY Original_Time ASC " ,null);
+        return sqLiteDatabase.rawQuery("select Date ,ID ,Done,Repeat from Database_Table ORDER BY Original_Time ASC " ,null);
     }
     public Integer Delete_Row(String id){
         SQLiteDatabase db=this.getWritableDatabase();
@@ -74,13 +74,13 @@ public class DataBase extends SQLiteOpenHelper {
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         return sqLiteDatabase.rawQuery("select * from Database_Table WHERE ID ="+id,null);
     }
-    public Cursor Get_All_Data(){
+    public Cursor Get_The_Repeat_From_Id(int id){
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
-        return sqLiteDatabase.rawQuery("select * from Database_Table",null);
+        return sqLiteDatabase.rawQuery("select Repeat from Database_Table  WHERE ID ="+id ,null);
     }
-    public Cursor Specified_Row(){
+    public Cursor Get_The_Date_From_Id(int id){
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
-        return sqLiteDatabase.rawQuery("select Date from Database_Table ",null);
+        return sqLiteDatabase.rawQuery("select Date from Database_Table  WHERE ID ="+id ,null);
     }
   
 
@@ -102,6 +102,20 @@ public class DataBase extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put(col_1,id);
         contentValues.put(col_6,Done);
+        sqLiteDatabase.update(DATABASE_TABLE_NAME,contentValues,"ID = ?",new String[] { id });
+    }
+    public void Update_The_Table_For_Date(String id ,String Date ){
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(col_1,id);
+        contentValues.put(col_3,Date);
+        sqLiteDatabase.update(DATABASE_TABLE_NAME,contentValues,"ID = ?",new String[] { id });
+    }
+    public void Update_The_Table_For_Repeat(String id ,String  Repeat ){
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(col_1,id);
+        contentValues.put(col_5,Repeat);
         sqLiteDatabase.update(DATABASE_TABLE_NAME,contentValues,"ID = ?",new String[] { id });
     }
 }

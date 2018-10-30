@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.speech.RecognizerIntent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -38,7 +39,7 @@ public class Create_New_To_Do_List extends AppCompatActivity {
     private DataBase dataBase;
     private WeekdaysPicker weekdays;
     private String get_Selected_Date;
-    private int original_Time;
+    private int original_Time,get_Id ;
 
 
     // private OnSelectDateListener listener;
@@ -47,9 +48,26 @@ public class Create_New_To_Do_List extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_new_to_do_list);
 
+
         // Reference here
         Reference();
 
+
+        if(getIntent().getExtras() != null ){
+            Intent intent = getIntent();
+             get_Id=intent.getIntExtra("to_do_list.com.sudoajay.Adapter_Id",0);
+
+            Cursor cursor = dataBase.Get_The_Value_From_Id(get_Id);
+            if (cursor != null) {
+                cursor.moveToFirst();
+                do
+                {
+                    enter_Task_Edit_Task.setText(cursor.getString(1));
+                    Sent_To_Date_Box(cursor.getString(2));
+                    time_Edit_Text.setText(cursor.getString(3));
+                    Fill_The_Selected_Weekdays(cursor.getString(4));
+                }while (cursor.moveToNext()); }
+        }
         // Check to see if a recognition activity is present
         // if running on AVD virtual device it will give this message. The mic
         // required only works on an actual android device
@@ -108,8 +126,11 @@ public class Create_New_To_Do_List extends AppCompatActivity {
                                 @Override
                                 public void onDateSet(DatePicker view, int year,
                                                       int monthOfYear, int dayOfMonth) {
+
+
+
                                              get_Selected_Date = dayOfMonth+"-"+monthOfYear+"-"+year;
-                                                date_Edit_Text.setText(get_Selected_Date);
+                                                date_Edit_Text.setText(dayOfMonth+"-"+(monthOfYear+1)+"-"+year);
                                             if((mYear ==year) && (mMonth ==monthOfYear)) {
                                                 if (mDay == dayOfMonth)
                                                     date_Edit_Text.setText(getResources().getString(R.string.today_Date));
@@ -227,12 +248,29 @@ public class Create_New_To_Do_List extends AppCompatActivity {
                 final Calendar c = Calendar.getInstance();
                 if(date_Edit_Text.getText().toString().equals(""))
                     get_Selected_Date = c.get(Calendar.DAY_OF_MONTH) + "-" + c.get(Calendar.MONTH) + "-" + c.get(Calendar.YEAR);
+                else{
+                    String[] split_Date = get_Selected_Date.split("-");
+                    if(((Integer.parseInt(split_Date[2]) < c.get(Calendar.YEAR)) ||
+                            ((Integer.parseInt(split_Date[2]) <= c.get(Calendar.YEAR)) &&(Integer.parseInt(split_Date[1]) < c.get(Calendar.MONTH)))
+                            || ((Integer.parseInt(split_Date[2]) <= c.get(Calendar.YEAR)) &&(Integer.parseInt(split_Date[1]) <= c.get(Calendar.MONTH))&& (Integer.parseInt(split_Date[0]) < c.get(Calendar.DAY_OF_MONTH)))))
+                                    Toast.makeText(getApplicationContext(), "Oops... The Date You entered is Already in Overdue List", Toast.LENGTH_SHORT).show();
+                    
+                }
                 if(time_Edit_Text.getText().toString().equals(""))
                     time_Edit_Text.setText(null);
+                // update the database
+                if(getIntent().getExtras() != null){
+                    dataBase.Update_The_Table(get_Id+"",enter_Task_Edit_Task.getText().toString(),get_Selected_Date,
+                            time_Edit_Text.getText().toString(),get_Repeat(),0,original_Time);
+                }else{
+                      // fill in database
+                    dataBase.Fill_It(enter_Task_Edit_Task.getText().toString(),get_Selected_Date,
+                            time_Edit_Text.getText().toString(),get_Repeat(),0,original_Time);
+                }
 
-                // fill in database
-                dataBase.Fill_It(enter_Task_Edit_Task.getText().toString(),get_Selected_Date,
-                        time_Edit_Text.getText().toString(),get_Repeat(),0,original_Time);
+                // check when date already overdue
+
+
 
                 // intent to open main activity class
                 Intent intent = new Intent(getApplicationContext(),MainActivity.class);
@@ -256,6 +294,46 @@ public class Create_New_To_Do_List extends AppCompatActivity {
             join+=week+"";
         }
         return join;
+    }
+
+    // put value to date box
+    private void Sent_To_Date_Box(String value){
+        Calendar c = Calendar.getInstance();
+        final int mYear = c.get(Calendar.YEAR);
+        final int mMonth = c.get(Calendar.MONTH);
+        final int mDay = c.get(Calendar.DAY_OF_MONTH);
+
+        String[] split = value.split("-");
+        int dayOfMonth =Integer.parseInt(split[0]);
+        int monthOfYear =Integer.parseInt(split[1]);
+        int year =Integer.parseInt(split[2]);
+
+
+        get_Selected_Date = dayOfMonth+"-"+monthOfYear+"-"+year;
+        date_Edit_Text.setText(get_Selected_Date);
+        if((mYear ==year) && (mMonth ==monthOfYear)) {
+            if (mDay == dayOfMonth)
+                date_Edit_Text.setText(getResources().getString(R.string.today_Date));
+            else if ((mDay-1) == dayOfMonth)
+                date_Edit_Text.setText(getResources().getString(R.string.yesterday_Date));
+            else if ((mDay+1) == dayOfMonth)
+                date_Edit_Text.setText(getResources().getString(R.string.tomorrow_Date));
+        }
+
+    }
+
+    // week days selected
+    private void Fill_The_Selected_Weekdays(String week){
+        String[] split  =week.split("");
+        List<Integer> list = new ArrayList<>();
+        for(String weeks_Days: split){
+            try {
+                list.add(Integer.parseInt(weeks_Days));
+            }catch (Exception e){
+
+            }
+            }
+        weekdays.setSelectedDays(list);
     }
 
 }

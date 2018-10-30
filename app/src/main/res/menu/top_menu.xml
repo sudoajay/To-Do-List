@@ -3,7 +3,7 @@
 
     <item
         android:id="@+id/done"
-        android:icon="@drawable/done_icon"
+        android:icon="@drawable/check_box_icon"
         android:title="@string/done_Action_Mode" />
 
     <item

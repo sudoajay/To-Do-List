@@ -64,4 +64,10 @@
     // Action Mode
     <string name="done_Action_Mode">Done</string>
     <string name="delete_Action_Mode">Delete</string>
+    <string name="heading_Action_Mode">Select your option</string>
+
+    // more option
+    <string name="done_More_Option">Done</string>
+    <string name="edit_More_Option">Edit</string>
+    <string name="delete_More_Option">Delete</string>
 </resources>
