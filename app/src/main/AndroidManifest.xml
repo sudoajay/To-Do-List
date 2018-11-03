@@ -4,6 +4,7 @@
     package="to_do_list.com.sudoajay">
 
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:allowBackup="true"
@@ -24,10 +25,27 @@
             android:name=".Create_New_To_Do_List"
             android:theme="@style/AppTheme.NoActionBar" />
 
-        <service
-            android:name=".MyService"
-            android:enabled="true"
-            android:exported="true"></service>
+        <receiver android:name=".Receivers.BootCompletedIntentReceiver"
+            tools:ignore="InnerclassSeparator">
+                <intent-filter>
+                    <action android:name="android.intent.action.BOOT_COMPLETED" />
+                </intent-filter>
+            </receiver>
+
+        <receiver android:name=".Receivers.ResponseBroadcastReceiver"
+            android:process=":remote"
+            tools:ignore="InnerclassSeparator">
+            <intent-filter>
+                <action android:name="ke.co.appslab.androidbackgroundservices.Receivers.ResponseBroadcastReceiver"/>
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".Receivers.ToastBroadcastReceiver"
+            android:process=":remote"
+            tools:ignore="InnerclassSeparator">
+        </receiver>
+        <service android:name=".Services.BackgroundService"
+            android:exported="false"
+            tools:ignore="InnerclassSeparator" />
     </application>
 
 </manifest>
