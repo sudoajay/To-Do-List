@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import to_do_list.com.sudoajay.MainActivity;
+
 /**
  * Created by harun on 1/10/18.
  */
@@ -30,6 +32,7 @@ public class BackgroundService extends IntentService {
         toastIntent.putExtra("toastMessage","I'M running after ever 15 minutes");
         sendBroadcast(toastIntent);
 
+        MainActivity mainActivity =new MainActivity();
     }
     public static String getACTION() {
         return ACTION;

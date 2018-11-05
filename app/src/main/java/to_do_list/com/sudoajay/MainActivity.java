@@ -5,7 +5,6 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.database.Cursor;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -13,21 +12,16 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
-
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
-import java.util.List;
-
 import to_do_list.com.sudoajay.DataBase.DataBase;
 import to_do_list.com.sudoajay.Fragments.Main_Class_Fragement;
 import to_do_list.com.sudoajay.Receivers.ResponseBroadcastReceiver;
 import to_do_list.com.sudoajay.Receivers.ToastBroadcastReceiver;
-import to_do_list.com.sudoajay.Services.BackgroundService;
+
 
 public class MainActivity extends AppCompatActivity {
     // global variable
@@ -47,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         Reference();
 
         IntentFilter intentFilter= new IntentFilter();
-        intentFilter.addAction(BackgroundService.ACTION);
+        intentFilter.addAction(to_do_list.com.sudoajay.Services.BackgroundService.ACTION);
         registerReceiver(broadcastReceiver,intentFilter);
 
         // schedule Background Task
@@ -93,9 +87,13 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
+
+
+        Alert_Notification alert_notification = new Alert_Notification();
+        alert_notification.notify(getApplicationContext() ,"hello Eveyone", 57);
     }
 
-    private void Schedule_Alarm() {
+    public void Schedule_Alarm() {
         Intent toastIntent= new Intent(getApplicationContext(),ToastBroadcastReceiver.class);
         PendingIntent toastAlarmIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, toastIntent,PendingIntent.FLAG_UPDATE_CURRENT);
         long startTime=System.currentTimeMillis(); //alarm starts immediately
@@ -155,10 +153,10 @@ public class MainActivity extends AppCompatActivity {
         startActivity(homeIntent);
 
     }
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
         IntentFilter intentFilter= new IntentFilter();
-        intentFilter.addAction(BackgroundService.ACTION);
+        intentFilter.addAction(to_do_list.com.sudoajay.Services.BackgroundService.ACTION);
         registerReceiver(broadcastReceiver,intentFilter);
     }
 

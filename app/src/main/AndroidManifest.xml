@@ -5,6 +5,7 @@
 
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:allowBackup="true"
@@ -25,25 +26,31 @@
             android:name=".Create_New_To_Do_List"
             android:theme="@style/AppTheme.NoActionBar" />
 
-        <receiver android:name=".Receivers.BootCompletedIntentReceiver"
+        <receiver
+            android:name=".Receivers.BootCompletedIntentReceiver"
             tools:ignore="InnerclassSeparator">
-                <intent-filter>
-                    <action android:name="android.intent.action.BOOT_COMPLETED" />
-                </intent-filter>
-            </receiver>
+            <intent-filter>
 
-        <receiver android:name=".Receivers.ResponseBroadcastReceiver"
+                <!-- <action android:name="android.intent.action.LOCKED_BOOT_COMPLETED" /> -->
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".Receivers.ResponseBroadcastReceiver"
             android:process=":remote"
             tools:ignore="InnerclassSeparator">
             <intent-filter>
-                <action android:name="ke.co.appslab.androidbackgroundservices.Receivers.ResponseBroadcastReceiver"/>
+                <action android:name="ke.co.appslab.androidbackgroundservices.Receivers.ResponseBroadcastReceiver" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".Receivers.ToastBroadcastReceiver"
+        <receiver
+            android:name=".Receivers.ToastBroadcastReceiver"
             android:process=":remote"
-            tools:ignore="InnerclassSeparator">
-        </receiver>
-        <service android:name=".Services.BackgroundService"
+            tools:ignore="InnerclassSeparator"></receiver>
+
+        <service
+            android:name=".Services.BackgroundService"
             android:exported="false"
             tools:ignore="InnerclassSeparator" />
     </application>
