@@ -71,17 +71,34 @@
     <string name="edit_More_Option">Edit</string>
     <string name="delete_More_Option">Delete</string>
 
-    <string name="alert__notification_title_template">"Alert ": %1$s</string>
+    <string name="alert__notification_title_template"> Reminder </string>
+    <!-- %1$s -->
 
     <!-- TODO: remove this placeholder text -->
-    <string name="alert__notification_placeholder_text_template">You said %1$s and lorem ipsum dolor
-        sit amet, consectetur adipiscing elit. Etiam non enim magna. Morbi dictum, velit vel semper
-        venenatis, magna odio volutpat velit, at ullamcorper nulla lacus sed turpis. Pellentesque
-        vitae metus elit, nec tincidunt tellus. Integer sed nisl sem, ullamcorper ornare lacus. Duis
-        ac mauris sed massa congue volutpat. Donec sed erat sit amet turpis viverra rhoncus sit amet
-        nec magna. Donec lacinia ligula at libero volutpat volutpat nec nec tortor.
+    <string name="alert__notification_placeholder_text_template">Lets Do This  - %1$s</string>
+
+    <string name="action_Completed">Completed</string>
+    <string name="action_Snooze">Snooze</string>
+    <string name="action_More">More</string>
+    <string name="Channel_Id">Reminder Id</string>
+
+    <!-- Custom Dialog -->
+    <string name="custom_Dialog_Done">Have you finish this task ?</string>
+    <string name="custom_Dialog_Delte">Are you sure to delete this task ?</string>
+
+    <string name="new_message_notification_title_template">New message: %1$s</string>
+
+    <!-- TODO: remove this placeholder text -->
+    <string name="new_message_notification_placeholder_text_template">You said %1$s and lorem ipsum
+        dolor sit amet, consectetur adipiscing elit. Etiam non enim magna. Morbi dictum, velit vel
+        semper venenatis, magna odio volutpat velit, at ullamcorper nulla lacus sed turpis.
+        Pellentesque vitae metus elit, nec tincidunt tellus. Integer sed nisl sem, ullamcorper
+        ornare lacus. Duis ac mauris sed massa congue volutpat. Donec sed erat sit amet turpis
+        viverra rhoncus sit amet nec magna. Donec lacinia ligula at libero volutpat volutpat nec nec
+        tortor.
     </string>
 
     <string name="action_share">Share</string>
     <string name="action_reply">Reply</string>
+
 </resources>

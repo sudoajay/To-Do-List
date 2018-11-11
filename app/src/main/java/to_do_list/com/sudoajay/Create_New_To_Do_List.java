@@ -18,11 +18,9 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.LinkedList;
 import java.util.List;
-import to_do_list.com.sudoajay.DataBase.DataBase;
+import to_do_list.com.sudoajay.DataBase.Main_DataBase;
 
 // outside library
 import com.dpro.widgets.WeekdaysPicker;
@@ -36,10 +34,11 @@ public class Create_New_To_Do_List extends AppCompatActivity {
     public static final int VOICE_RECOGNITION_REQUEST_CODE = 1234;
     private ImageView mic_Image_View;
     private EditText enter_Task_Edit_Task,time_Edit_Text,date_Edit_Text;
-    private DataBase dataBase;
+    private Main_DataBase mainDataBase;
     private WeekdaysPicker weekdays;
     private String get_Selected_Date;
-    private int original_Time,get_Id ;
+        // default value is 24 for non empty time
+    private int original_Time=24,get_Id ;
 
 
     // private OnSelectDateListener listener;
@@ -57,7 +56,7 @@ public class Create_New_To_Do_List extends AppCompatActivity {
             Intent intent = getIntent();
              get_Id=intent.getIntExtra("to_do_list.com.sudoajay.Adapter_Id",0);
 
-            Cursor cursor = dataBase.Get_The_Value_From_Id(get_Id);
+            Cursor cursor = mainDataBase.Get_The_Value_From_Id(get_Id);
             if (cursor != null) {
                 cursor.moveToFirst();
                 do
@@ -198,7 +197,7 @@ public class Create_New_To_Do_List extends AppCompatActivity {
         weekdays =  findViewById(R.id.weekdays);
 
         // create object of database
-        dataBase= new DataBase(this);
+        mainDataBase = new Main_DataBase(this);
 
         // setup weekdays selector
         // no day select default
@@ -260,11 +259,11 @@ public class Create_New_To_Do_List extends AppCompatActivity {
                     time_Edit_Text.setText(null);
                 // update the database
                 if(getIntent().getExtras() != null){
-                    dataBase.Update_The_Table(get_Id+"",enter_Task_Edit_Task.getText().toString(),get_Selected_Date,
+                    mainDataBase.Update_The_Table(get_Id+"",enter_Task_Edit_Task.getText().toString(),get_Selected_Date,
                             time_Edit_Text.getText().toString(),get_Repeat(),0,original_Time);
                 }else{
                       // fill in database
-                    dataBase.Fill_It(enter_Task_Edit_Task.getText().toString(),get_Selected_Date,
+                    mainDataBase.Fill_It(enter_Task_Edit_Task.getText().toString(),get_Selected_Date,
                             time_Edit_Text.getText().toString(),get_Repeat(),0,original_Time);
                 }
 

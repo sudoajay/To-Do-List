@@ -12,7 +12,7 @@ import android.content.Intent;
 public class ToastBroadcastReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        Intent serviceIntent= new Intent(context, to_do_list.com.sudoajay.Services.BackgroundService.class);
+        Intent serviceIntent= new Intent(context, to_do_list.com.sudoajay.IntentServices.BackgroundService.class);
         context.startService(serviceIntent);
 
     }

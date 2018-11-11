@@ -13,7 +13,7 @@ public class BootCompletedIntentReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         if ("android.intent.action.BOOT_COMPLETED".equals(intent.getAction())) {
 //            Intent pushIntent = new Intent(context, BackgroundService.class);
-            Toast.makeText(context,"Boot completed and service started",Toast.LENGTH_SHORT).show();
+//           Toast.makeText(context,"Boot completed and service started",Toast.LENGTH_SHORT).show();
 //            context.startService(pushIntent);
 
             Intent toastIntent= new Intent(context,ToastBroadcastReceiver.class);

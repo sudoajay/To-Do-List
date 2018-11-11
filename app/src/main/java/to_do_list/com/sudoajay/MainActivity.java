@@ -17,7 +17,7 @@ import android.view.View;
 import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Arrays;
-import to_do_list.com.sudoajay.DataBase.DataBase;
+import to_do_list.com.sudoajay.DataBase.Main_DataBase;
 import to_do_list.com.sudoajay.Fragments.Main_Class_Fragement;
 import to_do_list.com.sudoajay.Receivers.ResponseBroadcastReceiver;
 import to_do_list.com.sudoajay.Receivers.ToastBroadcastReceiver;
@@ -25,11 +25,10 @@ import to_do_list.com.sudoajay.Receivers.ToastBroadcastReceiver;
 
 public class MainActivity extends AppCompatActivity {
     // global variable
-    private DataBase dataBase;
+    private Main_DataBase mainDataBase;
     private  final ArrayList<String> places = new ArrayList<>(Arrays.asList("Overdue", "Today", "Overdo"));
     private Fragment fragment;
     private BottomNavigationView bottom_Navigation_View;
-    private int MYCODE=1000;
     private boolean doubleBackToExitPressedOnce;
     private ResponseBroadcastReceiver broadcastReceiver;
     @Override
@@ -40,19 +39,20 @@ public class MainActivity extends AppCompatActivity {
         // Reference here
         Reference();
 
+        if(getIntent().getExtras() != null ) {
+            Intent intent = getIntent();
+             int get_Id = intent.getIntExtra("Send_The_ID", 0);
+                mainDataBase.Update_The_Table_For_Done(get_Id+"" ,1);
+        }
+
+
         IntentFilter intentFilter= new IntentFilter();
-        intentFilter.addAction(to_do_list.com.sudoajay.Services.BackgroundService.ACTION);
+        intentFilter.addAction(to_do_list.com.sudoajay.IntentServices.BackgroundService.ACTION);
         registerReceiver(broadcastReceiver,intentFilter);
 
         // schedule Background Task
         Schedule_Alarm();
 
-
-        Long cal  = System.currentTimeMillis();
-        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-        PendingIntent pintent = PendingIntent.getService(getApplicationContext(), 0, intent, 0);
-        AlarmManager alarm = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-        alarm.setRepeating(AlarmManager.RTC_WAKEUP, cal, 30*1000, pintent);
 
         // bottom navigation setup
         bottom_Navigation_View.setSelectedItemId(R.id.today_Tab);
@@ -89,8 +89,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        Alert_Notification alert_notification = new Alert_Notification();
-        alert_notification.notify(getApplicationContext() ,"hello Eveyone", 57);
+
     }
 
     public void Schedule_Alarm() {
@@ -113,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
     private void Reference(){
-        dataBase= new DataBase(this);
+        mainDataBase = new Main_DataBase(this);
         bottom_Navigation_View = findViewById(R.id.bottom_Navigation_View);
         broadcastReceiver = new ResponseBroadcastReceiver();
 
@@ -156,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
         IntentFilter intentFilter= new IntentFilter();
-        intentFilter.addAction(to_do_list.com.sudoajay.Services.BackgroundService.ACTION);
+        intentFilter.addAction(to_do_list.com.sudoajay.IntentServices.BackgroundService.ACTION);
         registerReceiver(broadcastReceiver,intentFilter);
     }
 

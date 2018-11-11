@@ -8,7 +8,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +23,7 @@ import java.util.List;
 
 import to_do_list.com.sudoajay.Adapter.Custom_Adapter_Recycleview;
 import to_do_list.com.sudoajay.Create_New_To_Do_List;
-import to_do_list.com.sudoajay.DataBase.DataBase;
+import to_do_list.com.sudoajay.DataBase.Main_DataBase;
 import to_do_list.com.sudoajay.MainActivity;
 import to_do_list.com.sudoajay.R;
 
@@ -46,7 +45,7 @@ public class Main_Class_Fragement extends Fragment  implements View.OnClickListe
     private TextView nothing_Text_View;
     private ImageView nothing_Image_View;
     private int MYCODE=1000;
-    private DataBase dataBase ;
+    private Main_DataBase mainDataBase;
     private final ArrayList<String> type_Array = new ArrayList<>(Arrays.asList("Overdue", "Today", "Overdo"));
     private final ArrayList<String> weeks_Array = new ArrayList<>(Arrays.asList("Sunday", "Monday", "Tuesday"
             ,"Wednesday", "Thursday", "Friday" , "Saturday"));
@@ -110,7 +109,7 @@ public class Main_Class_Fragement extends Fragment  implements View.OnClickListe
         weeks = new ArrayList<>();
 
         // database create object
-        dataBase= new DataBase(main_Activity);
+        mainDataBase = new Main_DataBase(main_Activity);
 
     }
     private void Setup_Recycler_View(){
@@ -121,15 +120,14 @@ public class Main_Class_Fragement extends Fragment  implements View.OnClickListe
     }
 
     private void Grab_The_Data_From_DB(){
-        if(!dataBase.check_For_Empty()){
-            Cursor cursor = dataBase.Get_All_Date_And_ID_Done_Week();
+        if(!mainDataBase.check_For_Empty()){
+            Cursor cursor = mainDataBase.Get_All_Date_And_ID_Done_Week();
             if (cursor != null) {
                 cursor.moveToFirst();
                do
                 {
                     array_Id.add(cursor.getInt(1));
                     save_All_Date.add(cursor.getString(0));
-
                     if(cursor.getInt(2) == 0 )
                         check_Box_Array.add(false);
                     else{
@@ -163,11 +161,11 @@ public class Main_Class_Fragement extends Fragment  implements View.OnClickListe
     }
     private void Fill_Recycler_View(){
         // Grab The suitable Date From Array
-       if(!dataBase.check_For_Empty()) {
+       if(!mainDataBase.check_For_Empty()) {
            Suitable_Date_From_Array();
 
            for(Integer value : array_Id) {
-               Cursor cursor = dataBase.Get_The_Value_From_Id(value);
+               Cursor cursor = mainDataBase.Get_The_Value_From_Id(value);
                if (cursor != null) {
                    cursor.moveToFirst();
                         task_Name.add(cursor.getString(1));
@@ -196,7 +194,7 @@ public class Main_Class_Fragement extends Fragment  implements View.OnClickListe
 
                         // add to adapter and list view show
                             custom_adapter_recycleview = new Custom_Adapter_Recycleview(main_Activity
-                                    ,task_Name,check_Box_Array,task_Info,array_Id,dataBase,this);
+                                    ,task_Name,check_Box_Array,task_Info,array_Id, mainDataBase,this);
                             recyclerView.setAdapter(custom_adapter_recycleview);
 
                }
@@ -219,6 +217,7 @@ public class Main_Class_Fragement extends Fragment  implements View.OnClickListe
                         || ((Integer.parseInt(arr[2]) <= current_Year) &&(Integer.parseInt(arr[1]) <= current_Month)&& (Integer.parseInt(arr[0]) < current_Day)))){
                     save_All_Date.remove(i);
                     array_Id.remove(i);
+                    check_Box_Array.remove(i);
                 }
             }
 
@@ -231,6 +230,7 @@ public class Main_Class_Fragement extends Fragment  implements View.OnClickListe
                         (Integer.parseInt(arr[0]) == current_Day))){
                     save_All_Date.remove(i);
                     array_Id.remove(i);
+                    check_Box_Array.remove(i);
             }else {
                     if(!weeks.get(i).equals("")){
                         Create_New_Data(i);
@@ -246,6 +246,7 @@ public class Main_Class_Fragement extends Fragment  implements View.OnClickListe
                         || ((Integer.parseInt(arr[2]) >= current_Year) &&(Integer.parseInt(arr[1]) >= current_Month)&& (Integer.parseInt(arr[0]) > current_Day)))){
                     save_All_Date.remove(i);
                     array_Id.remove(i);
+                    check_Box_Array.remove(i);
                 }else {
                     if(!weeks.get(i).equals("")){
                         Create_New_Data_Future(i);
@@ -310,9 +311,9 @@ public class Main_Class_Fragement extends Fragment  implements View.OnClickListe
     public void Fix_Database_As_Per_Tick(){
         for(int i = 0 ; i< array_Id.size();i++) {
             if(check_Box_Array.get(i))
-                dataBase.Update_The_Table_For_Done(array_Id.get(i) +"", 1);
+                mainDataBase.Update_The_Table_For_Done(array_Id.get(i) +"", 1);
             else {
-                dataBase.Update_The_Table_For_Done(array_Id.get(i) +"", 0);
+                mainDataBase.Update_The_Table_For_Done(array_Id.get(i) +"", 0);
             }
         }
     }
@@ -323,7 +324,7 @@ public class Main_Class_Fragement extends Fragment  implements View.OnClickListe
             if(tick.get(i)){
                 task_Name.remove(i);
                 task_Info.remove(i);
-                dataBase.Delete_Row(array_Id.get(i)+"");
+                mainDataBase.Delete_Row(array_Id.get(i)+"");
                 array_Id.remove(i);
                 tick.remove(i);
 
@@ -358,16 +359,16 @@ public class Main_Class_Fragement extends Fragment  implements View.OnClickListe
             // empty today date repeat column
 
         // first part
-        Cursor cursor = dataBase.Get_The_Value_From_Id(array_Id.get(i));
+        Cursor cursor = mainDataBase.Get_The_Value_From_Id(array_Id.get(i));
         if (cursor != null) {
             cursor.moveToFirst();
 
             //second part
-            dataBase.Fill_It(cursor.getString(1),Next_Day(count,cursor.getString(2)),cursor.getString(3), cursor.getString(4)
+            mainDataBase.Fill_It(cursor.getString(1),Next_Day(count,cursor.getString(2)),cursor.getString(3), cursor.getString(4)
             ,cursor.getInt(5),cursor.getInt(6));
 
             // update or empty today repeat column
-            dataBase.Update_The_Table_For_Repeat(array_Id.get(i)+"","");
+            mainDataBase.Update_The_Table_For_Repeat(array_Id.get(i)+"","");
 
             // refresh the list
             if(custom_adapter_recycleview != null )
@@ -391,7 +392,7 @@ public class Main_Class_Fragement extends Fragment  implements View.OnClickListe
         int day_No = calendar.get(Calendar.DAY_OF_WEEK);
 
         // get the repeat of specified id
-        Cursor cursor = dataBase.Get_The_Repeat_From_Id(array_Id.get(i));
+        Cursor cursor = mainDataBase.Get_The_Repeat_From_Id(array_Id.get(i));
         if (cursor != null) {
             cursor.moveToFirst();
 
@@ -415,10 +416,10 @@ public class Main_Class_Fragement extends Fragment  implements View.OnClickListe
         count = Count_Days_Main(day_No, days);
 
         // grab the specified date from id
-        Cursor cursors = dataBase.Get_The_Date_From_Id(array_Id.get(i));
+        Cursor cursors = mainDataBase.Get_The_Date_From_Id(array_Id.get(i));
         if (cursors != null) {
             cursors.moveToFirst();
-            dataBase.Update_The_Table_For_Date(array_Id.get(i)+"", Next_Day(count,cursors.getString(0)));
+            mainDataBase.Update_The_Table_For_Date(array_Id.get(i)+"", Next_Day(count,cursors.getString(0)));
         }
     }
 

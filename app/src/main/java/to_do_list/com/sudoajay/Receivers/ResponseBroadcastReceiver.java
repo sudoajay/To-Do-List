@@ -20,6 +20,8 @@ public class ResponseBroadcastReceiver extends BroadcastReceiver {
         if (resultCode==RESULT_OK){
             String message=intent.getStringExtra("toastMessage");
             Toast.makeText(context,message,Toast.LENGTH_SHORT).show();
+
         }
     }
+
 }

@@ -2,7 +2,6 @@ package to_do_list.com.sudoajay.Adapter;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.support.annotation.NonNull;
@@ -19,11 +18,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
 
 import to_do_list.com.sudoajay.Create_New_To_Do_List;
-import to_do_list.com.sudoajay.DataBase.DataBase;
+import to_do_list.com.sudoajay.DataBase.Main_DataBase;
 import to_do_list.com.sudoajay.Fragments.Main_Class_Fragement;
 import to_do_list.com.sudoajay.MainActivity;
 import to_do_list.com.sudoajay.R;
@@ -34,18 +31,18 @@ public class Custom_Adapter_Recycleview extends RecyclerView.Adapter<Custom_Adap
     private ArrayList<Integer> array_Id;
     private MainActivity mainActivity;
     private Main_Class_Fragement main_class_fragement;
-    private DataBase dataBase;
+    private Main_DataBase mainDataBase;
     private ActionMode actionMode;
     private boolean setting_Pressed;
     public Custom_Adapter_Recycleview(MainActivity mainActivity, ArrayList<String> task_Name, ArrayList<Boolean>
-            check_Box_Array, ArrayList<String> task_Info, ArrayList<Integer> array_Id, DataBase dataBase,
+            check_Box_Array, ArrayList<String> task_Info, ArrayList<Integer> array_Id, Main_DataBase mainDataBase,
                                       Main_Class_Fragement main_class_fragement) {
         this.mainActivity = mainActivity;
         this.task_Name = task_Name;
         this.check_Box_Array =check_Box_Array;
         this.task_Info=task_Info;
         this.array_Id=array_Id;
-        this.dataBase= dataBase;
+        this.mainDataBase = mainDataBase;
         this.main_class_fragement= main_class_fragement;
 
     }
@@ -142,10 +139,8 @@ public class Custom_Adapter_Recycleview extends RecyclerView.Adapter<Custom_Adap
 
                         switch (item.getItemId()) {
                             case R.id.done_More_Option:
-                                main_class_fragement.Make_Them_Default(1,position);
-                                holder.check_Box.setChecked(true);
-                                check_Box_Array.set(position,true);
-                                Call_Custom_Dailog("Have you finish this task ?",1);
+
+                                Call_Custom_Dailog(mainActivity.getString(R.string.custom_Dialog_Done),1,holder.check_Box, position);
                                 break;
                             case R.id.edit_More_Option:
                                     Intent intent = new Intent(mainActivity.getApplicationContext(),Create_New_To_Do_List.class);
@@ -153,10 +148,7 @@ public class Custom_Adapter_Recycleview extends RecyclerView.Adapter<Custom_Adap
                                     mainActivity.startActivity(intent);
                                 break;
                             case R.id.delete_More_Option:
-                                main_class_fragement.Make_Them_Default(1,position);
-                                holder.check_Box.setChecked(true);
-                                check_Box_Array.set(position,true);
-                                Call_Custom_Dailog("Are you sure to delete this task ?",2);
+                                Call_Custom_Dailog(mainActivity.getString(R.string.custom_Dialog_Delte),2,holder.check_Box ,position);
                                 break;
                         }
 
@@ -192,11 +184,11 @@ public class Custom_Adapter_Recycleview extends RecyclerView.Adapter<Custom_Adap
                 setting_Pressed =true;
                 switch (menuItem.getItemId()) {
                     case R.id.done:
-                        Call_Custom_Dailog("Have you finish these task ?",1);
+                        Call_Custom_Dailog(mainActivity.getString(R.string.custom_Dialog_Done),1, null,0);
                         actionMode.finish();
                         return true;
                     case R.id.delete:
-                        Call_Custom_Dailog("Are you sure to delete these task ?",2);
+                        Call_Custom_Dailog(mainActivity.getString(R.string.custom_Dialog_Done),2,null ,0);
                         actionMode.finish();
                         return true;
                     default:
@@ -226,7 +218,7 @@ public class Custom_Adapter_Recycleview extends RecyclerView.Adapter<Custom_Adap
                 holder.task_Name_Text_View.setAlpha(1);
                 holder.task_Info_Text_View.setAlpha(1);
                 holder.check_Box.setAlpha(1);
-                dataBase.Update_The_Table_For_Done(array_Id.get(position) + "", 0);
+                mainDataBase.Update_The_Table_For_Done(array_Id.get(position) + "", 0);
                 holder.check_Box.setChecked(false);
             }
 
@@ -238,18 +230,18 @@ public class Custom_Adapter_Recycleview extends RecyclerView.Adapter<Custom_Adap
             holder.task_Name_Text_View.setAlpha(0.3f);
             holder.task_Info_Text_View.setAlpha(0.3f);
             holder.check_Box.setAlpha(0.3f);
-            dataBase.Update_The_Table_For_Done(array_Id.get(position)+"",1);
+            mainDataBase.Update_The_Table_For_Done(array_Id.get(position)+"",1);
             Toast.makeText(mainActivity,"Well done you have finish "+Done_Work_Count()+ " Out Of "+ task_Name.size() ,Toast.LENGTH_SHORT).show();
         }
        }else{
            if(check_Box_Array.get(position)) {
                check_Box_Array.set(position, false);
                holder.check_Box.setChecked(false);
-               dataBase.Update_The_Table_For_Done(array_Id.get(position) + "", 0);
+               mainDataBase.Update_The_Table_For_Done(array_Id.get(position) + "", 0);
            }else {
                check_Box_Array.set(position,true);
                holder.check_Box.setChecked(true);
-               dataBase.Update_The_Table_For_Done(array_Id.get(position) + "", 1);
+               mainDataBase.Update_The_Table_For_Done(array_Id.get(position) + "", 1);
            }
        }
     }
@@ -279,7 +271,7 @@ public class Custom_Adapter_Recycleview extends RecyclerView.Adapter<Custom_Adap
         }
         return count;
     }
-    public void Call_Custom_Dailog(String Message, final int type) {
+    public void Call_Custom_Dailog(String Message, final int type , final CheckBox checkBox , final int position) {
 
         final Dialog dialog = new Dialog(mainActivity);
         dialog.setCancelable(true);
@@ -293,6 +285,11 @@ public class Custom_Adapter_Recycleview extends RecyclerView.Adapter<Custom_Adap
         button_Yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(checkBox != null ) {
+                    main_class_fragement.Make_Them_Default(1, position);
+                    checkBox.setChecked(true);
+                    check_Box_Array.set(position, true);
+                }
                 if(type==1) {
                     // if yes to tick the task
                     main_class_fragement.Tick_Action_Mode(check_Box_Array);
@@ -309,6 +306,19 @@ public class Custom_Adapter_Recycleview extends RecyclerView.Adapter<Custom_Adap
         button_No.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(checkBox != null ) {
+                    main_class_fragement.Make_Them_Default(1, position);
+                    checkBox.setChecked(false);
+                    check_Box_Array.set(position, false);
+                }
+                if(type==1) {
+                    // if yes to tick the task
+                    main_class_fragement.Tick_Action_Mode(check_Box_Array);
+                }
+                else{
+                    // if yes to delete the task
+                    main_class_fragement.Delete_Action_Mode(check_Box_Array);
+                }
                 dialog.dismiss();
             }
         });

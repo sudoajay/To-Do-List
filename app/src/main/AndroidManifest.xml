@@ -47,10 +47,10 @@
         <receiver
             android:name=".Receivers.ToastBroadcastReceiver"
             android:process=":remote"
-            tools:ignore="InnerclassSeparator"></receiver>
+            tools:ignore="InnerclassSeparator" />
 
         <service
-            android:name=".Services.BackgroundService"
+            android:name=".IntentServices.BackgroundService"
             android:exported="false"
             tools:ignore="InnerclassSeparator" />
     </application>

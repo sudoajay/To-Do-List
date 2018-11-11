@@ -1,10 +1,13 @@
-package to_do_list.com.sudoajay.Services;
+package to_do_list.com.sudoajay.IntentServices;
 
 import android.app.Activity;
 import android.app.IntentService;
 import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.widget.Toast;
+
+import java.util.Calendar;
 
 import to_do_list.com.sudoajay.MainActivity;
 
@@ -32,9 +35,16 @@ public class BackgroundService extends IntentService {
         toastIntent.putExtra("toastMessage","I'M running after ever 15 minutes");
         sendBroadcast(toastIntent);
 
-        MainActivity mainActivity =new MainActivity();
+        
+
+
     }
     public static String getACTION() {
         return ACTION;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
     }
 }

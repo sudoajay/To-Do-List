@@ -11,7 +11,7 @@ import android.database.sqlite.SQLiteOpenHelper;
  * Created by sudoajay on 2/6/18.
  */
 
-public class DataBase extends SQLiteOpenHelper {
+public class Setting_Database extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "Database.db";
     public static  String DATABASE_TABLE_NAME = "Database_Table";
     public static final String col_1 = "ID";
@@ -24,7 +24,7 @@ public class DataBase extends SQLiteOpenHelper {
 
 
 
-    public DataBase(Context context  )
+    public Setting_Database(Context context  )
     {
         super(context, DATABASE_NAME, null,1);
 
@@ -82,7 +82,10 @@ public class DataBase extends SQLiteOpenHelper {
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         return sqLiteDatabase.rawQuery("select Date from Database_Table  WHERE ID ="+id ,null);
     }
-  
+    public Cursor Get_The_Data_From_Date_Orignal_Time(int done, String date){
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        return sqLiteDatabase.rawQuery("select * from Database_Table WHERE Date = ? AND Done = ?  ORDER BY Original_Time ASC "  ,new String []{date , done+"" });
+    }
 
     public void Update_The_Table(String id , String Task , String Date,String Time ,String  Repeat,int Done ,int Original_Time ){
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
@@ -118,4 +121,5 @@ public class DataBase extends SQLiteOpenHelper {
         contentValues.put(col_5,Repeat);
         sqLiteDatabase.update(DATABASE_TABLE_NAME,contentValues,"ID = ?",new String[] { id });
     }
+
 }
