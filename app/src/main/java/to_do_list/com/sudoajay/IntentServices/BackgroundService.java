@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import java.util.Calendar;
 
+import to_do_list.com.sudoajay.DataBase.Setting_Database;
 import to_do_list.com.sudoajay.MainActivity;
 
 /**
@@ -17,7 +18,6 @@ import to_do_list.com.sudoajay.MainActivity;
 
 public class BackgroundService extends IntentService {
     public static final String ACTION="to_do_list.com.sudoajay.Receivers.ResponseBroadcastReceiver";
-
     // Must create a default constructor
     public BackgroundService() {
         // Used to name the worker thread, important only for debugging.
@@ -34,10 +34,7 @@ public class BackgroundService extends IntentService {
         toastIntent.putExtra("resultCode", Activity.RESULT_OK);
         toastIntent.putExtra("toastMessage","I'M running after ever 15 minutes");
         sendBroadcast(toastIntent);
-
-        
-
-
+        Log.i("continue","Make Its Goosdsdd now then");
     }
     public static String getACTION() {
         return ACTION;

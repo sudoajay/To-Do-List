@@ -71,20 +71,34 @@
     <string name="edit_More_Option">Edit</string>
     <string name="delete_More_Option">Delete</string>
 
-    <string name="alert__notification_title_template"> Reminder </string>
-    <!-- %1$s -->
+    <string name="notification_title_name"> Reminder </string>
 
     <!-- TODO: remove this placeholder text -->
-    <string name="alert__notification_placeholder_text_template">Lets Do This  - %1$s</string>
 
+
+    <!-- Notification Button -->
     <string name="action_Completed">Completed</string>
     <string name="action_Snooze">Snooze</string>
     <string name="action_More">More</string>
-    <string name="Channel_Id">Reminder Id</string>
+    <string name="action_View">View</string>
+
+    <!-- Channel  id type -->
+    <string name="Channel_Id_Alert">Alert</string>
+    <string name="Channel_Id_Today_List_Alert">Today List Alert</string>
+    <string name="Channel_Id_Due_List_Alert">Due List Alert</string>
+
+    <!-- Notification Main Paragraph -->
+    <string name="alert_notification_para">Lets Do This Task  - %1$s</string>
+    <string name="today_Due_Alert_Notification">There are the some task to do %1$s   </string>
+    
+    <string name="today_Passing_Text">for today</string>
+    <string name="due_Passing_Text">which is due</string>
+
+
 
     <!-- Custom Dialog -->
     <string name="custom_Dialog_Done">Have you finish this task ?</string>
-    <string name="custom_Dialog_Delte">Are you sure to delete this task ?</string>
+    <string name="custom_Dialog_Delete">Are you sure to delete this task ?</string>
 
     <string name="new_message_notification_title_template">New message: %1$s</string>
 
@@ -100,5 +114,7 @@
 
     <string name="action_share">Share</string>
     <string name="action_reply">Reply</string>
+
+    <!-- Type of Alert Heading -->
 
 </resources>

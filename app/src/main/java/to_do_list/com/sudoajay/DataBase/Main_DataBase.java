@@ -72,19 +72,27 @@ public class Main_DataBase extends SQLiteOpenHelper {
     }
     public Cursor Get_The_Value_From_Id(int id){
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
-        return sqLiteDatabase.rawQuery("select * from Database_Table WHERE ID ="+id,null);
+        return sqLiteDatabase.rawQuery("select * from Database_Table WHERE ID = ?" ,new String []{ id+"" });
     }
     public Cursor Get_The_Repeat_From_Id(int id){
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
-        return sqLiteDatabase.rawQuery("select Repeat from Database_Table  WHERE ID ="+id ,null);
+        return sqLiteDatabase.rawQuery("select Repeat from Database_Table  WHERE ID = ?" ,new String []{id+"" });
+    }
+    public Cursor Get_The_Id_From_Done(int done ){
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        return sqLiteDatabase.rawQuery("select ID from Database_Table  WHERE Done = ?" ,new String []{done+"" });
     }
     public Cursor Get_The_Date_From_Id(int id){
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
-        return sqLiteDatabase.rawQuery("select Date from Database_Table  WHERE ID ="+id ,null);
+        return sqLiteDatabase.rawQuery("select Date from Database_Table  WHERE ID = ?" ,new String []{id+""});
     }
-    public Cursor Get_The_Data_From_Date_Orignal_Time(int done, String date){
+    public Cursor Get_The_Data_From_Today_Time(int done, String date){
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         return sqLiteDatabase.rawQuery("select * from Database_Table WHERE Date = ? AND Done = ?  ORDER BY Original_Time ASC "  ,new String []{date , done+"" });
+    }
+    public Cursor Get_The_Data_From_Done(int done){
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        return sqLiteDatabase.rawQuery("select * from Database_Table WHERE Done = ?  ORDER BY Original_Time ASC "  ,new String []{ done+"" });
     }
 
     public void Update_The_Table(String id , String Task , String Date,String Time ,String  Repeat,int Done ,int Original_Time ){

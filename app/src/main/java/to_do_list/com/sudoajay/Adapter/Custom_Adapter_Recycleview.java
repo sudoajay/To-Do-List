@@ -148,7 +148,7 @@ public class Custom_Adapter_Recycleview extends RecyclerView.Adapter<Custom_Adap
                                     mainActivity.startActivity(intent);
                                 break;
                             case R.id.delete_More_Option:
-                                Call_Custom_Dailog(mainActivity.getString(R.string.custom_Dialog_Delte),2,holder.check_Box ,position);
+                                Call_Custom_Dailog(mainActivity.getString(R.string.custom_Dialog_Done),2,holder.check_Box ,position);
                                 break;
                         }
 
