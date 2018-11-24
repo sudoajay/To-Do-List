@@ -3,15 +3,10 @@ package to_do_list.com.sudoajay.Receivers;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.util.Log;
 import android.widget.Toast;
-
-import java.util.Calendar;
 
 import to_do_list.com.sudoajay.DataBase.Main_DataBase;
 import to_do_list.com.sudoajay.DataBase.Setting_Database;
-import to_do_list.com.sudoajay.Notification.Alert_Notification;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;

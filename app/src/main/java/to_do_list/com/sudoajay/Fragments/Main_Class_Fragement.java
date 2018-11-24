@@ -181,7 +181,7 @@ public class Main_Class_Fragement extends Fragment  implements View.OnClickListe
                         String day = Return_The_Day(calendar.get(Calendar.DAY_OF_WEEK));
 
                         String time = cursor.getString(3);
-                        if(time.equals("")) time = "No Date";
+                        if(time.equals("")) time = "No Time";
 
                         List<Integer> dates =new ArrayList<>();
                         for(String  show: split_Date){

@@ -89,10 +89,10 @@
 
     <!-- Notification Main Paragraph -->
     <string name="alert_notification_para">Lets Do This Task  - %1$s</string>
-    <string name="today_Due_Alert_Notification">There are the some task to do %1$s   </string>
-    
-    <string name="today_Passing_Text">for today</string>
-    <string name="due_Passing_Text">which is due</string>
+    <string name="today_Alert_Notification"> only %1$s task for today </string>
+    <string name="due_Alert_Notification">  %1$s task which is due </string>
+
+
 
 
 

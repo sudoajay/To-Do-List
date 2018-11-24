@@ -13,17 +13,21 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
+import java.util.concurrent.TimeUnit;
 
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
+import to_do_list.com.sudoajay.Background_Task.WorkManger_Class_A;
+import to_do_list.com.sudoajay.Background_Task.WorkManger_Class_B;
 import to_do_list.com.sudoajay.DataBase.Main_DataBase;
 import to_do_list.com.sudoajay.DataBase.Setting_Database;
 import to_do_list.com.sudoajay.Fragments.Main_Class_Fragement;
@@ -46,9 +50,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-
-
         // Reference here
         Reference();
 
@@ -64,13 +65,21 @@ public class MainActivity extends AppCompatActivity {
         // First time check
         Setting_Database_Install();
 
-        IntentFilter intentFilter= new IntentFilter();
-        intentFilter.addAction(to_do_list.com.sudoajay.IntentServices.BackgroundService.ACTION);
-        registerReceiver(broadcastReceiver,intentFilter);
+//        IntentFilter intentFilter= new IntentFilter();
+//        intentFilter.addAction(to_do_list.com.sudoajay.IntentServices.BackgroundService.ACTION);
+//        registerReceiver(broadcastReceiver,intentFilter);
 
         // schedule Background Task
-        Schedule_Alarm();
+//        Schedule_Alarm();
 
+        Calendar calendar = Calendar.getInstance();
+        int Hour = calendar.get(Calendar.HOUR_OF_DAY);
+
+        // task A  == Morning 4 Am
+      //  Type_A_Task();
+
+        // Task B  == night 10 pm
+        Type_B_Task();
 
         // bottom navigation setup
         bottom_Navigation_View.setSelectedItemId(R.id.today_Tab);
@@ -199,6 +208,73 @@ public class MainActivity extends AppCompatActivity {
 
             setting_database.Fill_It(tomorrow_Task,tomorrow_Task,due_Task);
         }
+    }
+
+    private void Type_A_Task(){
+
+        // this task for cleaning and show today task
+
+        int diff ,hour;
+        Calendar calendar = Calendar.getInstance();
+         hour = calendar.get(Calendar.HOUR_OF_DAY);
+            if(hour > 4)
+                diff = (24-(hour-4));
+            else {
+                diff = 4-hour;
+            }
+        OneTimeWorkRequest morning_Work =
+                new OneTimeWorkRequest.Builder(WorkManger_Class_A.class).addTag("A").setInitialDelay( diff,TimeUnit.HOURS)
+                        .build();
+        WorkManager.getInstance().enqueue(morning_Work);
+
+
+        WorkManager.getInstance().getWorkInfoByIdLiveData(morning_Work.getId())
+                .observe(this, workInfo -> {
+                    // Do something with the status
+                    if (workInfo != null && workInfo.getState().isFinished()) {
+                        // ...
+                        PeriodicWorkRequest.Builder morning_Work_builder =
+                                new PeriodicWorkRequest.Builder(WorkManger_Class_A.class, 1,
+                                        TimeUnit.DAYS);
+                        // Create the actual work object:
+                        PeriodicWorkRequest morning_Worker = morning_Work_builder.build();
+                    // Then enqueue the recurring task:
+                        WorkManager.getInstance().enqueue(morning_Worker);
+                    }
+                });
+    }
+    private void Type_B_Task(){
+
+        // this task for Showing Due Task
+
+        int diff ,hour;
+        Calendar calendar = Calendar.getInstance();
+        hour = calendar.get(Calendar.HOUR_OF_DAY);
+        if(hour > 22)
+            diff = (24-(hour-22));
+        else {
+            diff = 22-hour;
+        }
+        OneTimeWorkRequest morning_Work =
+                new OneTimeWorkRequest.Builder(WorkManger_Class_B.class).addTag("B").setInitialDelay(diff ,TimeUnit.HOURS )
+                        .build();
+        WorkManager.getInstance().enqueue(morning_Work);
+
+
+        WorkManager.getInstance().getWorkInfoByIdLiveData(morning_Work.getId())
+                .observe(this, workInfo -> {
+                    // Do something with the status
+                    if (workInfo != null && workInfo.getState().isFinished()) {
+                        // ...
+                        PeriodicWorkRequest.Builder morning_Work_builder =
+                                new PeriodicWorkRequest.Builder(WorkManger_Class_B.class, 1,
+                                        TimeUnit.DAYS).addTag("B");
+                        // Create the actual work object:
+                        PeriodicWorkRequest morning_Worker = morning_Work_builder.build();
+                        // Then enqueue the recurring task:
+                        WorkManager.getInstance().enqueue(morning_Worker);
+                    }
+                });
     }
 
 }

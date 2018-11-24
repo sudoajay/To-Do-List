@@ -94,6 +94,11 @@ public class Main_DataBase extends SQLiteOpenHelper {
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         return sqLiteDatabase.rawQuery("select * from Database_Table WHERE Done = ?  ORDER BY Original_Time ASC "  ,new String []{ done+"" });
     }
+    public Cursor Get_All_Data_From_Date_Done_Time(String date,int time,int done){
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        return sqLiteDatabase.rawQuery("select * from Database_Table WHERE Date = ? And Original_Time >= ? AND Done = ? " ,new String []{ date, time+"" , done+"" });
+    }
+
 
     public void Update_The_Table(String id , String Task , String Date,String Time ,String  Repeat,int Done ,int Original_Time ){
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
