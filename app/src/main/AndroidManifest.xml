@@ -15,44 +15,17 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".MainActivity">
+        <activity android:name="com.sudoajay.to_do_list.MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".Create_New_To_Do_List"
+            android:name="com.sudoajay.to_do_list.Create_New_To_Do_List"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-
-        <receiver
-            android:name=".Receivers.BootCompletedIntentReceiver"
-            tools:ignore="InnerclassSeparator">
-            <intent-filter>
-
-                <!-- <action android:name="android.intent.action.LOCKED_BOOT_COMPLETED" /> -->
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
-            </intent-filter>
-        </receiver>
-        <receiver
-            android:name=".Receivers.ResponseBroadcastReceiver"
-            android:process=":remote"
-            tools:ignore="InnerclassSeparator">
-            <intent-filter>
-                <action android:name="ke.co.appslab.androidbackgroundservices.Receivers.ResponseBroadcastReceiver" />
-            </intent-filter>
-        </receiver>
-        <receiver
-            android:name=".Receivers.ToastBroadcastReceiver"
-            android:process=":remote"
-            tools:ignore="InnerclassSeparator" />
-
-        <service
-            android:name=".IntentServices.BackgroundService"
-            android:exported="false"
-            tools:ignore="InnerclassSeparator" />
     </application>
 
 </manifest>

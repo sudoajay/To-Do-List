@@ -1,4 +1,4 @@
-package to_do_list.com.sudoajay.Adapter;
+package com.sudoajay.to_do_list.Adapter;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
@@ -17,12 +17,14 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.sudoajay.to_do_list.Create_New_To_Do_List;
+import com.sudoajay.to_do_list.DataBase.Main_DataBase;
+import com.sudoajay.to_do_list.Fragments.Main_Class_Fragement;
+import com.sudoajay.to_do_list.MainActivity;
+
 import java.util.ArrayList;
 
-import to_do_list.com.sudoajay.Create_New_To_Do_List;
-import to_do_list.com.sudoajay.DataBase.Main_DataBase;
-import to_do_list.com.sudoajay.Fragments.Main_Class_Fragement;
-import to_do_list.com.sudoajay.MainActivity;
 import to_do_list.com.sudoajay.R;
 
 public class Custom_Adapter_Recycleview extends RecyclerView.Adapter<Custom_Adapter_Recycleview.MyViewHolder> {

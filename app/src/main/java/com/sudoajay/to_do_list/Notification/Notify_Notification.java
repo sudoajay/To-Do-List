@@ -1,4 +1,4 @@
-package to_do_list.com.sudoajay.Notification;
+package com.sudoajay.to_do_list.Notification;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
@@ -10,11 +10,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
-import android.widget.Toast;
+
+import com.sudoajay.to_do_list.MainActivity;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -22,9 +21,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-import to_do_list.com.sudoajay.Create_New_To_Do_List;
-import to_do_list.com.sudoajay.DataBase.Main_DataBase;
-import to_do_list.com.sudoajay.MainActivity;
+import com.sudoajay.to_do_list.DataBase.Main_DataBase;
+
 import to_do_list.com.sudoajay.R;
 
 /**
@@ -138,12 +136,6 @@ public class Notify_Notification {
             }
         }
 
-        // complete button on action
-        Update_The_Done();
-
-        // snooze button on action
-        Edit_Page();
-
         final NotificationCompat.Builder builder = new NotificationCompat.Builder(context,channel_id)
 
                 // Set appropriate defaults for the notification light, sound,
@@ -212,28 +204,28 @@ public class Notify_Notification {
                 .setAutoCancel(true);
         // if index one is empty then this action don't come
 
-        if(!task_Name.isEmpty() && which_Type.equalsIgnoreCase("Alert") && !task_Name.get(0).equals("No More Task Left to Do")){
-            builder.addAction(
-                    R.drawable.done_icon,
-                    res.getString(R.string.action_Completed),
-                    PendingIntent.getActivity(
-                            context,
-                            0,
-                            update_Intent,
-                            PendingIntent.FLAG_UPDATE_CURRENT)
-            );
-
-            builder.addAction(
-                    R.drawable.snooze_icon,
-                    res.getString(R.string.action_Snooze),
-                    PendingIntent.getActivity(
-                            context,
-                            0,
-                            edit_Intent,
-                            PendingIntent.FLAG_UPDATE_CURRENT)
-            );
-
-        }
+//        if(!task_Name.isEmpty() && which_Type.equalsIgnoreCase("Alert") && !task_Name.get(0).equals("No More Task Left to Do")){
+//            builder.addAction(
+//                    R.drawable.done_icon,
+//                    res.getString(R.string.action_Completed),
+//                    PendingIntent.getActivity(
+//                            context,
+//                            0,
+//                            update_Intent,
+//                            PendingIntent.FLAG_UPDATE_CURRENT)
+//            );
+//
+//            builder.addAction(
+//                    R.drawable.snooze_icon,
+//                    res.getString(R.string.action_Snooze),
+//                    PendingIntent.getActivity(
+//                            context,
+//                            0,
+//                            edit_Intent,
+//                            PendingIntent.FLAG_UPDATE_CURRENT)
+//            );
+//
+//        }
         
         // check if there ia data with empty
         // more and view button classification
@@ -264,10 +256,6 @@ public class Notify_Notification {
     @TargetApi(Build.VERSION_CODES.ECLAIR)
     private void notify(final Context context, final Notification notification ) {
 
-        if(which_Type.equalsIgnoreCase("Alert")) {
-            notification.sound = Uri.parse("android.resource://" + context.getPackageName() + "/" + R.raw.ringtone);
-            notification.defaults = Notification.DEFAULT_LIGHTS | Notification.DEFAULT_VIBRATE;
-        }
         notificationManager.notify(NOTIFICATION_TAG, 0, notification);
     }
 
@@ -386,53 +374,12 @@ public class Notify_Notification {
                 cursor.close();
                 }
             }
-//            // if not empty check
-//            if(task_Name.size() >= 2 ) {
-//                for (int i = 1; i < 3; i++) {
-//                    if (i >= task_Name.size()) {
-//                        task_Name.add("");
-//                        save_All_Date.add("");
-//                    }else{
-//                        task_Name.set(i,task_Name.get(i)+"  -  ");
-//                    }
-//                }
-//            }else{
-//
-//                task_Name.add("No More Task Left to Do");
-//                save_All_Date.add("");
-//                task_Name.add("");
-//                save_All_Date.add("");
-//                array_Id.add(0);
-//                array_Id.add(0);
-//            }
-//
-//            if(task_Name.size() <3){
-//                save_All_Date.add("");
-//                task_Name.add("");
-//                array_Id.add(0);
-//            }
-
         }
         private void Initialization(){
         save_All_Date = new ArrayList<>();
         task_Name = new ArrayList<>();
         array_Id = new ArrayList<>();
-
-
-
-    }
-    // complete action method
-    private void Update_The_Done(){
-        if(array_Id.size() > 0)array_Id.add(0);
-        update_Intent = new Intent(context,MainActivity.class);
-        update_Intent.putExtra("Send_The_ID" ,array_Id.get(0));
     }
 
-    // Snooze action method
-    private void Edit_Page(){
-        if(array_Id.size() >0)array_Id.add(0);
-        edit_Intent = new Intent(context,Create_New_To_Do_List.class);
-        edit_Intent.putExtra("to_do_list.com.sudoajay.Adapter_Id" ,array_Id.get(0) );
-    }
 
 }

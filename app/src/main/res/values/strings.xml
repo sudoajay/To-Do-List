@@ -56,7 +56,7 @@
     // bottom navigation view
     <string name="overdue_Bottom_Navigation">Overdue</string>
     <string name="today_Bottom_Navigation">Today</string>
-    <string name="overdo_Bottom_Navigation">Overdo</string>
+    <string name="later_Bottom_Navigation">Later</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -93,28 +93,8 @@
     <string name="due_Alert_Notification">  %1$s task which is due </string>
 
 
-
-
-
     <!-- Custom Dialog -->
     <string name="custom_Dialog_Done">Have you finish this task ?</string>
     <string name="custom_Dialog_Delete">Are you sure to delete this task ?</string>
-
-    <string name="new_message_notification_title_template">New message: %1$s</string>
-
-    <!-- TODO: remove this placeholder text -->
-    <string name="new_message_notification_placeholder_text_template">You said %1$s and lorem ipsum
-        dolor sit amet, consectetur adipiscing elit. Etiam non enim magna. Morbi dictum, velit vel
-        semper venenatis, magna odio volutpat velit, at ullamcorper nulla lacus sed turpis.
-        Pellentesque vitae metus elit, nec tincidunt tellus. Integer sed nisl sem, ullamcorper
-        ornare lacus. Duis ac mauris sed massa congue volutpat. Donec sed erat sit amet turpis
-        viverra rhoncus sit amet nec magna. Donec lacinia ligula at libero volutpat volutpat nec nec
-        tortor.
-    </string>
-
-    <string name="action_share">Share</string>
-    <string name="action_reply">Reply</string>
-
-    <!-- Type of Alert Heading -->
 
 </resources>

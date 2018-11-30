@@ -1,4 +1,4 @@
-package to_do_list.com.sudoajay.DataBase;
+package com.sudoajay.to_do_list.DataBase;
 
 import android.annotation.SuppressLint;
 import android.content.ContentValues;

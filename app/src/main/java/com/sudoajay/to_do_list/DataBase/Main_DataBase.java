@@ -1,4 +1,4 @@
-package to_do_list.com.sudoajay.DataBase;
+package com.sudoajay.to_do_list.DataBase;
 
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
@@ -97,6 +97,11 @@ public class Main_DataBase extends SQLiteOpenHelper {
     public Cursor Get_All_Data_From_Date_Done_Time(String date,int time,int done){
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         return sqLiteDatabase.rawQuery("select * from Database_Table WHERE Date = ? And Original_Time >= ? AND Done = ? " ,new String []{ date, time+"" , done+"" });
+    }
+    public Cursor Get_The_Id_Name_Original_Time_From_Date_Done_OriginalTime( String date,int time,int done){
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        return sqLiteDatabase.rawQuery("select ID ,Task ,Time,Original_Time from Database_Table  WHERE Date = ? And Original_Time >= ? AND Done = ? " +
+                "ORDER BY Original_Time ASC " ,new String []{date,time+"",done+"" });
     }
 
 

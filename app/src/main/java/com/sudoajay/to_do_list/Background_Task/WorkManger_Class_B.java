@@ -1,12 +1,13 @@
-package to_do_list.com.sudoajay.Background_Task;
+package com.sudoajay.to_do_list.Background_Task;
 
 
 import android.content.Context;
 import android.support.annotation.NonNull;
 
+import com.sudoajay.to_do_list.Notification.Notify_Notification;
+
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
-import to_do_list.com.sudoajay.Notification.Notify_Notification;
 
 public class WorkManger_Class_B extends Worker {
     private Context context;

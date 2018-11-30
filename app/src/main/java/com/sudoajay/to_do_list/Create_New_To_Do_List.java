@@ -1,4 +1,4 @@
-package to_do_list.com.sudoajay;
+package com.sudoajay.to_do_list;
 
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
@@ -20,7 +20,9 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import to_do_list.com.sudoajay.DataBase.Main_DataBase;
+import com.sudoajay.to_do_list.DataBase.Main_DataBase;
+
+import to_do_list.com.sudoajay.R;
 
 // outside library
 import com.dpro.widgets.WeekdaysPicker;

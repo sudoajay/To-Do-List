@@ -17,6 +17,6 @@
         android:id="@+id/overdo_Tab"
         android:enabled="true"
         android:icon="@drawable/overdo_icon"
-        android:title="@string/overdo_Bottom_Navigation"
+        android:title="@string/later_Bottom_Navigation"
         app:showAsAction="ifRoom" />
 </menu>

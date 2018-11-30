@@ -1,4 +1,4 @@
-package to_do_list.com.sudoajay.Fragments;
+package com.sudoajay.to_do_list.Fragments;
 
 
 import android.content.Intent;
@@ -15,16 +15,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.sudoajay.to_do_list.Create_New_To_Do_List;
+import com.sudoajay.to_do_list.MainActivity;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import to_do_list.com.sudoajay.Adapter.Custom_Adapter_Recycleview;
-import to_do_list.com.sudoajay.Create_New_To_Do_List;
-import to_do_list.com.sudoajay.DataBase.Main_DataBase;
-import to_do_list.com.sudoajay.MainActivity;
+import com.sudoajay.to_do_list.Adapter.Custom_Adapter_Recycleview;
+import com.sudoajay.to_do_list.DataBase.Main_DataBase;
+
 import to_do_list.com.sudoajay.R;
 
 

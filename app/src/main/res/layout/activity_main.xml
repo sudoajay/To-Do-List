@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context="com.sudoajay.to_do_list.MainActivity">
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/bottom_Navigation_View"
