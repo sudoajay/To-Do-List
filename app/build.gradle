@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "to_do_list.com.sudoajay"
+        applicationId "com.sudoajay.to_do_list"
         minSdkVersion 16
         targetSdkVersion 28
         versionCode 1
@@ -25,6 +25,7 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'com.google.firebase:firebase-core:16.0.5'
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
     //noinspection GradleCompatible
     implementation 'com.android.support:appcompat-v7:28.0.0'
@@ -37,4 +38,5 @@ dependencies {
     implementation 'android.arch.work:work-runtime:1.0.0-alpha11'
     //outside Library
     implementation 'com.github.DavidProdinger:weekdays-selector:1.0.4'
+    apply plugin: 'com.google.gms.google-services'
 }

@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "167989741885",
+    "firebase_url": "https://to-do-list-47f25.firebaseio.com",
+    "project_id": "to-do-list-47f25",
+    "storage_bucket": "to-do-list-47f25.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:167989741885:android:ade8fc0c18ea26d1",
+        "android_client_info": {
+          "package_name": "com.sudoajay.to_do_list"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "167989741885-i4je48ta2t2f9dpcfcvhithah9me02k0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDTBoyHGigwVDLjeDgNPpyy9JLAti6FBsA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
