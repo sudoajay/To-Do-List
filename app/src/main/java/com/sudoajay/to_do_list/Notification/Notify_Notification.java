@@ -12,18 +12,14 @@ import android.content.res.Resources;
 import android.database.Cursor;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
-
 import com.sudoajay.to_do_list.MainActivity;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-
 import com.sudoajay.to_do_list.DataBase.Main_DataBase;
-
-import to_do_list.com.sudoajay.R;
+import com.sudoajay.to_do_list.R;
 
 /**
  * Helper class for showing and canceling alert
@@ -109,17 +105,6 @@ public class Notify_Notification {
         }
 
 
-        // if no data Grab From Database
-
-        //  first box this for Alert Type
-        // second box this is not for alert Type
-//        if((task_Name.get(0).equalsIgnoreCase("") &&
-//                which_Type.equalsIgnoreCase("Alert")))
-//            text = task_Name.get(0);
-//        else if( (task_Name.get(1).equalsIgnoreCase("") &&
-//                !which_Type.equalsIgnoreCase("Alert")) )
-//            text = task_Name.get(1);
-
         // now check for null notification manger
         if (notificationManager == null) {
             notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -202,31 +187,7 @@ public class Notify_Notification {
 
                 // Automatically dismiss the notification when it is touched.
                 .setAutoCancel(true);
-        // if index one is empty then this action don't come
 
-//        if(!task_Name.isEmpty() && which_Type.equalsIgnoreCase("Alert") && !task_Name.get(0).equals("No More Task Left to Do")){
-//            builder.addAction(
-//                    R.drawable.done_icon,
-//                    res.getString(R.string.action_Completed),
-//                    PendingIntent.getActivity(
-//                            context,
-//                            0,
-//                            update_Intent,
-//                            PendingIntent.FLAG_UPDATE_CURRENT)
-//            );
-//
-//            builder.addAction(
-//                    R.drawable.snooze_icon,
-//                    res.getString(R.string.action_Snooze),
-//                    PendingIntent.getActivity(
-//                            context,
-//                            0,
-//                            edit_Intent,
-//                            PendingIntent.FLAG_UPDATE_CURRENT)
-//            );
-//
-//        }
-        
         // check if there ia data with empty
         // more and view button classification
         if(task_Name.size() > 5 && !task_Name.get(0).equals("")) {
@@ -275,14 +236,6 @@ public class Notify_Notification {
         mainDataBase = new Main_DataBase(context);
 
         Initialization();
-
-        // is is not alert notification
-        // it is for today and due task
-//        if(!which_Type.equalsIgnoreCase("Alert") && task_Name.isEmpty()){
-//            array_Id.add(0);
-//            task_Name.add("");
-//            save_All_Date.add("");
-//        }
         Grab_The_Data_From_DB(which_Type);
         total_Size= task_Name.size();
 

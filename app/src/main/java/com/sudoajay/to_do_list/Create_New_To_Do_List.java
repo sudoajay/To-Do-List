@@ -22,8 +22,6 @@ import java.util.Calendar;
 import java.util.List;
 import com.sudoajay.to_do_list.DataBase.Main_DataBase;
 
-import to_do_list.com.sudoajay.R;
-
 // outside library
 import com.dpro.widgets.WeekdaysPicker;
 
@@ -145,7 +143,7 @@ public class Create_New_To_Do_List extends AppCompatActivity {
                             }, mYear, mMonth, mDay);
 
                 if (android.os.Build.VERSION.SDK_INT <= android.os.Build.VERSION_CODES.LOLLIPOP) {
-                    datePickerDialog.setIcon(R.drawable.done_icon);
+                    datePickerDialog.setIcon(R.drawable.check_icon);
                     datePickerDialog.setTitle("Please select Date.");
                 }
 
@@ -174,7 +172,7 @@ public class Create_New_To_Do_List extends AppCompatActivity {
                             }
                         }, mHour, mMinute, false);
 
-                timePickerDialog.setIcon(R.drawable.done_icon);
+                timePickerDialog.setIcon(R.drawable.check_icon);
                 timePickerDialog.setTitle("Please select time.");
                 timePickerDialog.show();
                 break;

@@ -14,20 +14,16 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.sudoajay.to_do_list.Create_New_To_Do_List;
 import com.sudoajay.to_do_list.MainActivity;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
-
 import com.sudoajay.to_do_list.Adapter.Custom_Adapter_Recycleview;
 import com.sudoajay.to_do_list.DataBase.Main_DataBase;
-
-import to_do_list.com.sudoajay.R;
+import com.sudoajay.to_do_list.R;
 
 
 /**

@@ -17,15 +17,13 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.sudoajay.to_do_list.Create_New_To_Do_List;
 import com.sudoajay.to_do_list.DataBase.Main_DataBase;
 import com.sudoajay.to_do_list.Fragments.Main_Class_Fragement;
 import com.sudoajay.to_do_list.MainActivity;
+import com.sudoajay.to_do_list.R;
 
 import java.util.ArrayList;
-
-import to_do_list.com.sudoajay.R;
 
 public class Custom_Adapter_Recycleview extends RecyclerView.Adapter<Custom_Adapter_Recycleview.MyViewHolder> {
     private ArrayList<String> task_Name,task_Info;

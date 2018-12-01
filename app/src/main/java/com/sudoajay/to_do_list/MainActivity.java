@@ -31,8 +31,6 @@ import com.sudoajay.to_do_list.DataBase.Main_DataBase;
 import com.sudoajay.to_do_list.DataBase.Setting_Database;
 import com.sudoajay.to_do_list.Fragments.Main_Class_Fragement;
 
-import to_do_list.com.sudoajay.R;
-
 
 public class MainActivity extends AppCompatActivity {
     // global variable

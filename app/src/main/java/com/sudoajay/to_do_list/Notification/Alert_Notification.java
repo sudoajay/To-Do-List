@@ -12,15 +12,11 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
-
 import com.sudoajay.to_do_list.Create_New_To_Do_List;
 import com.sudoajay.to_do_list.MainActivity;
-
 import java.util.Calendar;
-
 import com.sudoajay.to_do_list.DataBase.Main_DataBase;
-
-import to_do_list.com.sudoajay.R;
+import com.sudoajay.to_do_list.R;
 
 /**
  * Helper class for showing and canceling new message
@@ -164,7 +160,7 @@ public class Alert_Notification {
         // if index one is empty then this action don't come
 
             builder.addAction(
-                    R.drawable.done_icon,
+                    R.drawable.check_icon,
                     res.getString(R.string.action_Completed),
                     PendingIntent.getActivity(
                             context,
