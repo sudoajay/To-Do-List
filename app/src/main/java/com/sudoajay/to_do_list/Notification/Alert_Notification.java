@@ -14,6 +14,8 @@ import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import com.sudoajay.to_do_list.Create_New_To_Do_List;
 import com.sudoajay.to_do_list.MainActivity;
+
+import java.util.ArrayList;
 import java.util.Calendar;
 import com.sudoajay.to_do_list.DataBase.Main_DataBase;
 import com.sudoajay.to_do_list.R;
@@ -34,10 +36,11 @@ public class Alert_Notification {
     private static final String NOTIFICATION_TAG = "NewMessage";
     private Context context;
     private NotificationManager notificationManager;
-    private String s,task_Name;
-    private Integer array_Id;
+    private ArrayList<String> save_All_Date,task_Name;
+    private ArrayList<Integer> array_Id;
     private Intent update_Intent ,edit_Intent;
     private Main_DataBase main_dataBase;
+    private int total_No=0;
     /**
      * Shows the notification, or updates a previously shown notification of
      * this type, with the given parameters.
@@ -73,8 +76,11 @@ public class Alert_Notification {
         // setup according Which Type
         // if There is no data match with query
             channel_id = context.getString(R.string.Channel_Id_Alert); // channel_id
-            text = res.getString(R.string.alert_notification_para, task_Name);
-
+        if(array_Id.size() > 1)
+                text = res.getString(R.string.alert_notification_para, task_Name.get(0));
+            else {
+                text =res.getString(R.string.alert_notification_lines,total_No+"") ;
+        }
 
         // if no data Grab From Database
         //  first box this for Alert Type
@@ -109,7 +115,7 @@ public class Alert_Notification {
                 .setDefaults(Notification.DEFAULT_ALL)
                 // Set required fields, including the small icon, the
                 // notification title, and text.
-                .setSmallIcon(R.drawable.ic_stat_alert_)
+                .setSmallIcon(R.drawable.today_icon)
                 .setContentTitle(title)
                 .setContentText(text)
 
@@ -179,8 +185,22 @@ public class Alert_Notification {
                             PendingIntent.FLAG_UPDATE_CURRENT)
             );
 
+            // if the date more than 1
+            if(task_Name.size()>1){
+                builder.setStyle(new NotificationCompat.InboxStyle()
+                        .addLine(task_Name.get(0) +" - "+ save_All_Date.get(0))
+                        .addLine(task_Name.get(1) +" - "+ save_All_Date.get(1))
+                        .addLine(task_Name.get(2) +" - "+ save_All_Date.get(2))
+                        .addLine(task_Name.get(3) +" - "+ save_All_Date.get(3))
+                        .addLine(task_Name.get(4) +" - "+ save_All_Date.get(4))
+                        .setBigContentTitle(title)
+                        .setSummaryText(""));
+            }
+
+
+
         // if the data By mistake empty or deleted
-        if(!task_Name.isEmpty() || !task_Name.equals("")) {
+        if(task_Name.size() > 0 || !task_Name.get(0).equals("") || total_No > 0) {
             notify(context, builder.build());
         }
     }
@@ -216,6 +236,8 @@ public class Alert_Notification {
             int current_Month= calendar.get(Calendar.MONTH);
             int current_Day= calendar.get(Calendar.DAY_OF_MONTH);
             int current_hour = calendar.get(Calendar.HOUR_OF_DAY);
+            int current_Minute =calendar.get(Calendar.MINUTE);
+            int hour,minute;
 
             // for today date
             String today_Date=current_Day + "-" + current_Month + "-" +current_Year;
@@ -223,29 +245,61 @@ public class Alert_Notification {
             Cursor cursor = main_dataBase.Get_The_Id_Name_Original_Time_From_Date_Done_OriginalTime(today_Date,current_hour,0);
             if(cursor !=null && cursor.moveToFirst()){
                 cursor.moveToFirst();
-                array_Id =(cursor.getInt(0));
-                task_Name= (cursor.getString(1));
-            }
+                do {
+                    array_Id.add(cursor.getInt(0));
+                    task_Name.add(cursor.getString(1));
+                    save_All_Date.add(cursor.getString(2));
+                    if (!cursor.getString(2).isEmpty() && cursor.getInt(3) != 24) {
+                        String[] split = cursor.getString(2).split(":");
+                        hour = cursor.getInt(3);
+                        minute = Integer.parseInt(split[1].substring(0, 2));
+                    } else {
+                        hour = 16;
+                        minute = 0;
+                    }
+
+                }while ((cursor.moveToNext()) && hour == current_hour && current_Minute ==minute);
+                }
+        }
+
+        if(task_Name.size()>1) {
+            // Remove last Array element
+            array_Id.remove(array_Id.size() - 1);
+            task_Name.remove(task_Name.size()-1);
+            save_All_Date.remove(save_All_Date.size()-1);
+        }
+        // sen the array size
+        total_No = array_Id.size();
+            // add automatic array
+        for (int i = task_Name.size();i<5;i++){
+            array_Id.add(0);
+            task_Name.add("");
+            save_All_Date.add("");
         }
 
     }
 
     // initialization arrays
     private void Initialization(){
-        array_Id = 0;
-        task_Name ="";
-
+        save_All_Date = new ArrayList<>();
+        task_Name = new ArrayList<>();
+        array_Id = new ArrayList<>();
     }
 
     // complete action method
     private void Update_The_Done(){
         update_Intent = new Intent(context,MainActivity.class);
-        update_Intent.putExtra("Send_The_ID" ,array_Id);
+        update_Intent.putExtra("Send_The_ID_Array" ,array_Id);
     }
 
     // Snooze action method
     private void Edit_Page(){
-        edit_Intent = new Intent(context,Create_New_To_Do_List.class);
-        edit_Intent.putExtra("to_do_list.com.sudoajay.Adapter_Id" ,array_Id);
+        if(array_Id.size() >1 ) {
+            edit_Intent = new Intent(context, Create_New_To_Do_List.class);
+            edit_Intent.putExtra("to_do_list.com.sudoajay.Adapter_Id", array_Id.get(0));
+        } else{
+            edit_Intent = new Intent(context, MainActivity.class);
+
+        }
     }
 }

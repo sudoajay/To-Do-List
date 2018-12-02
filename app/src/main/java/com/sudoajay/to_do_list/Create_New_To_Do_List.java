@@ -181,10 +181,12 @@ public class Create_New_To_Do_List extends AppCompatActivity {
 
     // convert 24hr to 12 hr
     private String Convert_Into(int hourOfDay,int minute){
+        String min = minute+"";
+        if(minute < 10)min="0"+minute;
         if(hourOfDay / 12 == 0){
-            return hourOfDay+":"+minute +" AM ";
+            return hourOfDay+":"+min +" AM ";
         }else{
-            return (hourOfDay%12)+":"+minute +" PM ";
+            return (hourOfDay%12)+":"+min +" PM ";
         }
     }
     @SuppressLint("ClickableViewAccessibility")

@@ -8,12 +8,10 @@ import android.support.annotation.NonNull;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 import com.sudoajay.to_do_list.DataBase.Main_DataBase;
-import com.sudoajay.to_do_list.DataBase.Setting_Database;
 import com.sudoajay.to_do_list.Notification.Notify_Notification;
 
 public class WorkManger_Class_A extends Worker {
 
-    private  Setting_Database setting_database;
     private Main_DataBase main_dataBase;
     private Context context;
     public WorkManger_Class_A(@NonNull Context context, @NonNull WorkerParameters workerParams) {
@@ -25,7 +23,6 @@ public class WorkManger_Class_A extends Worker {
     @Override
     public Result doWork() {
 
-        setting_database = new Setting_Database(context);
         main_dataBase = new Main_DataBase(context);
 
 

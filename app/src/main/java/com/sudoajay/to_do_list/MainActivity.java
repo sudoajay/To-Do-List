@@ -28,7 +28,6 @@ import com.sudoajay.to_do_list.Background_Task.WorkManger_Class_B;
 import com.sudoajay.to_do_list.Background_Task.WorkManger_Class_C;
 import com.sudoajay.to_do_list.Background_Task.WorkManger_Class_D;
 import com.sudoajay.to_do_list.DataBase.Main_DataBase;
-import com.sudoajay.to_do_list.DataBase.Setting_Database;
 import com.sudoajay.to_do_list.Fragments.Main_Class_Fragement;
 
 
@@ -38,7 +37,6 @@ public class MainActivity extends AppCompatActivity {
     private Fragment fragment;
     private BottomNavigationView bottom_Navigation_View;
     private boolean doubleBackToExitPressedOnce;
-    private Setting_Database setting_database;
     private Main_DataBase main_DataBase;
     @SuppressLint("ResourceType")
     @Override
@@ -51,16 +49,13 @@ public class MainActivity extends AppCompatActivity {
 
         if(getIntent().getExtras() != null ) {
             Intent intent = getIntent();
-            if(intent.hasExtra("Send_The_ID")) {
-                int get_Id = intent.getIntExtra("Send_The_ID", 0);
-                main_DataBase.Update_The_Table_For_Done(get_Id + "", 1);
-            }
+            if(intent.hasExtra("Send_The_ID_Array")) {
+                int[] get_Id = intent.getIntArrayExtra("Send_The_ID");
+                for(Integer fill : get_Id) {
+                    main_DataBase.Update_The_Table_For_Done(fill + "", 1);
+                }
+                }
         }
-
-        // Setting Database Fill
-        // First time check
-        Setting_Database_Install();
-
 
         // task A  == Morning 4 Am
          Type_A_Task();
@@ -121,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
     private void Reference(){
         main_DataBase = new Main_DataBase(this);
         bottom_Navigation_View = findViewById(R.id.bottom_Navigation_View);
-        setting_database = new Setting_Database(this);
+
     }
     // Replace Fragments
     public void Replace_Fragments(){
@@ -159,25 +154,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void Setting_Database_Install(){
-        // setting database fill
-        if(setting_database.check_For_Empty()){
-
-            int tomorrow_Task,due_Task;
-            Calendar calendar = Calendar.getInstance();
-            calendar.add(Calendar.DATE,1);
-            tomorrow_Task = calendar.get(Calendar.DATE);
-            if(calendar.get(Calendar.HOUR) < 22 )
-            {
-                calendar.add(Calendar.DATE,-1);
-                due_Task=calendar.get(Calendar.DATE);
-            }else{
-                due_Task = tomorrow_Task;
-            }
-
-            setting_database.Fill_It(tomorrow_Task,tomorrow_Task,due_Task);
-        }
-    }
 
     private void Type_A_Task(){
 
@@ -269,23 +245,29 @@ public class MainActivity extends AppCompatActivity {
                     if (!cursor.getString(2).isEmpty() && cursor.getInt(3) != 24) {
                         String[] split = cursor.getString(2).split(":");
                         hour = cursor.getInt(3);
-                        minute = Integer.parseInt(split[1].substring(0, 2));
+                            minute = Integer.parseInt(split[1].substring(0, 2));
                     } else {
                         hour = 16;
                         minute = 0;
                     }
 
                     total_Minute = ((hour - current_hour) * 60) + (minute - current_minute);
-                    Log.d("Checking" , total_Minute+"" );
+
                     // if is it in minus
                 } while (cursor.moveToNext() && total_Minute < 0);
             }
 
             OneTimeWorkRequest alert_Work;
-            if (total_Minute < 0) {
+            if (total_Minute < 0 || total_Minute == 0) {
+                assert cursor != null;
+                if(cursor.moveToNext()){
+                    total_Minute = 1 ;
+                }else {
+                    total_Minute = 60;
+                }
                  alert_Work =
                         new OneTimeWorkRequest.Builder(WorkManger_Class_D.class)
-                                .addTag("Alert Task").setInitialDelay(60, TimeUnit.MINUTES)
+                                .addTag("Alert Task").setInitialDelay(total_Minute, TimeUnit.MINUTES)
                                 .build();
 
             } else {

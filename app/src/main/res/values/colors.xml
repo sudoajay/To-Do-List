@@ -1,6 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <color name="colorPrimary">#376db6</color>
     <color name="colorPrimaryDark">#1e5397</color>
     <color name="colorAccent">#D81B60</color>
+
+    <!-- Screens background color-->
+    <color name="bg_screen1">#e4a234</color>
+    <color name="bg_screen2">#48a74b</color>
+    <color name="bg_screen3">#0d8dd1</color>
+    <color name="bg_screen4">#d6585d</color>
+
+    <!-- dots inactive colors -->
+    <color name="dot_dark_screen1">#a97d32</color>
+    <color name="dot_dark_screen2">#3f8341</color>
+    <color name="dot_dark_screen3">#2d5e78</color>
+    <color name="dot_dark_screen4">#73282b</color>
+
+    <!-- dots active colors -->
+    <color name="dot_light_screen1">#efc379</color>
+    <color name="dot_light_screen2">#82f985</color>
+    <color name="dot_light_screen3">#67bfed</color>
+    <color name="dot_light_screen4">#f97f84</color>
+    <color name="accent_material_dark" tools:ignore="PrivateResource">#000000</color>
+
+
+    <array name="array_dot_active">
+        <item>@color/dot_light_screen1</item>
+        <item>@color/dot_light_screen2</item>
+        <item>@color/dot_light_screen3</item>
+        <item>@color/dot_light_screen4</item>
+    </array>
+
+    <array name="array_dot_inactive">
+        <item>@color/dot_dark_screen1</item>
+        <item>@color/dot_dark_screen2</item>
+        <item>@color/dot_dark_screen3</item>
+        <item>@color/dot_dark_screen4</item>
+    </array>
 </resources>

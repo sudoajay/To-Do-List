@@ -15,7 +15,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name="com.sudoajay.to_do_list.MainActivity"
+        <activity android:name="com.sudoajay.to_do_list.WelcomeActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:configChanges="orientation"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,9 +25,27 @@
             </intent-filter>
         </activity>
         <activity
+            android:name="com.sudoajay.to_do_list.MainActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
+
+        <activity
             android:name="com.sudoajay.to_do_list.Create_New_To_Do_List"
             android:screenOrientation="portrait"
+            android:configChanges="orientation"
             android:theme="@style/AppTheme.NoActionBar" />
+
+        <service android:name=".Firebase_Message_Config.MyFireBaseInstanceMessageService"
+            tools:ignore="InnerclassSeparator"
+            android:stopWithTask="false">
+            <intent-filter>
+
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+
     </application>
+
 
 </manifest>

@@ -5,7 +5,7 @@
     <string name="nothing_Text">Nothing To Do</string>
 
     // Create New To do Class
-    <string name="new_Task">New Task</string>
+    <string name="new_Task">What would you like to do ?</string>
     <string name="back">Back Image</string>
     <string name="done">Done Image</string>
     <string name="Enter_Task_Question">What is new Task ? </string>
@@ -89,6 +89,7 @@
 
     <!-- Notification Main Paragraph -->
     <string name="alert_notification_para">Lets Do This Task  - %1$s</string>
+    <string name="alert_notification_lines">There are %1$s task to do right now </string>
     <string name="today_Alert_Notification"> only %1$s task for today </string>
     <string name="due_Alert_Notification">  %1$s task which is due </string>
 
@@ -97,4 +98,21 @@
     <string name="custom_Dialog_Done">Have you finish this task ?</string>
     <string name="custom_Dialog_Delete">Are you sure to delete this task ?</string>
 
+
+    <string name="next">NEXT</string>
+    <string name="skip">SKIP</string>
+    <string name="start">GOT IT</string>
+
+
+    <string name="slide_1_title">Overdue</string>
+    <string name="slide_1_desc">The task that you missed to do</string>
+
+    <string name="slide_2_title">Today</string>
+    <string name="slide_2_desc">The task for today </string>
+
+    <string name="slide_3_title">Later</string>
+    <string name="slide_3_desc">The task that you have to do </string>
+
+    <string name="slide_4_title">Data Restore</string>
+    <string name="slide_4_desc">From One Click You Can Restore Your Data To Main Storage</string>
 </resources>

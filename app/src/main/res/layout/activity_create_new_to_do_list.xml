@@ -32,7 +32,9 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/back_icon"
-                tools:ignore="RtlSymmetry" />
+                tools:ignore="RtlSymmetry,VectorDrawableCompat"
+                android:layout_marginStart="10dp"
+                android:paddingRight="10dp" />
 
             <TextView
                 android:id="@+id/toolbar_title"
@@ -40,10 +42,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
-                android:layout_marginLeft="10dp"
                 android:fontFamily="sans-serif"
                 android:paddingEnd="30dp"
-                android:paddingRight="30dp"
+                android:paddingRight="15dp"
                 android:text="@string/new_Task"
                 android:textColor="#ffffff"
                 android:textSize="18sp"
@@ -54,17 +55,20 @@
             <ImageView
                 android:id="@+id/save_Image_View"
                 android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_marginRight="20dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="4dp"
+                android:layout_marginRight="4dp"
                 android:layout_weight="1"
                 android:contentDescription="@string/done"
                 android:onClick="On_Click_Process"
                 android:paddingEnd="10dp"
+                android:paddingRight="10dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0"
                 app:srcCompat="@drawable/check_icon"
-                tools:ignore="RtlSymmetry" />
+                tools:ignore="RtlSymmetry,VectorDrawableCompat" />
 
         </android.support.constraint.ConstraintLayout>
     </android.support.v7.widget.Toolbar>
@@ -165,8 +169,8 @@
         android:layout_marginLeft="16dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="2dp"
-        android:focusable="false"
         android:ems="10"
+        android:focusable="false"
         android:hint="@string/Enter_Date_Answer"
         android:inputType="text|number|datetime|date|time"
         android:onClick="On_Click_Process"
@@ -189,7 +193,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.256"
-        app:srcCompat="@drawable/google_mic_icon" />
+        app:srcCompat="@drawable/mic_icon"
+        tools:ignore="VectorDrawableCompat" />
 
     <ImageView
         android:id="@+id/calendar_Image_View"
@@ -204,8 +209,9 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.482"
-        app:srcCompat="@drawable/calendar_icon" />
+        app:layout_constraintVertical_bias="0.491"
+        app:srcCompat="@drawable/calendar_icon"
+        tools:ignore="VectorDrawableCompat" />
 
     <ImageView
         android:id="@+id/time_Image_View"
@@ -223,7 +229,7 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.58"
+        app:layout_constraintVertical_bias="0.588"
         app:srcCompat="@drawable/time_icon" />
 
 

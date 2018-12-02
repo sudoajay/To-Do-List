@@ -69,7 +69,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/dot_more" />
+            app:srcCompat="@drawable/more_set_icon"
+            tools:ignore="VectorDrawableCompat" />
 
     </android.support.constraint.ConstraintLayout>
 

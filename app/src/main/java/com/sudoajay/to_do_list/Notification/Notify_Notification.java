@@ -65,9 +65,8 @@ public class Notify_Notification {
     // * Due List
 
     /*
-            if(which_Type.equalsIgnoreCase("Alert")){
 
-            }else  if(which_Type.equalsIgnoreCase("Today List Alert")){
+             if(which_Type.equalsIgnoreCase("Today List Alert")){
 
             }else{
 
@@ -128,7 +127,6 @@ public class Notify_Notification {
                 .setDefaults(Notification.DEFAULT_ALL)
                 // Set required fields, including the small icon, the
                 // notification title, and text.
-                .setSmallIcon(R.drawable.ic_stat_alert_)
                 .setContentTitle(title)
                 .setContentText(text)
 
@@ -211,8 +209,16 @@ public class Notify_Notification {
                             PendingIntent.FLAG_UPDATE_CURRENT)
             );
         }
-        notify(context, builder.build() );
 
+        if(which_Type.equalsIgnoreCase("Today List Alert")){
+            builder.setSmallIcon(R.drawable.overdo_icon);
+        }else{
+            builder.setSmallIcon(R.drawable.later_icon);
+        }
+
+        if(total_Size > 0) {
+            notify(context, builder.build());
+        }
     }
     @TargetApi(Build.VERSION_CODES.ECLAIR)
     private void notify(final Context context, final Notification notification ) {
