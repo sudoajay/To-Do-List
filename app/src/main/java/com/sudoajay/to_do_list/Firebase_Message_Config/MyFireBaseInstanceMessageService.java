@@ -48,7 +48,7 @@ public class MyFireBaseInstanceMessageService extends FirebaseMessagingService {
     private void sendNotification(String body,String url) {
 
         String channel_id = "Information";
-        String title = "Media Mover";
+        String title = "To Do List";
         Intent i = new Intent(Intent.ACTION_VIEW);
         i.setData(Uri.parse(url));
 

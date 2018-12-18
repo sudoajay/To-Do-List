@@ -222,7 +222,6 @@
         android:onClick="On_Click_Process"
         android:paddingLeft="10dp"
         android:paddingTop="5dp"
-        android:paddingRight="5dp"
         android:paddingBottom="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

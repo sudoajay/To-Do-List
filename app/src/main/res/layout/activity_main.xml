@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        app:itemBackground="@color/colorPrimary"
+        app:itemBackground="@drawable/ripple"
         app:itemIconTint="@drawable/navbar_color"
         app:itemTextColor="@drawable/navbar_color"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -40,7 +40,8 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.859"
         app:pressedTranslationZ="12dp"
-        app:srcCompat="@drawable/plus_icon" />
+        app:srcCompat="@drawable/plus_icon"
+        tools:ignore="VectorDrawableCompat" />
 
     <FrameLayout
         android:id="@+id/frame_Layout"
