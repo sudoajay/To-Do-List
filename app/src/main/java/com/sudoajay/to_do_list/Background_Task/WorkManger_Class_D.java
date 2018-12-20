@@ -20,6 +20,6 @@ public class WorkManger_Class_D extends Worker {
     public Result doWork() {
 
 
-        return Result.SUCCESS;
+        return Result.success();
     }
 }

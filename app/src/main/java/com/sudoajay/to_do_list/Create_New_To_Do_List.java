@@ -11,34 +11,36 @@ import android.speech.RecognizerIntent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.DatePicker;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.LinkedList;
 import java.util.List;
 import com.sudoajay.to_do_list.DataBase.Main_DataBase;
 
 // outside library
 import com.dpro.widgets.WeekdaysPicker;
 
-
+import org.angmarch.views.NiceSpinner;
 
 
 public class Create_New_To_Do_List extends AppCompatActivity {
 
     // Globally Variable
     public static final int VOICE_RECOGNITION_REQUEST_CODE = 1234;
-    private ImageView mic_Image_View;
-    private EditText enter_Task_Edit_Task,time_Edit_Text,date_Edit_Text;
+    private ImageView mic_Image_View,repeat_Off_Image_View;
+    private EditText enter_Task_Edit_Task,time_Edit_Text,date_Edit_Text,endlessly_Edit_Text;
     private Main_DataBase mainDataBase;
     private WeekdaysPicker weekdays;
     private String get_Selected_Date;
         // default value is 24 for non empty time
     private int original_Time=24,get_Id ;
+    private NiceSpinner custom_Spinner;
 
 
     // private OnSelectDateListener listener;
@@ -46,7 +48,6 @@ public class Create_New_To_Do_List extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_new_to_do_list);
-
 
         // Reference here
         Reference();
@@ -74,19 +75,17 @@ public class Create_New_To_Do_List extends AppCompatActivity {
         List activities = pm.queryIntentActivities(new Intent(
                 RecognizerIntent.ACTION_RECOGNIZE_SPEECH), 0);
         if (activities.size() != 0) {
-            mic_Image_View.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startVoiceRecognitionActivity();
-                }
-            });
+            mic_Image_View.setOnClickListener(v -> startVoiceRecognitionActivity());
         } else {
             mic_Image_View.setEnabled(false);
             Toast.makeText(this , "Recognizer not present" , Toast.LENGTH_LONG).show();
         }
 
+        setCustomSpinner();
+
     }
     // all on click bustton come here .. or you say on click Listener
+    @SuppressLint("SetTextI18n")
     public void On_Click_Process(View view){
         final Calendar c = Calendar.getInstance();
         switch (view.getId()){
@@ -119,28 +118,23 @@ public class Create_New_To_Do_List extends AppCompatActivity {
                         theme = android.R.style.Theme_Holo_Dialog;
                 }
                     datePickerDialog = new DatePickerDialog(this,theme,
-                            new DatePickerDialog.OnDateSetListener() {
-
-                                @SuppressLint("SetTextI18n")
-                                @Override
-                                public void onDateSet(DatePicker view, int year,
-                                                      int monthOfYear, int dayOfMonth) {
+                            (view1, year, monthOfYear, dayOfMonth) -> {
 
 
 
-                                             get_Selected_Date = dayOfMonth+"-"+monthOfYear+"-"+year;
-                                                date_Edit_Text.setText(dayOfMonth+"-"+(monthOfYear+1)+"-"+year);
-                                            if((mYear ==year) && (mMonth ==monthOfYear)) {
-                                                if (mDay == dayOfMonth)
-                                                    date_Edit_Text.setText(getResources().getString(R.string.today_Date));
-                                                else if ((mDay-1) == dayOfMonth)
-                                                    date_Edit_Text.setText(getResources().getString(R.string.yesterday_Date));
-                                                else if ((mDay+1) == dayOfMonth)
-                                                    date_Edit_Text.setText(getResources().getString(R.string.tomorrow_Date));
-                                            }
-                                    Toast.makeText(Create_New_To_Do_List.this, date_Edit_Text.getText().toString(),Toast.LENGTH_LONG).show();
-                                }
+                                         get_Selected_Date = dayOfMonth+"-"+monthOfYear+"-"+year;
+                                            date_Edit_Text.setText(dayOfMonth+"-"+(monthOfYear+1)+"-"+year);
+                                        if((mYear ==year) && (mMonth ==monthOfYear)) {
+                                            if (mDay == dayOfMonth)
+                                                date_Edit_Text.setText(getResources().getString(R.string.today_Date));
+                                            else if ((mDay-1) == dayOfMonth)
+                                                date_Edit_Text.setText(getResources().getString(R.string.yesterday_Date));
+                                            else if ((mDay+1) == dayOfMonth)
+                                                date_Edit_Text.setText(getResources().getString(R.string.tomorrow_Date));
+                                        }
+                                Toast.makeText(Create_New_To_Do_List.this, date_Edit_Text.getText().toString(),Toast.LENGTH_LONG).show();
                             }, mYear, mMonth, mDay);
+
 
                 if (android.os.Build.VERSION.SDK_INT <= android.os.Build.VERSION_CODES.LOLLIPOP) {
                     datePickerDialog.setIcon(R.drawable.check_icon);
@@ -156,25 +150,60 @@ public class Create_New_To_Do_List extends AppCompatActivity {
                 int mHour = c.get(Calendar.HOUR_OF_DAY);
                 int mMinute = c.get(Calendar.MINUTE);
 
-                // Launch Time Picker Dialog
+                // time picker dialog setup
                 TimePickerDialog timePickerDialog = new TimePickerDialog(this,android.R.style.Theme_Holo_Dialog,
-                        new TimePickerDialog.OnTimeSetListener() {
-
-                            @SuppressLint("SetTextI18n")
-                            @Override
-                            public void onTimeSet(TimePicker view, int hourOfDay,
-                                                  int minute) {
-                                original_Time = hourOfDay;
-                                String set_Time = Convert_Into(hourOfDay,minute);
-                                Toast.makeText(Create_New_To_Do_List.this, set_Time+"",Toast.LENGTH_LONG).show();
-                                time_Edit_Text.setText(set_Time);
-
-                            }
+                        (view12, hourOfDay, minute) -> {
+                            original_Time = hourOfDay;
+                        String set_Time = Convert_Into(hourOfDay,minute);
+                        Toast.makeText(Create_New_To_Do_List.this, set_Time+"",Toast.LENGTH_LONG).show();
+                        time_Edit_Text.setText(set_Time);
                         }, mHour, mMinute, false);
 
                 timePickerDialog.setIcon(R.drawable.check_icon);
                 timePickerDialog.setTitle("Please select time.");
                 timePickerDialog.show();
+                break;
+            case R.id.repeat_Image_View:
+                setCustomSpinner();
+            case R.id.repeat_Off_Image_View:
+            case R.id.endlessly_Edit_Text:
+                // Get Current Date
+
+                final int cYear = c.get(Calendar.YEAR);
+                final int cMonth = c.get(Calendar.MONTH);
+                final int cDay = c.get(Calendar.DAY_OF_MONTH);
+
+
+                DatePickerDialog datePickerDialog1;
+                int theme1;
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                    theme1 = android.R.style.Theme_Material_Light_Dialog;
+                }else{
+                    theme1 = android.R.style.Theme_Holo_Dialog;
+                }
+                datePickerDialog1 = new DatePickerDialog(this,theme1,
+                        (view1, year, monthOfYear, dayOfMonth) -> {
+                            get_Selected_Date = dayOfMonth+"-"+monthOfYear+"-"+year;
+                            endlessly_Edit_Text.setText(dayOfMonth+"-"+(monthOfYear+1)+"-"+year);
+                            if((cYear ==year) && (cMonth ==monthOfYear)) {
+                                if (cDay == dayOfMonth)
+                                    endlessly_Edit_Text.setText(getResources().getString(R.string.today_Date));
+                                else if ((cDay-1) == dayOfMonth)
+                                    endlessly_Edit_Text.setText(getResources().getString(R.string.yesterday_Date));
+                                else if ((cDay+1) == dayOfMonth)
+                                    endlessly_Edit_Text.setText(getResources().getString(R.string.tomorrow_Date));
+                            }
+                            Toast.makeText(Create_New_To_Do_List.this, endlessly_Edit_Text.getText().toString(),Toast.LENGTH_LONG).show();
+                        }, cYear, cMonth, cDay);
+
+
+                if (android.os.Build.VERSION.SDK_INT <= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                    datePickerDialog1.setIcon(R.drawable.check_icon);
+                    datePickerDialog1.setTitle("Please select Date.");
+                }
+
+                datePickerDialog1.show();
+
                 break;
         }
     }
@@ -197,6 +226,9 @@ public class Create_New_To_Do_List extends AppCompatActivity {
         date_Edit_Text = findViewById(R.id.date_Edit_Text);
         time_Edit_Text = findViewById(R.id.time_Edit_Text);
         weekdays =  findViewById(R.id.weekdays);
+        custom_Spinner =  findViewById(R.id.custom_Spinner);
+        repeat_Off_Image_View = findViewById(R.id.repeat_Off_Image_View);
+        endlessly_Edit_Text = findViewById(R.id.endlessly_Edit_Text);
 
         // create object of database
         mainDataBase = new Main_DataBase(this);
@@ -231,6 +263,38 @@ public class Create_New_To_Do_List extends AppCompatActivity {
         }
     }
 
+    // set spinner list for repeat
+    private void setCustomSpinner(){
+
+        List<String> repeat_Array = new LinkedList<>(Arrays.asList(getResources().getStringArray(R.array.custom_Weekdays_Setup)));
+        custom_Spinner.attachDataSource(repeat_Array);
+
+        // custom listener with
+
+        custom_Spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                endlessly_Edit_Text.setVisibility(View.VISIBLE);
+                repeat_Off_Image_View.setVisibility(View.VISIBLE);
+                if(position== 5){
+                    weekdays.setVisibility(View.VISIBLE);
+                }else{
+                    weekdays.setVisibility(View.GONE);
+                }
+                if(position ==0){
+                    endlessly_Edit_Text.setVisibility(View.GONE);
+                    repeat_Off_Image_View.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
+
     public void Call_Custom_Dailog(String Message) {
 
         final Dialog dialog = new Dialog(this);
@@ -242,50 +306,48 @@ public class Create_New_To_Do_List extends AppCompatActivity {
         TextView button_Yes = dialog.findViewById(R.id.button_Yes);
         // if button is clicked, close the custom dialog
 
-        button_Yes.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // if date and time is empty
-                final Calendar c = Calendar.getInstance();
-                if(date_Edit_Text.getText().toString().equals(""))
-                    get_Selected_Date = c.get(Calendar.DAY_OF_MONTH) + "-" + c.get(Calendar.MONTH) + "-" + c.get(Calendar.YEAR);
-                else{
-                    String[] split_Date = get_Selected_Date.split("-");
-                    if(((Integer.parseInt(split_Date[2]) < c.get(Calendar.YEAR)) ||
-                            ((Integer.parseInt(split_Date[2]) <= c.get(Calendar.YEAR)) &&(Integer.parseInt(split_Date[1]) < c.get(Calendar.MONTH)))
-                            || ((Integer.parseInt(split_Date[2]) <= c.get(Calendar.YEAR)) &&(Integer.parseInt(split_Date[1]) <= c.get(Calendar.MONTH))&& (Integer.parseInt(split_Date[0]) < c.get(Calendar.DAY_OF_MONTH)))))
-                                    Toast.makeText(getApplicationContext(), "Oops... The Date You entered is Already in Overdue List", Toast.LENGTH_SHORT).show();
-                    
-                }
-                if(time_Edit_Text.getText().toString().equals(""))
-                    time_Edit_Text.setText(null);
-                // update the database
-                if(getIntent().getExtras() != null){
-                    mainDataBase.Update_The_Table(get_Id+"",enter_Task_Edit_Task.getText().toString(),get_Selected_Date,
-                            time_Edit_Text.getText().toString(),get_Repeat(),0,original_Time);
-                }else{
-                      // fill in database
-                    mainDataBase.Fill_It(enter_Task_Edit_Task.getText().toString(),get_Selected_Date,
-                            time_Edit_Text.getText().toString(),get_Repeat(),0,original_Time);
-                }
+        button_Yes.setOnClickListener(v -> {
+            // if date and time is empty
+            final Calendar c = Calendar.getInstance();
+            if(date_Edit_Text.getText().toString().equals(""))
+                get_Selected_Date = c.get(Calendar.DAY_OF_MONTH) + "-" + c.get(Calendar.MONTH) + "-" + c.get(Calendar.YEAR);
+            else{
+                String[] split_Date = get_Selected_Date.split("-");
+                if(((Integer.parseInt(split_Date[2]) < c.get(Calendar.YEAR)) ||
+                        ((Integer.parseInt(split_Date[2]) <= c.get(Calendar.YEAR)) &&(Integer.parseInt(split_Date[1]) < c.get(Calendar.MONTH)))
+                        || ((Integer.parseInt(split_Date[2]) <= c.get(Calendar.YEAR)) &&(Integer.parseInt(split_Date[1]) <= c.get(Calendar.MONTH))&& (Integer.parseInt(split_Date[0]) < c.get(Calendar.DAY_OF_MONTH)))))
+                                Toast.makeText(getApplicationContext(), "Oops... The Date You entered is Already in Overdue List", Toast.LENGTH_SHORT).show();
 
-                // check when date already overdue
-
-
-
-                // intent to open main activity class
-                Intent intent = new Intent(getApplicationContext(),MainActivity.class);
-                startActivity(intent);
-
-                dialog.dismiss();
             }
-        });
-        button_No.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
+            // if time is empty
+            if(time_Edit_Text.getText().toString().equals("")) time_Edit_Text.setText(null);
+
+            // if endlessly is empty
+            if(endlessly_Edit_Text.getText().toString().equals("")) endlessly_Edit_Text.setText(null);
+
+            // update the database
+            if(getIntent().getExtras() != null){
+                mainDataBase.Update_The_Table(get_Id+"",enter_Task_Edit_Task.getText().toString(),get_Selected_Date,
+                        time_Edit_Text.getText().toString(),custom_Spinner.getSelectedIndex(),get_Repeat(),
+                        endlessly_Edit_Text.getText().toString(),0,original_Time);
+            }else{
+                  // fill in database
+                mainDataBase.Fill_It(enter_Task_Edit_Task.getText().toString(),get_Selected_Date,
+                        time_Edit_Text.getText().toString(),custom_Spinner.getSelectedIndex(),get_Repeat(),
+                        endlessly_Edit_Text.getText().toString(),0,original_Time);
             }
+
+            // check when date already overdue
+
+
+
+            // intent to open main activity class
+            Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+            startActivity(intent);
+
+            dialog.dismiss();
         });
+        button_No.setOnClickListener(v -> dialog.dismiss());
         dialog.show();
     }
     public String get_Repeat(){

@@ -25,6 +25,6 @@ public class WorkManger_Class_C extends Worker {
         Alert_Notification alert_notification = new Alert_Notification();
         alert_notification.notify(context,"Alert ",0);
 
-        return Result.SUCCESS;
+        return Result.success();
     }
 }

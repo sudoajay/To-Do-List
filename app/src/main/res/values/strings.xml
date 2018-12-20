@@ -12,8 +12,9 @@
     <string name="Enter_Task_Answer">Enter Task</string>
     <string name="Enter_Date_Question">What will be the Date ? (Optional)</string>
     <string name="repeat_Question">You Want To Repeat ? (Optional)</string>
-    <string name="Enter_Day_Answer">Set Day</string>
+    <string name="Enter_Time_Answer">Set Time</string>
     <string name="Enter_Date_Answer">Set Date</string>
+    <string name="endlessly_Date">Endlessly</string>
     <string name="calender_icon">Calender_icon</string>
     <string name="timer_icon">Timer_icon</string>
 
@@ -115,4 +116,15 @@
 
     <string name="slide_4_title">Data Restore</string>
     <string name="slide_4_desc">From One Click You Can Restore Your Data To Main Storage</string>
+
+    // custom weekdays Setup
+    <string-array name="custom_Weekdays_Setup">
+        <item>No Repeat</item>
+        <item>Daily</item>
+        <item>Every Weekday(Mon-Fri)</item>
+        <item>Every Weekday(Sat,Sun)</item>
+        <item>Once A Month(Same Date)</item>
+        <item>Custom WeekDay</item>
+    </string-array>
+
 </resources>

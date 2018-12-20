@@ -24,6 +24,6 @@ public class WorkManger_Class_B extends Worker {
         Notify_Notification notify_notification = new Notify_Notification();
         notify_notification.notify(context, "Due ", "Due List Alert");
 
-        return Result.SUCCESS;
+        return Result.success();
     }
 }

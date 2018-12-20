@@ -362,11 +362,11 @@ public class Main_Class_Fragement extends Fragment  implements View.OnClickListe
             cursor.moveToFirst();
 
             //second part
-            mainDataBase.Fill_It(cursor.getString(1),Next_Day(count,cursor.getString(2)),cursor.getString(3), cursor.getString(4)
-            ,cursor.getInt(5),cursor.getInt(6));
+            mainDataBase.Fill_It(cursor.getString(1),Next_Day(count,cursor.getString(2)),cursor.getString(3), cursor.getInt(4)
+            ,cursor.getString(5),cursor.getString(6),cursor.getInt(7),cursor.getInt(8));
 
             // update or empty today repeat column
-            mainDataBase.Update_The_Table_For_Repeat(array_Id.get(i)+"","");
+            mainDataBase.Update_The_Table_For_Repeat(array_Id.get(i)+"",-1);
 
             // refresh the list
             if(custom_adapter_recycleview != null )

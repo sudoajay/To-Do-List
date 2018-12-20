@@ -45,7 +45,7 @@ public class WorkManger_Class_A extends Worker {
         // second task - Show All the today task
         Notify_Notification notify_notification = new Notify_Notification();
         notify_notification.notify(context, "Today ", "Today List Alert");
-        return Result.SUCCESS;
+        return Result.success();
     }
 }
 

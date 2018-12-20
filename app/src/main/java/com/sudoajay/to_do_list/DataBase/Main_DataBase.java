@@ -19,8 +19,10 @@ public class Main_DataBase extends SQLiteOpenHelper {
     public static final String col_3 = "Date";
     public static final String col_4 = "Time";
     public static final String col_5 = "Repeat";
-    public static final String col_6 = "Done";
-    public static final String col_7 = "Original_Time";
+    public static final String col_6 = "customWeekday";
+    public static final String col_7 = "Endlessly";
+    public static final String col_8 = "Done";
+    public static final String col_9 = "Original_Time";
 
 
 
@@ -32,7 +34,7 @@ public class Main_DataBase extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("create table " + DATABASE_TABLE_NAME + "(ID INTEGER PRIMARY KEY AUTOINCREMENT , " +
-                "Task TEXT,Date Text,Time Text,Repeat Text , Done INTEGER , Original_Time INTEGER)");
+                "Task TEXT,Date Text,Time Text,Repeat INTEGER ,customWeekday Text,Endlessly Text, Done INTEGER , Original_Time INTEGER)");
 
     }
 
@@ -41,15 +43,17 @@ public class Main_DataBase extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + DATABASE_TABLE_NAME);
         onCreate(db);
     }
-    public void Fill_It(String Task , String Date ,String Time ,String  Repeat ,int Done, int Original_Time){
+    public void Fill_It(String Task , String Date ,String Time ,int  Repeat ,String customWeekday ,String Endlessly ,int Done, int Original_Time){
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(col_2,Task);
         contentValues.put(col_3,Date);
         contentValues.put(col_4,Time);
         contentValues.put(col_5,Repeat);
-        contentValues.put(col_6,Done);
-        contentValues.put(col_7 ,Original_Time);
+        contentValues.put(col_6,customWeekday);
+        contentValues.put(col_7 ,Endlessly);
+        contentValues.put(col_8,Done);
+        contentValues.put(col_9,Original_Time);
         sqLiteDatabase.insert(DATABASE_TABLE_NAME,null,contentValues);
     }
     public boolean check_For_Empty(){
@@ -105,7 +109,7 @@ public class Main_DataBase extends SQLiteOpenHelper {
     }
 
 
-    public void Update_The_Table(String id , String Task , String Date,String Time ,String  Repeat,int Done ,int Original_Time ){
+    public void Update_The_Table(String id , String Task , String Date,String Time ,int  Repeat ,String customWeekday ,String Endlessly ,int Done ,int Original_Time ){
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(col_1,id);
@@ -113,8 +117,10 @@ public class Main_DataBase extends SQLiteOpenHelper {
         contentValues.put(col_3,Date);
         contentValues.put(col_4,Time);
         contentValues.put(col_5,Repeat);
-        contentValues.put(col_6,Done);
-        contentValues.put(col_7,Original_Time);
+        contentValues.put(col_6,customWeekday);
+        contentValues.put(col_7 ,Endlessly);
+        contentValues.put(col_8,Done);
+        contentValues.put(col_9,Original_Time);
         sqLiteDatabase.update(DATABASE_TABLE_NAME,contentValues,"ID = ?",new String[] { id });
     }
 
@@ -122,7 +128,7 @@ public class Main_DataBase extends SQLiteOpenHelper {
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(col_1,id);
-        contentValues.put(col_6,Done);
+        contentValues.put(col_8,Done);
         sqLiteDatabase.update(DATABASE_TABLE_NAME,contentValues,"ID = ?",new String[] { id });
     }
     public void Update_The_Table_For_Date(String id ,String Date ){
@@ -132,7 +138,7 @@ public class Main_DataBase extends SQLiteOpenHelper {
         contentValues.put(col_3,Date);
         sqLiteDatabase.update(DATABASE_TABLE_NAME,contentValues,"ID = ?",new String[] { id });
     }
-    public void Update_The_Table_For_Repeat(String id ,String  Repeat ){
+    public void Update_The_Table_For_Repeat(String id ,int  Repeat ){
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(col_1,id);
