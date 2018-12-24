@@ -167,7 +167,7 @@
         app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.418"
+        app:layout_constraintVertical_bias="0.41"
         tools:ignore="RtlSymmetry" />
 
     <EditText
@@ -197,12 +197,15 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
         android:ems="10"
-        android:hint="@string/endlessly_Date"
         android:focusable="false"
+        android:hint="@string/endlessly_Date"
         android:inputType="text|number|datetime|date|time"
         android:onClick="On_Click_Process"
+        android:paddingStart="5dp"
         android:paddingLeft="5dp"
+        android:text="No Date Set"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/repeat_Off_Image_View"
@@ -210,9 +213,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/weekdays"
         app:layout_constraintVertical_bias="0.279"
-        android:layout_marginLeft="16dp"
-        tools:ignore="RtlSymmetry"
-        android:paddingStart="5dp" />
+        tools:ignore="RtlSymmetry" />
 
     <ImageView
         android:id="@+id/mic_Image_View"

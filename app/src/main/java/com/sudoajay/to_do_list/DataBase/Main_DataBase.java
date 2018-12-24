@@ -68,9 +68,10 @@ public class Main_DataBase extends SQLiteOpenHelper {
     }
     public Cursor Get_All_Date_And_ID_Done_Week(){
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
-        return sqLiteDatabase.rawQuery("select Date ,ID ,Done,Repeat from Database_Table ORDER BY Original_Time ASC " ,null);
+        return sqLiteDatabase.rawQuery("select Date ,ID ,Done,Repeat,customWeekday,Endlessly from Database_Table ORDER BY Original_Time ASC "
+                ,null);
     }
-    public Integer Delete_Row(String id){
+    public Integer deleteRow(String id){
         SQLiteDatabase db=this.getWritableDatabase();
         return db.delete(DATABASE_TABLE_NAME,"ID = ?",new String[] {id});
     }
@@ -143,6 +144,15 @@ public class Main_DataBase extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put(col_1,id);
         contentValues.put(col_5,Repeat);
+        sqLiteDatabase.update(DATABASE_TABLE_NAME,contentValues,"ID = ?",new String[] { id });
+    }
+    public void UpdateTheTableAndClear(String id ){
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(col_1,id);
+        contentValues.put(col_5,0);
+        contentValues.put(col_6,"");
+        contentValues.put(col_7,"");
         sqLiteDatabase.update(DATABASE_TABLE_NAME,contentValues,"ID = ?",new String[] { id });
     }
 

@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,7 +28,7 @@ import java.util.ArrayList;
 
 public class Custom_Adapter_Recycleview extends RecyclerView.Adapter<Custom_Adapter_Recycleview.MyViewHolder> {
     private ArrayList<String> task_Name,task_Info;
-    private ArrayList<Boolean> check_Box_Array,similar_Check_Box_Array;
+    private ArrayList<Boolean> check_Box_Array;
     private ArrayList<Integer> array_Id;
     private MainActivity mainActivity;
     private Main_Class_Fragement main_class_fragement;

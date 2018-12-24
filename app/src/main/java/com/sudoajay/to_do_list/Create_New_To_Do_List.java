@@ -37,7 +37,7 @@ public class Create_New_To_Do_List extends AppCompatActivity {
     private EditText enter_Task_Edit_Task,time_Edit_Text,date_Edit_Text,endlessly_Edit_Text;
     private Main_DataBase mainDataBase;
     private WeekdaysPicker weekdays;
-    private String get_Selected_Date;
+    private String getSelectedDate,getSelectedEndlesslyDate;
         // default value is 24 for non empty time
     private int original_Time=24,get_Id ;
     private NiceSpinner custom_Spinner;
@@ -52,6 +52,8 @@ public class Create_New_To_Do_List extends AppCompatActivity {
         // Reference here
         Reference();
 
+        // set custom spinner
+        setCustomSpinner();
 
         if(getIntent().getExtras() != null ){
             Intent intent = getIntent();
@@ -63,9 +65,25 @@ public class Create_New_To_Do_List extends AppCompatActivity {
                 do
                 {
                     enter_Task_Edit_Task.setText(cursor.getString(1));
+
                     Sent_To_Date_Box(cursor.getString(2));
+
                     time_Edit_Text.setText(cursor.getString(3));
-                    Fill_The_Selected_Weekdays(cursor.getString(4));
+
+
+                    custom_Spinner.setSelectedIndex(cursor.getInt(4));
+
+                    if(cursor.getInt(4) == 5) {
+                        weekdays.setVisibility(View.VISIBLE);
+                        Fill_The_Selected_Weekdays(cursor.getString(5));
+                    }
+                    if(cursor.getInt(4) != 0 ) {
+                        endlessly_Edit_Text.setVisibility(View.VISIBLE);
+                        repeat_Off_Image_View.setVisibility(View.VISIBLE  );
+                        endlessly_Edit_Text.setText(cursor.getString(6));
+                        if (endlessly_Edit_Text.getText().toString().isEmpty())
+                            endlessly_Edit_Text.setText("No Date Set");
+                    }
                 }while (cursor.moveToNext()); }
         }
         // Check to see if a recognition activity is present
@@ -81,7 +99,7 @@ public class Create_New_To_Do_List extends AppCompatActivity {
             Toast.makeText(this , "Recognizer not present" , Toast.LENGTH_LONG).show();
         }
 
-        setCustomSpinner();
+
 
     }
     // all on click bustton come here .. or you say on click Listener
@@ -119,10 +137,7 @@ public class Create_New_To_Do_List extends AppCompatActivity {
                 }
                     datePickerDialog = new DatePickerDialog(this,theme,
                             (view1, year, monthOfYear, dayOfMonth) -> {
-
-
-
-                                         get_Selected_Date = dayOfMonth+"-"+monthOfYear+"-"+year;
+                                         getSelectedDate = dayOfMonth+"-"+monthOfYear+"-"+year;
                                             date_Edit_Text.setText(dayOfMonth+"-"+(monthOfYear+1)+"-"+year);
                                         if((mYear ==year) && (mMonth ==monthOfYear)) {
                                             if (mDay == dayOfMonth)
@@ -140,9 +155,7 @@ public class Create_New_To_Do_List extends AppCompatActivity {
                     datePickerDialog.setIcon(R.drawable.check_icon);
                     datePickerDialog.setTitle("Please select Date.");
                 }
-
                 datePickerDialog.show();
-
                 break;
             case R.id.time_Edit_Text:
             case R.id.time_Image_View:
@@ -183,7 +196,7 @@ public class Create_New_To_Do_List extends AppCompatActivity {
                 }
                 datePickerDialog1 = new DatePickerDialog(this,theme1,
                         (view1, year, monthOfYear, dayOfMonth) -> {
-                            get_Selected_Date = dayOfMonth+"-"+monthOfYear+"-"+year;
+                            getSelectedEndlesslyDate = dayOfMonth+"-"+monthOfYear+"-"+year;
                             endlessly_Edit_Text.setText(dayOfMonth+"-"+(monthOfYear+1)+"-"+year);
                             if((cYear ==year) && (cMonth ==monthOfYear)) {
                                 if (cDay == dayOfMonth)
@@ -234,8 +247,9 @@ public class Create_New_To_Do_List extends AppCompatActivity {
         mainDataBase = new Main_DataBase(this);
 
         // setup weekdays selector
-        // no day select default
-        weekdays.selectDay(0);
+        // select today day default
+        Calendar calendar = Calendar.getInstance();
+        weekdays.selectDay(calendar.get(Calendar.DAY_OF_WEEK));
 
     }
 
@@ -310,9 +324,9 @@ public class Create_New_To_Do_List extends AppCompatActivity {
             // if date and time is empty
             final Calendar c = Calendar.getInstance();
             if(date_Edit_Text.getText().toString().equals(""))
-                get_Selected_Date = c.get(Calendar.DAY_OF_MONTH) + "-" + c.get(Calendar.MONTH) + "-" + c.get(Calendar.YEAR);
+                getSelectedDate = c.get(Calendar.DAY_OF_MONTH) + "-" + c.get(Calendar.MONTH) + "-" + c.get(Calendar.YEAR);
             else{
-                String[] split_Date = get_Selected_Date.split("-");
+                String[] split_Date = getSelectedDate.split("-");
                 if(((Integer.parseInt(split_Date[2]) < c.get(Calendar.YEAR)) ||
                         ((Integer.parseInt(split_Date[2]) <= c.get(Calendar.YEAR)) &&(Integer.parseInt(split_Date[1]) < c.get(Calendar.MONTH)))
                         || ((Integer.parseInt(split_Date[2]) <= c.get(Calendar.YEAR)) &&(Integer.parseInt(split_Date[1]) <= c.get(Calendar.MONTH))&& (Integer.parseInt(split_Date[0]) < c.get(Calendar.DAY_OF_MONTH)))))
@@ -323,18 +337,25 @@ public class Create_New_To_Do_List extends AppCompatActivity {
             if(time_Edit_Text.getText().toString().equals("")) time_Edit_Text.setText(null);
 
             // if endlessly is empty
-            if(endlessly_Edit_Text.getText().toString().equals("")) endlessly_Edit_Text.setText(null);
+            if(endlessly_Edit_Text.getText().toString().equals("No Date Set")) getSelectedEndlesslyDate=null;
+            else{
+                String[] split_Date = getSelectedEndlesslyDate.split("-");
+                if(((Integer.parseInt(split_Date[2]) < c.get(Calendar.YEAR)) ||
+                        ((Integer.parseInt(split_Date[2]) <= c.get(Calendar.YEAR)) &&(Integer.parseInt(split_Date[1]) < c.get(Calendar.MONTH)))
+                        || ((Integer.parseInt(split_Date[2]) <= c.get(Calendar.YEAR)) &&(Integer.parseInt(split_Date[1]) <= c.get(Calendar.MONTH))&& (Integer.parseInt(split_Date[0]) < c.get(Calendar.DAY_OF_MONTH)))))
+                    Toast.makeText(getApplicationContext(),"Oops... The Date You entered is Already in Overdue List", Toast.LENGTH_SHORT).show();
+            }
 
             // update the database
             if(getIntent().getExtras() != null){
-                mainDataBase.Update_The_Table(get_Id+"",enter_Task_Edit_Task.getText().toString(),get_Selected_Date,
+                mainDataBase.Update_The_Table(get_Id+"",enter_Task_Edit_Task.getText().toString(),getSelectedDate,
                         time_Edit_Text.getText().toString(),custom_Spinner.getSelectedIndex(),get_Repeat(),
-                        endlessly_Edit_Text.getText().toString(),0,original_Time);
+                        getSelectedEndlesslyDate,0,original_Time);
             }else{
                   // fill in database
-                mainDataBase.Fill_It(enter_Task_Edit_Task.getText().toString(),get_Selected_Date,
+                mainDataBase.Fill_It(enter_Task_Edit_Task.getText().toString(),getSelectedDate,
                         time_Edit_Text.getText().toString(),custom_Spinner.getSelectedIndex(),get_Repeat(),
-                        endlessly_Edit_Text.getText().toString(),0,original_Time);
+                        getSelectedEndlesslyDate,0,original_Time);
             }
 
             // check when date already overdue
@@ -372,8 +393,8 @@ public class Create_New_To_Do_List extends AppCompatActivity {
         int year =Integer.parseInt(split[2]);
 
 
-        get_Selected_Date = dayOfMonth+"-"+monthOfYear+"-"+year;
-        date_Edit_Text.setText(get_Selected_Date);
+        getSelectedDate = dayOfMonth+"-"+monthOfYear+"-"+year;
+        date_Edit_Text.setText(getSelectedDate);
         if((mYear ==year) && (mMonth ==monthOfYear)) {
             if (mDay == dayOfMonth)
                 date_Edit_Text.setText(getResources().getString(R.string.today_Date));

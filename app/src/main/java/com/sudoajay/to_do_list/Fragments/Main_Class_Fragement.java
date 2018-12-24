@@ -8,10 +8,12 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.sudoajay.to_do_list.Create_New_To_Do_List;
@@ -37,9 +39,9 @@ public class Main_Class_Fragement extends Fragment  implements View.OnClickListe
     private RecyclerView recyclerView;
     private  View view;
     private Custom_Adapter_Recycleview custom_adapter_recycleview;
-    private ArrayList<String> task_Name,save_All_Date,task_Info,weeks;
+    private ArrayList<String> task_Name,save_All_Date,task_Info,weeks,endlesslyData;
     private ArrayList<Boolean> check_Box_Array,similar_Check_Box_Array;
-    private ArrayList<Integer> array_Id;
+    private ArrayList<Integer> array_Id,onRepeatId;
     private TextView nothing_Text_View;
     private ImageView nothing_Image_View;
     private int MYCODE=1000;
@@ -105,6 +107,8 @@ public class Main_Class_Fragement extends Fragment  implements View.OnClickListe
         task_Info = new ArrayList<>();
         array_Id = new ArrayList<>();
         weeks = new ArrayList<>();
+        onRepeatId = new ArrayList<>();
+        endlesslyData = new ArrayList<>();
 
         // database create object
         mainDataBase = new Main_DataBase(main_Activity);
@@ -131,8 +135,15 @@ public class Main_Class_Fragement extends Fragment  implements View.OnClickListe
                     else{
                         check_Box_Array.add(true);
                     }
-                    weeks.add(cursor.getString(3));
+                    onRepeatId.add(cursor.getInt(3));
 
+                    // if its have custom weekdays
+                    if(cursor.getInt(3) == 5 ) weeks.add(cursor.getString(4));
+                    else{
+                        weeks.add(null);
+                    }
+
+                    endlesslyData.add(cursor.getString(5));
                 }while (cursor.moveToNext()); }
 
         }
@@ -179,7 +190,7 @@ public class Main_Class_Fragement extends Fragment  implements View.OnClickListe
                         String day = Return_The_Day(calendar.get(Calendar.DAY_OF_WEEK));
 
                         String time = cursor.getString(3);
-                        if(time.equals("")) time = "No Time";
+                        if(time.equals("")) time = "No Time Set";
 
                         List<Integer> dates =new ArrayList<>();
                         for(String  show: split_Date){
@@ -216,6 +227,8 @@ public class Main_Class_Fragement extends Fragment  implements View.OnClickListe
                     save_All_Date.remove(i);
                     array_Id.remove(i);
                     check_Box_Array.remove(i);
+                    onRepeatId.remove(i);
+                    weeks.remove(i);
                 }
             }
 
@@ -229,9 +242,13 @@ public class Main_Class_Fragement extends Fragment  implements View.OnClickListe
                     save_All_Date.remove(i);
                     array_Id.remove(i);
                     check_Box_Array.remove(i);
+                    onRepeatId.remove(i);
+                    weeks.remove(i);
             }else {
-                    if(!weeks.get(i).equals("")){
-                        Create_New_Data(i);
+
+                    // this is for weekdays configuration
+                    if(onRepeatId.get(i) != 0){
+                        createNewData(i);
                     }
                 }
             }
@@ -245,10 +262,12 @@ public class Main_Class_Fragement extends Fragment  implements View.OnClickListe
                     save_All_Date.remove(i);
                     array_Id.remove(i);
                     check_Box_Array.remove(i);
+                    onRepeatId.remove(i);
+                    weeks.remove(i);
                 }else {
-                    if(!weeks.get(i).equals("")){
-                        Create_New_Data_Future(i);
-                    }
+//                    if(!weeks.get(i).equals("")){
+//                        Create_New_Data_Future(i);
+//                    }
                 }
             }
         }
@@ -301,9 +320,6 @@ public class Main_Class_Fragement extends Fragment  implements View.OnClickListe
         }
         custom_adapter_recycleview.notifyDataSetChanged();
     }
-    public Custom_Adapter_Recycleview getCustom_adapter_recycleview() {
-        return custom_adapter_recycleview;
-    }
 
     // fix Database
     public void Fix_Database_As_Per_Tick(){
@@ -322,7 +338,7 @@ public class Main_Class_Fragement extends Fragment  implements View.OnClickListe
             if(tick.get(i)){
                 task_Name.remove(i);
                 task_Info.remove(i);
-                mainDataBase.Delete_Row(array_Id.get(i)+"");
+                mainDataBase.deleteRow(array_Id.get(i)+"");
                 array_Id.remove(i);
                 tick.remove(i);
 
@@ -331,26 +347,51 @@ public class Main_Class_Fragement extends Fragment  implements View.OnClickListe
         custom_adapter_recycleview.notifyDataSetChanged();
     }
     // this is for today only
-    private void Create_New_Data(int i){
-        // convert string week days to int array
-        String[] split = weeks.get(i).split("");
-        List<Integer> week_Days = new ArrayList<>();
-        for(String days: split){
-            try {
-                week_Days.add(Integer.parseInt(days));
-            }catch (Exception e){
-
-              }
-            }
-
+    // and this method duplicate the date
+    private void createNewData(int i){
 
         // get the day of today
-            Calendar c = Calendar.getInstance();
-            int day = c.get(Calendar.DAY_OF_WEEK), count=0;
+        Calendar c = Calendar.getInstance();
+        int day = c.get(Calendar.DAY_OF_WEEK), count = 0;
 
+        // Week days Store in Integer
+        // for mon -fir
+        // for sat , sun
+        // for custom weekdays
+        List<Integer> week_Days1,week_Days2,week_Days3 = null,endlessly;
+        switch(onRepeatId.get(i)){
+            case 1:
+                // this is for daily repeating
+                count=1;
+                break;
+            case 2:
+                // this is for mon -fri week days only
+                week_Days1 = new ArrayList<>(Arrays.asList(2,3,4,5,6));
+                count = Count_Days_Main(day, week_Days1);
+                break;
+            case 3:
+                // this is for sat , sunday week day only
+                week_Days2 = new ArrayList<>(Arrays.asList(1,7));
+                count = Count_Days_Main(day, week_Days2);
+                break;
+            case 4:
+                // this is for same data for next month
+                // empty here because its work on next day method
+                break;
 
-            count = Count_Days_Main(day,week_Days);
+            case 5:
+            // this method for custom weekdays in repeat section
+            // convert string week days to int array
 
+             week_Days3 = new ArrayList<>();
+                for (int k = 0;k < weeks.get(i).length(); k++) {
+                    week_Days3.add(Integer.parseInt(String.valueOf(weeks.get(i).charAt(k))));
+                }
+
+            count = Count_Days_Main(day, week_Days3);
+                Log.d("checking_it", "Week Day  " + week_Days3.get(0) + " cCount "+ count );
+                break;
+        }
 
             // grab the data from id
             // create new data with new next date
@@ -361,12 +402,54 @@ public class Main_Class_Fragement extends Fragment  implements View.OnClickListe
         if (cursor != null) {
             cursor.moveToFirst();
 
-            //second part
-            mainDataBase.Fill_It(cursor.getString(1),Next_Day(count,cursor.getString(2)),cursor.getString(3), cursor.getInt(4)
-            ,cursor.getString(5),cursor.getString(6),cursor.getInt(7),cursor.getInt(8));
+            // find the current day , current month , current year
+            Calendar calendar = Calendar.getInstance();
+            int current_Year= calendar.get(Calendar.YEAR);
+            int current_Month= calendar.get(Calendar.MONTH);
+            int current_Day= calendar.get(Calendar.DAY_OF_MONTH);
+            int currentWeek =calendar.get(Calendar.DAY_OF_WEEK);
 
-            // update or empty today repeat column
-            mainDataBase.Update_The_Table_For_Repeat(array_Id.get(i)+"",-1);
+
+            if(endlesslyData.get(i) != null){
+            // split the array int string  by "-"
+            String[] array= endlesslyData.get(i).split("-");
+
+                if(((Integer.parseInt(array[2]) >current_Year) ||
+                        ((Integer.parseInt(array[2]) >= current_Year) &&(Integer.parseInt(array[1]) > current_Month))
+                        || ((Integer.parseInt(array[2]) >= current_Year) &&(Integer.parseInt(array[1]) >= current_Month)&& (Integer.parseInt(array[0]) > current_Day))))
+                {
+
+                    mainDataBase.Fill_It(cursor.getString(1), Next_Day(count, cursor.getString(2), i), cursor.getString(3), cursor.getInt(4)
+                            , cursor.getString(5), cursor.getString(6), cursor.getInt(7), cursor.getInt(8));
+
+                }
+            }else{
+                mainDataBase.Fill_It(cursor.getString(1), Next_Day(count, cursor.getString(2), i), cursor.getString(3), cursor.getInt(4)
+                        , cursor.getString(5), cursor.getString(6), cursor.getInt(7), cursor.getInt(8));
+            }
+            // clear the data
+            // repeat id , weekdays , endlessly
+            ClearTheData(array_Id.get(i)+"");
+
+
+
+            if(onRepeatId.get(i) == 2 ){
+                if(currentWeek == 7 || currentWeek == 1) deleteEverything(i);
+            }else if(onRepeatId.get(i) == 3 ){
+                if(currentWeek == 2 || currentWeek == 3 || currentWeek == 4 || currentWeek == 5
+                        || currentWeek == 6) deleteEverything(i);
+            }else if(onRepeatId.get(i) ==5 ){
+                // it used for deleted an row
+                // match boolean
+                boolean matches =false;
+
+                assert week_Days3 != null;
+                for(Integer weeks:week_Days3){
+                    if(weeks == currentWeek)matches =true;
+                }
+                if(!matches) deleteEverything(i);
+            }
+            // its not matches and remove the data from everywhere
 
             // refresh the list
             if(custom_adapter_recycleview != null )
@@ -374,112 +457,99 @@ public class Main_Class_Fragement extends Fragment  implements View.OnClickListe
         }
     }
 
-    // this is for future day
-    // check if the repeat match with day
-    private void Create_New_Data_Future(int i) {
-        // local variable
-        List<Integer> days = new ArrayList<>();
-        int count = 0;
+//    // this is for future day
+//    // check if the repeat match with day
+//    private void Create_New_Data_Future(int i) {
+//        // local variable
+//        List<Integer> days = new ArrayList<>();
+//        int count = 0;
+//
+//        String[] split_Date = save_All_Date.get(i).split("-");
+//
+//
+//        Calendar calendar = new GregorianCalendar(Integer.parseInt(split_Date[2]), Integer.parseInt(split_Date[1])
+//                , Integer.parseInt(split_Date[0])); // Note that Month value is 0-based. e.g., 0 for January.
+//
+//        int day_No = calendar.get(Calendar.DAY_OF_WEEK);
+//
+//        // get the repeat of specified id
+//        Cursor cursor = mainDataBase.Get_The_Repeat_From_Id(array_Id.get(i));
+//        if (cursor != null) {
+//            cursor.moveToFirst();
+//
+//            String[] split = cursor.getString(0).split("");
+//
+//            for (String show : split) {
+//                try {
+//                    days.add(Integer.parseInt(show));
+//                } catch (Exception e) {
+//
+//                }
+//            }
+//        }
+//
+//        for (Integer get : days) {
+//            if (get == day_No) {
+//                return;
+//            }
+//        }
+//
+//        count = Count_Days_Main(day_No, days);
+//
+//        // grab the specified date from id
+//        Cursor cursors = mainDataBase.Get_The_Date_From_Id(array_Id.get(i));
+//        if (cursors != null) {
+//            cursors.moveToFirst();
+//            mainDataBase.Update_The_Table_For_Date(array_Id.get(i)+"", Next_Day(count,cursors.getString(0)));
+//        }
+//    }
+    //this method for weekdays next date
+    private static int Count_Days_Main(int day,  List<Integer> week_Days){
+        int temp =day,count=0;
+        do{
+            count++;
+            temp++;
+            if(temp==8)temp=1;
+            Log.i("checking_it", "temp = "+temp  + " day = " +day);
 
-        String[] split_Date = save_All_Date.get(i).split("-");
-
-
-        Calendar calendar = new GregorianCalendar(Integer.parseInt(split_Date[2]), Integer.parseInt(split_Date[1])
-                , Integer.parseInt(split_Date[0])); // Note that Month value is 0-based. e.g., 0 for January.
-
-        int day_No = calendar.get(Calendar.DAY_OF_WEEK);
-
-        // get the repeat of specified id
-        Cursor cursor = mainDataBase.Get_The_Repeat_From_Id(array_Id.get(i));
-        if (cursor != null) {
-            cursor.moveToFirst();
-
-            String[] split = cursor.getString(0).split("");
-
-            for (String show : split) {
-                try {
-                    days.add(Integer.parseInt(show));
-                } catch (Exception e) {
-
-                }
+            for(Integer week:week_Days){
+                Log.i("checking_it", "temp = "+temp  + " day = " +day+ " week = " +week);
+                if(temp == week)return count;
             }
-        }
-
-        for (Integer get : days) {
-            if (get == day_No) {
-                return;
-            }
-        }
-
-        count = Count_Days_Main(day_No, days);
-
-        // grab the specified date from id
-        Cursor cursors = mainDataBase.Get_The_Date_From_Id(array_Id.get(i));
-        if (cursors != null) {
-            cursors.moveToFirst();
-            mainDataBase.Update_The_Table_For_Date(array_Id.get(i)+"", Next_Day(count,cursors.getString(0)));
-        }
+        }while(temp != day);
+        return 0;
     }
+    private String Next_Day( int count ,   String date,final int i){
 
-    private int Count_Days_Main(int day,  List<Integer> week_Days){
-        int temp ,count = 0;
-        for(int  k=1 ;k <= 7;k++){
-            temp = day;
-            temp+=k;
-            for(int j = 0 ;j <week_Days.size();j++ ){
-
-                if(day == week_Days.get(j)){
-                    j++;
-                    if(j == week_Days.size()) {
-                        j=0;
-                    }
-                    count =Count_Days(day,week_Days.get(j));
-                    break;
-                }
-                else if(temp > 7) {
-                    if (temp % 7 == week_Days.get(j)) {
-                        count =Count_Days(day,week_Days.get(j));
-                        break;
-                    }
-                }else if(week_Days.get(j) == temp){
-                    count =Count_Days(day,week_Days.get(j));
-                    break;
-                }
-            }
-            if(count !=0)break;
-        }
-        return count;
-    }
-    private int Count_Days(int day , int next_days){
-
-        if(next_days > day) return (next_days -day);
-        else if(next_days == day) return 7;
-        else{
-            return (7-(day - next_days));
-        }
-    }
-    private String Next_Day(int count , String date){
         String[] split = date.split("-");
         List<Integer> dates = new ArrayList<>();
-        for(String days: split){
+        for (String days : split) {
             try {
                 dates.add(Integer.parseInt(days));
-            }catch (Exception e){
+            } catch (Exception e) {
 
             }
         }
+      if(onRepeatId.get(i)!=4 ) {
 
-        // check for feb
-         if((dates.get(1) ==1) && ((count+= dates.get(0))>= 28)){
-            date =Change_Month_Feb(dates,count);
-        }
+            // make count
+          count+=dates.get(0);
+          Log.i("checking_it ", count + "-" + dates.get(1) + "-" + dates.get(2) + " grab ");
+          // check for feb
+          if ((dates.get(1) == 1) && ((count) >= 28)) {
+              date = Change_Month_Feb(dates, count);
+          }
 
-         // check for months pass
-        else if((count+= dates.get(0))>= 30){
-            date = Change_Month(dates,count);
-        }else{
-            date= count+"-"+dates.get(1)+"-"+dates.get(2);
-        }
+          // check for months pass
+          else if ((count) >= 30) {
+              date = Change_Month(dates, count);
+          } else {
+              date = (count) + "-" + dates.get(1) + "-" + dates.get(2);
+          }
+      }else{
+            // this is for once a month
+            date  = getOnceAMonth(dates.get(0),(dates.get(1)),dates.get(2));
+          }
         return date;
     }
     // except feb month
@@ -492,7 +562,7 @@ public class Main_Class_Fragement extends Fragment  implements View.OnClickListe
         for(Integer month31: month_31){
             if(dates.get(1).intValue() == month31){
                 count %= 31;
-                if(month31 == 12)
+                if(month31 == 11)
                     return_back = count+"-"+1+"-"+(dates.get(2)+1);
                 else {
                     return_back = count+"-"+(dates.get(1)+1)+"-"+dates.get(2);
@@ -522,6 +592,44 @@ public class Main_Class_Fragement extends Fragment  implements View.OnClickListe
 
     }
 
+    // clear the data from database
+    // with no repeat , custom weekdays , endlessly
+    private void ClearTheData(String id){
+        mainDataBase.UpdateTheTableAndClear(id+"");
+    }
+    // this is for same day on Month day
 
+    // check for
+    private String getOnceAMonth(final int day , final int month , final int year ){
+        if(day == 31){
+            // for feb month
+            if(month== 0){
+                if(year%4 ==0)return 28+"-"+(month+1)+"-"+year;
+                else {
+                     return 29+"-"+(month+1)+"-"+year;
+                }
+            }
+            // for specified 31 month except 6 bcz 7 also there
+            else if(month ==2 || month ==4 || month == 7 || month == 9 ){
+                return 30+"-"+(month+1)+"-"+year;
+            }
 
+        }
+        // only for 11 month
+        if(month == 11) return day+"-"+(0)+"-"+(year+1);
+
+        return day+"-"+(month+1)+"-"+year;
+
+    }
+
+    // delete Everything
+    private void deleteEverything(int i){
+            mainDataBase.deleteRow(array_Id.get(i) + "");
+            save_All_Date.remove(i);
+            array_Id.remove(i);
+            check_Box_Array.remove(i);
+            onRepeatId.remove(i);
+            weeks.remove(i);
+
+    }
 }

@@ -34,7 +34,7 @@ public class WorkManger_Class_A extends Worker {
             if (cursor != null  && cursor.moveToFirst()) {
                 cursor.moveToFirst();
                 do {
-                    main_dataBase.Delete_Row(cursor.getInt(0) + "");
+                    main_dataBase.deleteRow(cursor.getInt(0) + "");
                 } while (cursor.moveToNext());
 
 
