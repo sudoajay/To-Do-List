@@ -10,6 +10,7 @@ import android.database.Cursor;
 import android.speech.RecognizerIntent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -147,8 +148,18 @@ public class Create_New_To_Do_List extends AppCompatActivity {
                                             else if ((mDay+1) == dayOfMonth)
                                                 date_Edit_Text.setText(getResources().getString(R.string.tomorrow_Date));
                                         }
-                                Toast.makeText(Create_New_To_Do_List.this, date_Edit_Text.getText().toString(),Toast.LENGTH_LONG).show();
-                            }, mYear, mMonth, mDay);
+                                // if the date is old
+                                // then tell the user about this
+                                String[] split_Date = getSelectedDate.split("-");
+                                if(((Integer.parseInt(split_Date[2]) < c.get(Calendar.YEAR)) ||
+                                        ((Integer.parseInt(split_Date[2]) <= c.get(Calendar.YEAR)) &&(Integer.parseInt(split_Date[1]) < c.get(Calendar.MONTH)))
+                                        || ((Integer.parseInt(split_Date[2]) <= c.get(Calendar.YEAR)) &&(Integer.parseInt(split_Date[1]) <= c.get(Calendar.MONTH))&& (Integer.parseInt(split_Date[0]) < c.get(Calendar.DAY_OF_MONTH)))))
+                                    Toast.makeText(getApplicationContext(), "Oops... The Date You selected is Already gone", Toast.LENGTH_SHORT).show();
+                                else {
+                                    // it will show the text which is present in date edit text
+                                    Toast.makeText(getApplicationContext(), date_Edit_Text.getText().toString(), Toast.LENGTH_LONG).show();
+                                }
+                                }, mYear, mMonth, mDay);
 
 
                 if (android.os.Build.VERSION.SDK_INT <= android.os.Build.VERSION_CODES.LOLLIPOP) {
@@ -160,16 +171,39 @@ public class Create_New_To_Do_List extends AppCompatActivity {
             case R.id.time_Edit_Text:
             case R.id.time_Image_View:
 
-                int mHour = c.get(Calendar.HOUR_OF_DAY);
-                int mMinute = c.get(Calendar.MINUTE);
+               final int mHour = c.get(Calendar.HOUR_OF_DAY);
+               final int mMinute = c.get(Calendar.MINUTE);
+                final int nYear = c.get(Calendar.YEAR);
+                final int nMonth = c.get(Calendar.MONTH);
+                final int nDay = c.get(Calendar.DAY_OF_MONTH);
 
                 // time picker dialog setup
                 TimePickerDialog timePickerDialog = new TimePickerDialog(this,android.R.style.Theme_Holo_Dialog,
                         (view12, hourOfDay, minute) -> {
                             original_Time = hourOfDay;
                         String set_Time = Convert_Into(hourOfDay,minute);
-                        Toast.makeText(Create_New_To_Do_List.this, set_Time+"",Toast.LENGTH_LONG).show();
+
+
                         time_Edit_Text.setText(set_Time);
+
+                        if(getSelectedDate.equals("")){
+                            if(TimeIsPast(mHour,mMinute,hourOfDay,minute))
+                                Toast.makeText(getApplicationContext(), "Oops... The Time You selected is Already gone", Toast.LENGTH_SHORT).show();
+                            else {
+                                Toast.makeText(Create_New_To_Do_List.this, set_Time+"",Toast.LENGTH_LONG).show();
+                            }
+                        }else{
+                            String[] split_Date = getSelectedDate.split("-");
+                            if(Integer.parseInt(split_Date[0]) == nDay && Integer.parseInt(split_Date[1]) == nMonth
+                                    && Integer.parseInt(split_Date[2]) == nYear){
+                                if(TimeIsPast(mHour,mMinute,hourOfDay,minute))
+                                    Toast.makeText(getApplicationContext(), "Oops... The Time You selected is Already gone", Toast.LENGTH_SHORT).show();
+                                else{
+                                    Toast.makeText(Create_New_To_Do_List.this, set_Time+"",Toast.LENGTH_LONG).show();
+                                }
+                            }
+
+                        }
                         }, mHour, mMinute, false);
 
                 timePickerDialog.setIcon(R.drawable.check_icon);
@@ -206,7 +240,17 @@ public class Create_New_To_Do_List extends AppCompatActivity {
                                 else if ((cDay+1) == dayOfMonth)
                                     endlessly_Edit_Text.setText(getResources().getString(R.string.tomorrow_Date));
                             }
-                            Toast.makeText(Create_New_To_Do_List.this, endlessly_Edit_Text.getText().toString(),Toast.LENGTH_LONG).show();
+
+                            // if date already done then show the user
+                            String[] split_Date = getSelectedEndlesslyDate.split("-");
+                            if(((Integer.parseInt(split_Date[2]) < c.get(Calendar.YEAR)) ||
+                                    ((Integer.parseInt(split_Date[2]) <= c.get(Calendar.YEAR)) &&(Integer.parseInt(split_Date[1]) < c.get(Calendar.MONTH)))
+                                    || ((Integer.parseInt(split_Date[2]) <= c.get(Calendar.YEAR)) &&(Integer.parseInt(split_Date[1]) <= c.get(Calendar.MONTH))&& (Integer.parseInt(split_Date[0]) < c.get(Calendar.DAY_OF_MONTH)))))
+                                Toast.makeText(getApplicationContext(), "Oops... The Date You selected is Already gone", Toast.LENGTH_SHORT).show();
+                            else {
+                                // print the endlessly_Edit_Text text
+                                Toast.makeText(getApplicationContext(), endlessly_Edit_Text.getText().toString(), Toast.LENGTH_LONG).show();
+                            }
                         }, cYear, cMonth, cDay);
 
 
@@ -323,28 +367,15 @@ public class Create_New_To_Do_List extends AppCompatActivity {
         button_Yes.setOnClickListener(v -> {
             // if date and time is empty
             final Calendar c = Calendar.getInstance();
+
             if(date_Edit_Text.getText().toString().equals(""))
                 getSelectedDate = c.get(Calendar.DAY_OF_MONTH) + "-" + c.get(Calendar.MONTH) + "-" + c.get(Calendar.YEAR);
-            else{
-                String[] split_Date = getSelectedDate.split("-");
-                if(((Integer.parseInt(split_Date[2]) < c.get(Calendar.YEAR)) ||
-                        ((Integer.parseInt(split_Date[2]) <= c.get(Calendar.YEAR)) &&(Integer.parseInt(split_Date[1]) < c.get(Calendar.MONTH)))
-                        || ((Integer.parseInt(split_Date[2]) <= c.get(Calendar.YEAR)) &&(Integer.parseInt(split_Date[1]) <= c.get(Calendar.MONTH))&& (Integer.parseInt(split_Date[0]) < c.get(Calendar.DAY_OF_MONTH)))))
-                                Toast.makeText(getApplicationContext(), "Oops... The Date You entered is Already in Overdue List", Toast.LENGTH_SHORT).show();
 
-            }
             // if time is empty
             if(time_Edit_Text.getText().toString().equals("")) time_Edit_Text.setText(null);
 
             // if endlessly is empty
             if(endlessly_Edit_Text.getText().toString().equals("No Date Set")) getSelectedEndlesslyDate=null;
-            else{
-                String[] split_Date = getSelectedEndlesslyDate.split("-");
-                if(((Integer.parseInt(split_Date[2]) < c.get(Calendar.YEAR)) ||
-                        ((Integer.parseInt(split_Date[2]) <= c.get(Calendar.YEAR)) &&(Integer.parseInt(split_Date[1]) < c.get(Calendar.MONTH)))
-                        || ((Integer.parseInt(split_Date[2]) <= c.get(Calendar.YEAR)) &&(Integer.parseInt(split_Date[1]) <= c.get(Calendar.MONTH))&& (Integer.parseInt(split_Date[0]) < c.get(Calendar.DAY_OF_MONTH)))))
-                    Toast.makeText(getApplicationContext(),"Oops... The Date You entered is Already in Overdue List", Toast.LENGTH_SHORT).show();
-            }
 
             // update the database
             if(getIntent().getExtras() != null){
@@ -420,4 +451,12 @@ public class Create_New_To_Do_List extends AppCompatActivity {
         weekdays.setSelectedDays(list);
     }
 
+
+    // check for time was past or not
+    private boolean TimeIsPast(int mHour , int mMinute,int selHour, int selMinute){
+        if(mHour > selHour)return true;
+        else if(mHour == selHour && mMinute >selMinute)
+            return true;
+        return false;
+    }
 }

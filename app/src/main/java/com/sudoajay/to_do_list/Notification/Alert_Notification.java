@@ -12,6 +12,8 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
+
 import com.sudoajay.to_do_list.Create_New_To_Do_List;
 import com.sudoajay.to_do_list.MainActivity;
 
@@ -76,7 +78,7 @@ public class Alert_Notification {
         // setup according Which Type
         // if There is no data match with query
             channel_id = context.getString(R.string.Channel_Id_Alert); // channel_id
-        if(array_Id.size() > 1)
+        if(array_Id.size() == 1)
                 text = res.getString(R.string.alert_notification_para, task_Name.get(0));
             else {
                 text =res.getString(R.string.alert_notification_lines,total_No+"") ;
@@ -175,6 +177,8 @@ public class Alert_Notification {
                             PendingIntent.FLAG_UPDATE_CURRENT)
             );
 
+            // this is not visible more then one element in an array
+        if(task_Name.size() ==  1) {
             builder.addAction(
                     R.drawable.snooze_icon,
                     res.getString(R.string.action_Snooze),
@@ -184,7 +188,7 @@ public class Alert_Notification {
                             edit_Intent,
                             PendingIntent.FLAG_UPDATE_CURRENT)
             );
-
+        }
             // if the date more than 1
             if(task_Name.size()>1){
                 builder.setStyle(new NotificationCompat.InboxStyle()
@@ -200,7 +204,7 @@ public class Alert_Notification {
 
 
         // if the data By mistake empty or deleted
-        if(task_Name.size() > 0 || !task_Name.get(0).equals("") || total_No > 0) {
+        if(!task_Name.isEmpty() || task_Name.size() > 0) {
             notify(context, builder.build());
         }
     }
@@ -230,7 +234,6 @@ public class Alert_Notification {
         Initialization();
 
         if(!main_dataBase.check_For_Empty()){
-
             Calendar calendar = Calendar.getInstance();
             int current_Year= calendar.get(Calendar.YEAR);
             int current_Month= calendar.get(Calendar.MONTH);
@@ -246,36 +249,40 @@ public class Alert_Notification {
             if(cursor !=null && cursor.moveToFirst()){
                 cursor.moveToFirst();
                 do {
-                    array_Id.add(cursor.getInt(0));
-                    task_Name.add(cursor.getString(1));
-                    save_All_Date.add(cursor.getString(2));
                     if (!cursor.getString(2).isEmpty() && cursor.getInt(3) != 24) {
                         String[] split = cursor.getString(2).split(":");
                         hour = cursor.getInt(3);
                         minute = Integer.parseInt(split[1].substring(0, 2));
                     } else {
-                        hour = 16;
+                        hour = 12;
                         minute = 0;
                     }
+                    if(hour == current_hour && current_Minute ==minute){
+                        array_Id.add(cursor.getInt(0));
+                        task_Name.add(cursor.getString(1));
+                        save_All_Date.add(cursor.getString(2));
+                    }
 
-                }while ((cursor.moveToNext()) && hour == current_hour && current_Minute ==minute);
+                }while ((cursor.moveToNext()));
                 }
         }
-
         if(task_Name.size()>1) {
-            // Remove last Array element
-            array_Id.remove(array_Id.size() - 1);
-            task_Name.remove(task_Name.size()-1);
-            save_All_Date.remove(save_All_Date.size()-1);
-        }
-        // sen the array size
-        total_No = array_Id.size();
+
+//            // Remove last Array element
+//            array_Id.remove(array_Id.size() - 1);
+//            task_Name.remove(task_Name.size() - 1);
+//            save_All_Date.remove(save_All_Date.size() - 1);
+
+            // set the array size
+            total_No = array_Id.size();
             // add automatic array
-        for (int i = task_Name.size();i<5;i++){
-            array_Id.add(0);
-            task_Name.add("");
-            save_All_Date.add("");
+            for (int i = task_Name.size(); i < 5; i++) {
+                array_Id.add(0);
+                task_Name.add("");
+                save_All_Date.add("");
+            }
         }
+
 
     }
 

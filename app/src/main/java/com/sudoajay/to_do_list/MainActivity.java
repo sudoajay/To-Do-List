@@ -30,6 +30,7 @@ import com.sudoajay.to_do_list.Background_Task.WorkManger_Class_C;
 import com.sudoajay.to_do_list.Background_Task.WorkManger_Class_D;
 import com.sudoajay.to_do_list.DataBase.Main_DataBase;
 import com.sudoajay.to_do_list.Fragments.Main_Class_Fragement;
+import com.sudoajay.to_do_list.Notification.Alert_Notification;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -73,32 +74,29 @@ public class MainActivity extends AppCompatActivity {
         fragment = main_class_fragement.createInstance(this,places.get(1));
         Replace_Fragments();
 
-        bottom_Navigation_View.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        bottom_Navigation_View.setOnNavigationItemSelectedListener(menuItem -> {
 
-                switch (menuItem.getItemId()) {
-                    case R.id.overdue_Tab:
-                        Main_Class_Fragement main_class_fragement1 = new Main_Class_Fragement();
-                        fragment = main_class_fragement1.createInstance(MainActivity.this,places.get(0));
-                        Replace_Fragments();
-                        return true;
+            switch (menuItem.getItemId()) {
+                case R.id.overdue_Tab:
+                    Main_Class_Fragement main_class_fragement1 = new Main_Class_Fragement();
+                    fragment = main_class_fragement1.createInstance(MainActivity.this,places.get(0));
+                    Replace_Fragments();
+                    return true;
 
-                    case R.id.today_Tab:
-                        Main_Class_Fragement main_class_fragement2 = new Main_Class_Fragement();
-                        fragment = main_class_fragement2.createInstance(MainActivity.this,places.get(1));
-                        Replace_Fragments();
-                        return true;
-                    case R.id.overdo_Tab:
-                        Main_Class_Fragement main_class_fragement3 = new Main_Class_Fragement();
-                        fragment =main_class_fragement3.createInstance(MainActivity.this,places.get(2));
-                        Replace_Fragments();
-                        return true;
-                }
-
-
-                return false;
+                case R.id.today_Tab:
+                    Main_Class_Fragement main_class_fragement2 = new Main_Class_Fragement();
+                    fragment = main_class_fragement2.createInstance(MainActivity.this,places.get(1));
+                    Replace_Fragments();
+                    return true;
+                case R.id.overdo_Tab:
+                    Main_Class_Fragement main_class_fragement3 = new Main_Class_Fragement();
+                    fragment =main_class_fragement3.createInstance(MainActivity.this,places.get(2));
+                    Replace_Fragments();
+                    return true;
             }
+
+
+            return false;
         });
 
     }
@@ -138,13 +136,7 @@ public class MainActivity extends AppCompatActivity {
         this.doubleBackToExitPressedOnce = true;
         Toast.makeText(this, " Click Back Again To Exit", Toast.LENGTH_SHORT).show();
 
-        new Handler().postDelayed(new Runnable() {
-
-            @Override
-            public void run() {
-                doubleBackToExitPressedOnce = false;
-            }
-        }, 2000);
+        new Handler().postDelayed(() -> doubleBackToExitPressedOnce = false, 2000);
     }
 
     public void Finish() {
@@ -171,7 +163,7 @@ public class MainActivity extends AppCompatActivity {
         OneTimeWorkRequest morning_Work =
                 new OneTimeWorkRequest.Builder(WorkManger_Class_A.class).addTag("A").setInitialDelay( diff,TimeUnit.HOURS)
                         .build();
-        WorkManager.getInstance().enqueueUniqueWork("B", ExistingWorkPolicy.KEEP, morning_Work);
+        WorkManager.getInstance().enqueueUniqueWork("B", ExistingWorkPolicy.REPLACE, morning_Work);
 
 
         WorkManager.getInstance().getWorkInfoByIdLiveData(morning_Work.getId())
@@ -187,7 +179,7 @@ public class MainActivity extends AppCompatActivity {
                         PeriodicWorkRequest morning_Worker = morning_Work_builder.build();
 
                         // Then enqueue the recurring task:
-                        WorkManager.getInstance().enqueueUniquePeriodicWork("Morning Work", ExistingPeriodicWorkPolicy.KEEP
+                        WorkManager.getInstance().enqueueUniquePeriodicWork("Morning Work", ExistingPeriodicWorkPolicy.REPLACE
                                 ,morning_Worker);
                     }
                 });
@@ -207,7 +199,7 @@ public class MainActivity extends AppCompatActivity {
         OneTimeWorkRequest night_Work =
                 new OneTimeWorkRequest.Builder(WorkManger_Class_B.class).addTag("B").setInitialDelay(diff ,TimeUnit.HOURS )
                         .build();
-        WorkManager.getInstance().enqueueUniqueWork("B", ExistingWorkPolicy.KEEP, night_Work);
+        WorkManager.getInstance().enqueueUniqueWork("B", ExistingWorkPolicy.REPLACE, night_Work);
 
 
         WorkManager.getInstance().getWorkInfoByIdLiveData(night_Work.getId())
@@ -221,7 +213,7 @@ public class MainActivity extends AppCompatActivity {
                         // Create the actual work object:
                         PeriodicWorkRequest morning_Worker = morning_Work_builder.build();
                         // Then enqueue the recurring task:
-                        WorkManager.getInstance().enqueueUniquePeriodicWork("Night Work", ExistingPeriodicWorkPolicy.KEEP
+                        WorkManager.getInstance().enqueueUniquePeriodicWork("Night Work", ExistingPeriodicWorkPolicy.REPLACE
                                 ,morning_Worker);
                     }
                 });
@@ -243,7 +235,8 @@ public class MainActivity extends AppCompatActivity {
             if (cursor != null && cursor.moveToFirst()) {
                 cursor.moveToFirst();
                 do {
-                    if (!cursor.getString(2).isEmpty() && cursor.getInt(3) != 24) {
+                    // if time is set
+                    if (!cursor.getString(2).isEmpty()) {
                         String[] split = cursor.getString(2).split(":");
                         hour = cursor.getInt(3);
                             minute = Integer.parseInt(split[1].substring(0, 2));
@@ -264,8 +257,10 @@ public class MainActivity extends AppCompatActivity {
                 if(cursor.moveToNext()){
                     total_Minute = 1 ;
                 }else {
-                    total_Minute = 60;
+                    total_Minute = ((24 - current_hour) * 60) + (60 - current_minute);
                 }
+
+                // is an empty class for
                  alert_Work =
                         new OneTimeWorkRequest.Builder(WorkManger_Class_D.class)
                                 .addTag("Alert Task").setInitialDelay(total_Minute, TimeUnit.MINUTES)
