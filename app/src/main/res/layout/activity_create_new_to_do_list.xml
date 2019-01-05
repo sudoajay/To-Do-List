@@ -205,7 +205,6 @@
         android:onClick="On_Click_Process"
         android:paddingStart="5dp"
         android:paddingLeft="5dp"
-        android:text="No Date Set"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/repeat_Off_Image_View"
