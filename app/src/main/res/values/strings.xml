@@ -15,8 +15,8 @@
     <string name="Enter_Time_Answer">Set Time</string>
     <string name="Enter_Date_Answer">Set Date</string>
     <string name="endlessly_Date">Endlessly</string>
-    <string name="calender_icon">Calender_icon</string>
-    <string name="timer_icon">Timer_icon</string>
+    <string name="calender_icon">Calender icon</string>
+    <string name="timer_icon">Timer icon</string>
 
     // Edit Date Text
     <string name="today_Date">Today</string>

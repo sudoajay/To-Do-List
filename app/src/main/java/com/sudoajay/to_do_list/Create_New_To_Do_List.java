@@ -258,9 +258,7 @@ public class Create_New_To_Do_List extends AppCompatActivity {
                     datePickerDialog1.setIcon(R.drawable.check_icon);
                     datePickerDialog1.setTitle("Please select Date.");
                 }
-
                 datePickerDialog1.show();
-
                 break;
         }
     }

@@ -205,7 +205,7 @@
         android:onClick="On_Click_Process"
         android:paddingStart="5dp"
         android:paddingLeft="5dp"
-        android:visibility="gone"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/repeat_Off_Image_View"
         app:layout_constraintHorizontal_bias="0.5"

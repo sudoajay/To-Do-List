@@ -165,7 +165,6 @@ public class MainActivity extends AppCompatActivity {
                         .build();
         WorkManager.getInstance().enqueueUniqueWork("B", ExistingWorkPolicy.REPLACE, morning_Work);
 
-
         WorkManager.getInstance().getWorkInfoByIdLiveData(morning_Work.getId())
                 .observe(this, workInfo -> {
                     // Do something with the status
