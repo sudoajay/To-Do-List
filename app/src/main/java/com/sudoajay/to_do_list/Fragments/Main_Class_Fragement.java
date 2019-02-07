@@ -44,7 +44,6 @@ public class Main_Class_Fragement extends Fragment  implements View.OnClickListe
     private ArrayList<Integer> array_Id,onRepeatId;
     private TextView nothing_Text_View;
     private ImageView nothing_Image_View;
-    private int MYCODE=1000;
     private Main_DataBase mainDataBase;
     private final ArrayList<String> type_Array = new ArrayList<>(Arrays.asList("Overdue", "Today", "Overdo"));
     private final ArrayList<String> weeks_Array = new ArrayList<>(Arrays.asList("Sunday", "Monday", "Tuesday"
@@ -110,18 +109,21 @@ public class Main_Class_Fragement extends Fragment  implements View.OnClickListe
         onRepeatId = new ArrayList<>();
         endlesslyData = new ArrayList<>();
 
-        // database create object
-        mainDataBase = new Main_DataBase(main_Activity);
+
 
     }
     private void Setup_Recycler_View(){
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(main_Activity.getApplicationContext());
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
     }
 
     private void Grab_The_Data_From_DB(){
+
+        // database create object
+        mainDataBase = new Main_DataBase(getContext());
+
         if(!mainDataBase.check_For_Empty()){
             Cursor cursor = mainDataBase.Get_All_Date_And_ID_Done_Week();
             if (cursor != null) {
@@ -152,6 +154,7 @@ public class Main_Class_Fragement extends Fragment  implements View.OnClickListe
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         // Result OK.d.
+        int MYCODE = 1000;
         if (requestCode == MYCODE) {
             Toast.makeText(main_Activity,"something" , Toast.LENGTH_SHORT).show();
             // do something good
@@ -229,6 +232,13 @@ public class Main_Class_Fragement extends Fragment  implements View.OnClickListe
                     check_Box_Array.remove(i);
                     onRepeatId.remove(i);
                     weeks.remove(i);
+                }
+                else {
+
+                    // this is for weekdays configuration
+                    if(onRepeatId.get(i) != 0){
+                        createNewData(i);
+                    }
                 }
             }
 
@@ -350,6 +360,8 @@ public class Main_Class_Fragement extends Fragment  implements View.OnClickListe
     // and this method duplicate the date
     private void createNewData(int i){
 
+        Log.i("getSomething"," --- " + i );
+
         // get the day of today
         Calendar c = Calendar.getInstance();
         int day = c.get(Calendar.DAY_OF_WEEK), count = 0;
@@ -358,7 +370,7 @@ public class Main_Class_Fragement extends Fragment  implements View.OnClickListe
         // for mon -fir
         // for sat , sun
         // for custom weekdays
-        List<Integer> week_Days1,week_Days2,week_Days3 = null,endlessly;
+        List<Integer> week_Days1,week_Days2,week_Days3 = null;
         switch(onRepeatId.get(i)){
             case 1:
                 // this is for daily repeating
@@ -389,7 +401,6 @@ public class Main_Class_Fragement extends Fragment  implements View.OnClickListe
                 }
 
             count = Count_Days_Main(day, week_Days3);
-                Log.d("checking_it", "Week Day  " + week_Days3.get(0) + " cCount "+ count );
                 break;
         }
 
@@ -510,10 +521,8 @@ public class Main_Class_Fragement extends Fragment  implements View.OnClickListe
             count++;
             temp++;
             if(temp==8)temp=1;
-            Log.i("checking_it", "temp = "+temp  + " day = " +day);
 
             for(Integer week:week_Days){
-                Log.i("checking_it", "temp = "+temp  + " day = " +day+ " week = " +week);
                 if(temp == week)return count;
             }
         }while(temp != day);
@@ -534,7 +543,6 @@ public class Main_Class_Fragement extends Fragment  implements View.OnClickListe
 
             // make count
           count+=dates.get(0);
-          Log.i("checking_it ", count + "-" + dates.get(1) + "-" + dates.get(2) + " grab ");
           // check for feb
           if ((dates.get(1) == 1) && ((count) >= 28)) {
               date = Change_Month_Feb(dates, count);

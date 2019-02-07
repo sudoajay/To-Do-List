@@ -117,7 +117,7 @@
     <string name="slide_4_title">Data Restore</string>
     <string name="slide_4_desc">From One Click You Can Restore Your Data To Main Storage</string>
 
-    // custom weekdays Setup
+     <!--custom weekdays Setup-->
     <string-array name="custom_Weekdays_Setup">
         <item>No Repeat</item>
         <item>Daily</item>
@@ -127,4 +127,7 @@
         <item>Custom WeekDay</item>
     </string-array>
 
+    <!--prefManager Shared-->
+    <string name="shared_preference_name">Shared Preference</string>
+    <string name="is_first_time_launch">IsFirstTimeLaunch</string>
 </resources>

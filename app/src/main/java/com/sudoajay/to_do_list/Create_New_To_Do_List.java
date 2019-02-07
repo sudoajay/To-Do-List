@@ -38,7 +38,7 @@ public class Create_New_To_Do_List extends AppCompatActivity {
     private EditText enter_Task_Edit_Task,time_Edit_Text,date_Edit_Text,endlessly_Edit_Text;
     private Main_DataBase mainDataBase;
     private WeekdaysPicker weekdays;
-    private String getSelectedDate,getSelectedEndlesslyDate;
+    private String getSelectedDate="",getSelectedEndlesslyDate;
         // default value is 24 for non empty time
     private int original_Time=24,get_Id ;
     private NiceSpinner custom_Spinner;
@@ -176,7 +176,6 @@ public class Create_New_To_Do_List extends AppCompatActivity {
                 final int nYear = c.get(Calendar.YEAR);
                 final int nMonth = c.get(Calendar.MONTH);
                 final int nDay = c.get(Calendar.DAY_OF_MONTH);
-
                 // time picker dialog setup
                 TimePickerDialog timePickerDialog = new TimePickerDialog(this,android.R.style.Theme_Holo_Dialog,
                         (view12, hourOfDay, minute) -> {
