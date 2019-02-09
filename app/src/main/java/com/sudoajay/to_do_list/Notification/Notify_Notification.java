@@ -39,7 +39,6 @@ public class Notify_Notification {
     private ArrayList<String> save_All_Date,task_Name;
     private ArrayList<Integer> array_Id;
     private Intent update_Intent , edit_Intent;
-    private String which_Type;
     private int total_Size;
 
 
@@ -79,7 +78,7 @@ public class Notify_Notification {
         String text="",channel_id;
         final Resources res = context.getResources();
         this.context = context;
-        this.which_Type =which_Type;
+        String which_Type1 = which_Type;
         final String title = notification_Hint+res.getString(
                 R.string.notification_title_name);
 
@@ -257,7 +256,7 @@ public class Notify_Notification {
     }
         private void Grab_The_Data_From_DB(final String which_Type){
             // local variable
-            String temp;
+            StringBuilder temp;
             Cursor cursor;
             boolean pass=true;
 
@@ -311,12 +310,12 @@ public class Notify_Notification {
                         if(pass) {
                             array_Id.add(cursor.getInt(0));
                             if (cursor.getString(1).length() < 20) {
-                                temp = cursor.getString(1);
+                                temp = new StringBuilder(cursor.getString(1));
                                 for (int i = temp.length() + 1; i <= 20; i++) {
 
-                                    temp += " ";
+                                    temp.append(" ");
                                 }
-                                task_Name.add(temp);
+                                task_Name.add(temp.toString());
                             } else {
                                 task_Name.add(cursor.getString(1).substring(0, 20));
                             }

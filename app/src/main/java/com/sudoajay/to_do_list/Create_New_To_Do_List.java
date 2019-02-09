@@ -10,7 +10,6 @@ import android.database.Cursor;
 import android.speech.RecognizerIntent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -401,11 +400,11 @@ public class Create_New_To_Do_List extends AppCompatActivity {
     }
     public String get_Repeat(){
         List<Integer> weekday = weekdays.getSelectedDays();
-        String join="";
+        StringBuilder join= new StringBuilder();
         for(Integer week: weekday){
-            join+=week+"";
+            join.append(week);
         }
-        return join;
+        return join.toString();
     }
 
     // put value to date box
@@ -452,8 +451,6 @@ public class Create_New_To_Do_List extends AppCompatActivity {
     // check for time was past or not
     private boolean TimeIsPast(int mHour , int mMinute,int selHour, int selMinute){
         if(mHour > selHour)return true;
-        else if(mHour == selHour && mMinute >selMinute)
-            return true;
-        return false;
+        else return mHour == selHour && mMinute > selMinute;
     }
 }

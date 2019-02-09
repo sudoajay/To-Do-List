@@ -12,8 +12,7 @@ import com.sudoajay.to_do_list.Notification.Notify_Notification;
 
 public class WorkManger_Class_A extends Worker {
 
-    private Main_DataBase main_dataBase;
-    private Context context;
+    private final Context context;
     public WorkManger_Class_A(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
         this.context = context;
@@ -23,7 +22,7 @@ public class WorkManger_Class_A extends Worker {
     @Override
     public Result doWork() {
 
-        main_dataBase = new Main_DataBase(context);
+        Main_DataBase main_dataBase = new Main_DataBase(context);
 
 
         // two task at 4 am

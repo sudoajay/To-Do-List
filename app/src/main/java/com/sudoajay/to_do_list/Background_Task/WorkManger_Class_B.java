@@ -10,7 +10,7 @@ import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
 public class WorkManger_Class_B extends Worker {
-    private Context context;
+    private final Context context;
 
 
     public WorkManger_Class_B(@NonNull Context context, @NonNull WorkerParameters workerParams) {

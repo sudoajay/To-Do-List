@@ -8,11 +8,10 @@ import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
 public class WorkManger_Class_D extends Worker {
-    private Context context;
 
     public WorkManger_Class_D(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
-        this.context =context;
+        Context context1 = context;
     }
 
     @NonNull

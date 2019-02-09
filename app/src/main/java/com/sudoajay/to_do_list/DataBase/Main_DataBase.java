@@ -13,7 +13,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class Main_DataBase extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "Database.db";
-    public static  String DATABASE_TABLE_NAME = "DATABASE_TABLE_NAME";
+    public static final String DATABASE_TABLE_NAME = "DATABASE_TABLE_NAME";
     public static final String col_1 = "ID";
     public static final String col_2 = "Task";
     public static final String col_3 = "Date";
@@ -61,10 +61,7 @@ public class Main_DataBase extends SQLiteOpenHelper {
         @SuppressLint("Recycle") Cursor cursor = sqLiteDatabase.rawQuery("select * from "+DATABASE_TABLE_NAME,null);
         cursor.moveToFirst();
         int count = cursor.getCount();
-        if(count > 0) {
-            return false;
-            }
-        return true;
+        return count <= 0;
     }
     public Cursor Get_All_Date_And_ID_Done_Week(){
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
@@ -79,17 +76,9 @@ public class Main_DataBase extends SQLiteOpenHelper {
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         return sqLiteDatabase.rawQuery("select * from DATABASE_TABLE_NAME WHERE ID = ?" ,new String []{ id+"" });
     }
-    public Cursor Get_The_Repeat_From_Id(int id){
-        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
-        return sqLiteDatabase.rawQuery("select Repeat from DATABASE_TABLE_NAME  WHERE ID = ?" ,new String []{id+"" });
-    }
     public Cursor Get_The_Id_From_Done(int done ){
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         return sqLiteDatabase.rawQuery("select ID from DATABASE_TABLE_NAME  WHERE Done = ?" ,new String []{done+"" });
-    }
-    public Cursor Get_The_Date_From_Id(int id){
-        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
-        return sqLiteDatabase.rawQuery("select Date from DATABASE_TABLE_NAME  WHERE ID = ?" ,new String []{id+""});
     }
     public Cursor Get_The_Data_From_Today_Time(int done, String date){
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
@@ -130,20 +119,6 @@ public class Main_DataBase extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put(col_1,id);
         contentValues.put(col_8,Done);
-        sqLiteDatabase.update(DATABASE_TABLE_NAME,contentValues,"ID = ?",new String[] { id });
-    }
-    public void Update_The_Table_For_Date(String id ,String Date ){
-        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(col_1,id);
-        contentValues.put(col_3,Date);
-        sqLiteDatabase.update(DATABASE_TABLE_NAME,contentValues,"ID = ?",new String[] { id });
-    }
-    public void Update_The_Table_For_Repeat(String id ,int  Repeat ){
-        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(col_1,id);
-        contentValues.put(col_5,Repeat);
         sqLiteDatabase.update(DATABASE_TABLE_NAME,contentValues,"ID = ?",new String[] { id });
     }
     public void UpdateTheTableAndClear(String id ){

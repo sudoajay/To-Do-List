@@ -1,18 +1,16 @@
 package com.sudoajay.to_do_list;
 
 import android.annotation.SuppressLint;
+import android.arch.lifecycle.Observer;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Handler;
-import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 import java.util.ArrayList;
@@ -23,6 +21,7 @@ import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.ExistingWorkPolicy;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
 import com.sudoajay.to_do_list.Background_Task.WorkManger_Class_A;
 import com.sudoajay.to_do_list.Background_Task.WorkManger_Class_B;
@@ -30,7 +29,6 @@ import com.sudoajay.to_do_list.Background_Task.WorkManger_Class_C;
 import com.sudoajay.to_do_list.Background_Task.WorkManger_Class_D;
 import com.sudoajay.to_do_list.DataBase.Main_DataBase;
 import com.sudoajay.to_do_list.Fragments.Main_Class_Fragement;
-import com.sudoajay.to_do_list.Notification.Alert_Notification;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -152,34 +150,25 @@ public class MainActivity extends AppCompatActivity {
 
         // this task for cleaning and show today task
 
-        int diff ,hour;
+        int diff ,hours;
         Calendar calendar = Calendar.getInstance();
-         hour = calendar.get(Calendar.HOUR_OF_DAY);
-            if(hour > 4)
-                diff = (24-(hour-4));
+         hours = calendar.get(Calendar.HOUR_OF_DAY);
+            if(hours > 4)
+                diff = (24-(hours-4));
             else {
-                diff = 4-hour;
+                diff = 4-hours;
             }
         OneTimeWorkRequest morning_Work =
-                new OneTimeWorkRequest.Builder(WorkManger_Class_A.class).addTag("A").setInitialDelay( diff,TimeUnit.HOURS)
-                        .build();
-        WorkManager.getInstance().enqueueUniqueWork("B", ExistingWorkPolicy.REPLACE, morning_Work);
+                new OneTimeWorkRequest.Builder(WorkManger_Class_A.class).addTag("Show Today Task").setInitialDelay(diff
+                        , TimeUnit.HOURS).build();
+        WorkManager.getInstance().enqueueUniqueWork("Show Today Task", ExistingWorkPolicy.KEEP, morning_Work);
 
         WorkManager.getInstance().getWorkInfoByIdLiveData(morning_Work.getId())
                 .observe(this, workInfo -> {
                     // Do something with the status
                     if (workInfo != null && workInfo.getState().isFinished()) {
                         // ...
-                        PeriodicWorkRequest.Builder morning_Work_builder =
-                                new PeriodicWorkRequest.Builder(WorkManger_Class_A.class, 1,
-                                        TimeUnit.DAYS).addTag("Morning Work");
-
-                        // Create the actual work object:
-                        PeriodicWorkRequest morning_Worker = morning_Work_builder.build();
-
-                        // Then enqueue the recurring task:
-                        WorkManager.getInstance().enqueueUniquePeriodicWork("Morning Work", ExistingPeriodicWorkPolicy.REPLACE
-                                ,morning_Worker);
+                        Type_A_Task();
                     }
                 });
     }
@@ -195,25 +184,17 @@ public class MainActivity extends AppCompatActivity {
         else {
             diff = 22-hour;
         }
-        OneTimeWorkRequest night_Work =
-                new OneTimeWorkRequest.Builder(WorkManger_Class_B.class).addTag("B").setInitialDelay(diff ,TimeUnit.HOURS )
-                        .build();
-        WorkManager.getInstance().enqueueUniqueWork("B", ExistingWorkPolicy.REPLACE, night_Work);
+        OneTimeWorkRequest morning_Work =
+                new OneTimeWorkRequest.Builder(WorkManger_Class_B.class).addTag("Showing Due Task").setInitialDelay(diff
+                        , TimeUnit.HOURS).build();
+        WorkManager.getInstance().enqueueUniqueWork("Showing Due Task", ExistingWorkPolicy.KEEP, morning_Work);
 
-
-        WorkManager.getInstance().getWorkInfoByIdLiveData(night_Work.getId())
+        WorkManager.getInstance().getWorkInfoByIdLiveData(morning_Work.getId())
                 .observe(this, workInfo -> {
                     // Do something with the status
                     if (workInfo != null && workInfo.getState().isFinished()) {
                         // ...
-                        PeriodicWorkRequest.Builder morning_Work_builder =
-                                new PeriodicWorkRequest.Builder(WorkManger_Class_B.class, 1,
-                                        TimeUnit.DAYS).addTag("Night Work");
-                        // Create the actual work object:
-                        PeriodicWorkRequest morning_Worker = morning_Work_builder.build();
-                        // Then enqueue the recurring task:
-                        WorkManager.getInstance().enqueueUniquePeriodicWork("Night Work", ExistingPeriodicWorkPolicy.REPLACE
-                                ,morning_Worker);
+                        Type_B_Task();
                     }
                 });
     }
@@ -250,7 +231,7 @@ public class MainActivity extends AppCompatActivity {
                 } while (cursor.moveToNext() && total_Minute < 0);
             }
 
-            OneTimeWorkRequest alert_Work;
+
             if (total_Minute < 0 || total_Minute == 0) {
                 assert cursor != null;
                 if(cursor.moveToNext()){
@@ -259,26 +240,18 @@ public class MainActivity extends AppCompatActivity {
                     total_Minute = ((24 - current_hour) * 60) + (60 - current_minute);
                 }
 
-                // is an empty class for
-                 alert_Work =
-                        new OneTimeWorkRequest.Builder(WorkManger_Class_D.class)
-                                .addTag("Alert Task").setInitialDelay(total_Minute, TimeUnit.MINUTES)
-                                .build();
-
-            } else {
-                 alert_Work =
-                        new OneTimeWorkRequest.Builder(WorkManger_Class_C.class)
-                                .addTag("Alert Task").setInitialDelay(total_Minute, TimeUnit.MINUTES)
-                                .build();
             }
-            WorkManager.getInstance().enqueueUniqueWork("Alert Task", ExistingWorkPolicy.REPLACE, alert_Work);
+            OneTimeWorkRequest morning_Work =
+                    new OneTimeWorkRequest.Builder(WorkManger_Class_C.class).addTag("Alert Task").setInitialDelay(total_Minute
+                            , TimeUnit.MINUTES).build();
+            WorkManager.getInstance().enqueueUniqueWork("Alert Task", ExistingWorkPolicy.KEEP, morning_Work);
 
-            WorkManager.getInstance().getWorkInfoByIdLiveData(alert_Work.getId())
+            WorkManager.getInstance().getWorkInfoByIdLiveData(morning_Work.getId())
                     .observe(this, workInfo -> {
                         // Do something with the status
                         if (workInfo != null && workInfo.getState().isFinished()) {
+                            // ...
                             Type_C_Task();
-
                         }
                     });
         }

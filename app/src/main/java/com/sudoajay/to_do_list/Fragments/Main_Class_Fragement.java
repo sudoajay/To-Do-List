@@ -13,7 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.sudoajay.to_do_list.Create_New_To_Do_List;
@@ -109,6 +108,8 @@ public class Main_Class_Fragement extends Fragment  implements View.OnClickListe
         onRepeatId = new ArrayList<>();
         endlesslyData = new ArrayList<>();
 
+        // database create object
+        mainDataBase = new Main_DataBase(getContext());
 
 
     }
@@ -120,9 +121,6 @@ public class Main_Class_Fragement extends Fragment  implements View.OnClickListe
     }
 
     private void Grab_The_Data_From_DB(){
-
-        // database create object
-        mainDataBase = new Main_DataBase(getContext());
 
         if(!mainDataBase.check_For_Empty()){
             Cursor cursor = mainDataBase.Get_All_Date_And_ID_Done_Week();

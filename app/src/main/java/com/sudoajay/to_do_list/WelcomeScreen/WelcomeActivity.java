@@ -26,9 +26,7 @@ import com.sudoajay.to_do_list.R;
 public class WelcomeActivity extends AppCompatActivity {
 
     private ViewPager viewPager;
-    private MyViewPagerAdapter myViewPagerAdapter;
     private LinearLayout dotsLayout;
-    private TextView[] dots;
     private int[] layouts;
     private Button btnSkip, btnNext;
     private PrefManager prefManager;
@@ -70,7 +68,7 @@ public class WelcomeActivity extends AppCompatActivity {
         // making notification bar transparent
         changeStatusBarColor();
 
-        myViewPagerAdapter = new MyViewPagerAdapter();
+        MyViewPagerAdapter myViewPagerAdapter = new MyViewPagerAdapter();
         viewPager.setAdapter(myViewPagerAdapter);
         viewPager.addOnPageChangeListener(viewPagerPageChangeListener);
 
@@ -79,7 +77,7 @@ public class WelcomeActivity extends AppCompatActivity {
         btnNext.setOnClickListener(v -> {
             // checking for last page
             // if last page home screen will be launched
-            int current = getItem(+1);
+            int current = getItem();
             if (current < layouts.length) {
                 // move to next screen
                 viewPager.setCurrentItem(current);
@@ -90,7 +88,7 @@ public class WelcomeActivity extends AppCompatActivity {
     }
 
     private void addBottomDots(int currentPage) {
-        dots = new TextView[layouts.length];
+        TextView[] dots = new TextView[layouts.length];
 
         int[] colorsActive = getResources().getIntArray(R.array.array_dot_active);
         int[] colorsInactive = getResources().getIntArray(R.array.array_dot_inactive);
@@ -108,8 +106,8 @@ public class WelcomeActivity extends AppCompatActivity {
             dots[currentPage].setTextColor(colorsActive[currentPage]);
     }
 
-    private int getItem(int i) {
-        return viewPager.getCurrentItem() + i;
+    private int getItem() {
+        return viewPager.getCurrentItem() + 1;
     }
 
     private void launchHomeScreen() {
@@ -127,7 +125,7 @@ public class WelcomeActivity extends AppCompatActivity {
     }
 
     //	viewpager change listener
-    ViewPager.OnPageChangeListener viewPagerPageChangeListener = new ViewPager.OnPageChangeListener() {
+    final ViewPager.OnPageChangeListener viewPagerPageChangeListener = new ViewPager.OnPageChangeListener() {
 
         @Override
         public void onPageSelected(int position) {

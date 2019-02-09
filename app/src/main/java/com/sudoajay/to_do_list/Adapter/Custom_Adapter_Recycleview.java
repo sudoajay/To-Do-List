@@ -8,7 +8,6 @@ import android.support.annotation.NonNull;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,12 +26,13 @@ import com.sudoajay.to_do_list.R;
 import java.util.ArrayList;
 
 public class Custom_Adapter_Recycleview extends RecyclerView.Adapter<Custom_Adapter_Recycleview.MyViewHolder> {
-    private ArrayList<String> task_Name,task_Info;
-    private ArrayList<Boolean> check_Box_Array;
-    private ArrayList<Integer> array_Id;
-    private MainActivity mainActivity;
-    private Main_Class_Fragement main_class_fragement;
-    private Main_DataBase mainDataBase;
+    private final ArrayList<String> task_Name;
+    private final ArrayList<String> task_Info;
+    private final ArrayList<Boolean> check_Box_Array;
+    private final ArrayList<Integer> array_Id;
+    private final MainActivity mainActivity;
+    private final Main_Class_Fragement main_class_fragement;
+    private final Main_DataBase mainDataBase;
     private ActionMode actionMode;
     private boolean setting_Pressed;
     public Custom_Adapter_Recycleview(MainActivity mainActivity, ArrayList<String> task_Name, ArrayList<Boolean>
@@ -166,7 +166,7 @@ public class Custom_Adapter_Recycleview extends RecyclerView.Adapter<Custom_Adap
 
         // action mode setup or you say configuration
         // anyomous class
-    private ActionMode.Callback mActionModeCallback =new ActionMode.Callback() {
+    private final ActionMode.Callback mActionModeCallback =new ActionMode.Callback() {
             @Override
             public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
                 actionMode.getMenuInflater().inflate(R.menu.top_menu, menu);
@@ -253,9 +253,10 @@ public class Custom_Adapter_Recycleview extends RecyclerView.Adapter<Custom_Adap
 
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        private TextView task_Name_Text_View,task_Info_Text_View;// init the item view's
-        private CheckBox check_Box;
-        private ImageView more_Setting_Image_View;
+        private final TextView task_Name_Text_View;
+        private final TextView task_Info_Text_View;// init the item view's
+        private final CheckBox check_Box;
+        private final ImageView more_Setting_Image_View;
         public MyViewHolder(View itemView) {
             super(itemView);
             // get the reference of item view's

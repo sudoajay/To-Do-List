@@ -12,7 +12,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
 
 import com.sudoajay.to_do_list.Create_New_To_Do_List;
 import com.sudoajay.to_do_list.MainActivity;
