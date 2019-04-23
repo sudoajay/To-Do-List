@@ -92,12 +92,16 @@ public class Main_DataBase extends SQLiteOpenHelper {
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         return sqLiteDatabase.rawQuery("select * from DATABASE_TABLE_NAME WHERE Date = ? And Original_Time >= ? AND Done = ? " ,new String []{ date, time+"" , done+"" });
     }
-    public Cursor Get_The_Id_Name_Original_Time_From_Date_Done_OriginalTime( String date,int time,int done){
+    public Cursor Get_The_Id_Name_Original_Time_From_Date_Done_OriginalTime( String date,int done){
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
-        return sqLiteDatabase.rawQuery("select ID ,Task ,Time,Original_Time from DATABASE_TABLE_NAME  WHERE Date = ? And Original_Time >= ? AND Done = ? " +
-                "ORDER BY Original_Time ASC " ,new String []{date,time+"",done+"" });
+        return sqLiteDatabase.rawQuery("select ID ,Task ,Time,Original_Time from DATABASE_TABLE_NAME  WHERE Date = ? AND Done = ? " +
+                "ORDER BY Original_Time ASC " ,new String []{date,done+"" });
     }
-
+    public Cursor AlertNotificationDatabase(int done ,String date,int originalTime){
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        return sqLiteDatabase.rawQuery("select Task ,Time,Original_Time from DATABASE_TABLE_NAME  WHERE Done = ? AND Date = ? AND Original_Time >= ?" +
+                "ORDER BY Original_Time ASC " ,new String []{done+"",date,originalTime+"" });
+    }
 
     public void Update_The_Table(String id , String Task , String Date,String Time ,int  Repeat ,String customWeekday ,String Endlessly ,int Done ,int Original_Time ){
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();

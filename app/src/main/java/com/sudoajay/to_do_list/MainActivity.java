@@ -1,43 +1,54 @@
 package com.sudoajay.to_do_list;
 
 import android.annotation.SuppressLint;
-import android.arch.lifecycle.Observer;
+import android.app.ActivityManager;
+import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
+import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
+
+import androidx.work.ExistingWorkPolicy;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkInfo;
+import androidx.work.WorkManager;
+
+import com.google.common.util.concurrent.ListenableFuture;
+import com.sudoajay.to_do_list.AlarmManger.CallAlarmManger;
+import com.sudoajay.to_do_list.Background_Task.WorkManger_Class_A;
+import com.sudoajay.to_do_list.Background_Task.WorkManger_Class_B;
+import com.sudoajay.to_do_list.DataBase.Main_DataBase;
+import com.sudoajay.to_do_list.ForegroundService.Foreground;
+import com.sudoajay.to_do_list.ForegroundService.ForegroundDialog;
+import com.sudoajay.to_do_list.ForegroundService.TraceBackgroundService;
+import com.sudoajay.to_do_list.Fragments.Main_Class_Fragement;
+import com.sudoajay.to_do_list.WelcomeScreen.PrefManager;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
-import androidx.work.ExistingPeriodicWorkPolicy;
-import androidx.work.ExistingWorkPolicy;
-import androidx.work.OneTimeWorkRequest;
-import androidx.work.PeriodicWorkRequest;
-import androidx.work.WorkInfo;
-import androidx.work.WorkManager;
-import com.sudoajay.to_do_list.Background_Task.WorkManger_Class_A;
-import com.sudoajay.to_do_list.Background_Task.WorkManger_Class_B;
-import com.sudoajay.to_do_list.Background_Task.WorkManger_Class_C;
-import com.sudoajay.to_do_list.Background_Task.WorkManger_Class_D;
-import com.sudoajay.to_do_list.DataBase.Main_DataBase;
-import com.sudoajay.to_do_list.Fragments.Main_Class_Fragement;
 
 
 public class MainActivity extends AppCompatActivity {
     // global variable
-    private  final ArrayList<String> places = new ArrayList<>(Arrays.asList("Overdue", "Today", "Overdo"));
+    private final ArrayList<String> places = new ArrayList<>(Arrays.asList("Overdue", "Today", "Overdo"));
     private Fragment fragment;
     private BottomNavigationView bottom_Navigation_View;
     private boolean doubleBackToExitPressedOnce;
     private Main_DataBase main_DataBase;
+    private String value = "";
+    private PrefManager prefManager;
+    private TraceBackgroundService traceBackgroundService;
+
     @SuppressLint("ResourceType")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,48 +58,82 @@ public class MainActivity extends AppCompatActivity {
         // Reference here
         Reference();
 
-        if(getIntent().getExtras() != null ) {
+        if (getIntent().getExtras() != null) {
             Intent intent = getIntent();
-            if(intent.hasExtra("Send_The_ID_Array")) {
+            if (intent.hasExtra("Send_The_ID_Array")) {
                 int[] get_Id = intent.getIntArrayExtra("Send_The_ID");
-                for(Integer fill : get_Id) {
+                for (Integer fill : get_Id) {
                     main_DataBase.Update_The_Table_For_Done(fill + "", 1);
                 }
-                }
+            }
+            if (intent.hasExtra("Passing")) {
+                value = intent.getStringExtra("Passing");
+            }
+            if(Objects.requireNonNull(intent.getAction()).equalsIgnoreCase("Stop_Foreground(Setting)")){
+                Intent startIntent = new Intent(getApplicationContext(), Foreground.class);
+                startIntent.putExtra("com.sudoajay.whatapp_media_mover_to_sdcard.ForegroundDialog"
+                        , "Stop_Foreground");
+                startService(startIntent);
+            }
         }
 
-        // task A  == Morning 4 Am
-         Type_A_Task();
 
-        // Task B  == night 10 pm
-        Type_B_Task();
+        if (prefManager.isFirstTimeLaunch()) {
+            //        // task A  == Morning 4 Am
+            TypeATask();
 
-        // Type C Alert Notification
-        Type_C_Task();
+            // Task B  == night 8 pm
+            TypeBTask();
 
-            // bottom navigation setup
-        bottom_Navigation_View.setSelectedItemId(R.id.today_Tab);
-         Main_Class_Fragement main_class_fragement = new Main_Class_Fragement();
-        fragment = main_class_fragement.createInstance(this,places.get(1));
-        Replace_Fragments();
+            // Type C Alert Notification
+            new CallAlarmManger(getApplicationContext());
 
+        }else {
+
+//        Check if background Working or not
+            if(traceBackgroundService.isBackgroundServiceWorking()){
+                traceBackgroundService.isBackgroundWorking();
+            }
+
+            if(!traceBackgroundService.isBackgroundServiceWorking()){
+                if (!isServiceRunningInForeground(getApplicationContext(), Foreground.class)) {
+                    ForegroundDialog foregroundService = new ForegroundDialog(MainActivity.this, MainActivity.this);
+                    foregroundService.call_Thread();
+
+                }
+            }
+        }
+        if (value.equalsIgnoreCase("DueList")) {
+            // bottom navigation setup Due tab
+            bottom_Navigation_View.setSelectedItemId(R.id.overdue_Tab);
+            Main_Class_Fragement main_class_fragement = new Main_Class_Fragement();
+            fragment = main_class_fragement.createInstance(this, places.get(0));
+            Replace_Fragments();
+        } else {
+            // bottom navigation setup Today tab
+            // by default
+            bottom_Navigation_View.setSelectedItemId(R.id.today_Tab);
+            Main_Class_Fragement main_class_fragement = new Main_Class_Fragement();
+            fragment = main_class_fragement.createInstance(this, places.get(1));
+            Replace_Fragments();
+        }
         bottom_Navigation_View.setOnNavigationItemSelectedListener(menuItem -> {
 
             switch (menuItem.getItemId()) {
                 case R.id.overdue_Tab:
                     Main_Class_Fragement main_class_fragement1 = new Main_Class_Fragement();
-                    fragment = main_class_fragement1.createInstance(MainActivity.this,places.get(0));
+                    fragment = main_class_fragement1.createInstance(MainActivity.this, places.get(0));
                     Replace_Fragments();
                     return true;
 
                 case R.id.today_Tab:
                     Main_Class_Fragement main_class_fragement2 = new Main_Class_Fragement();
-                    fragment = main_class_fragement2.createInstance(MainActivity.this,places.get(1));
+                    fragment = main_class_fragement2.createInstance(MainActivity.this, places.get(1));
                     Replace_Fragments();
                     return true;
                 case R.id.overdo_Tab:
                     Main_Class_Fragement main_class_fragement3 = new Main_Class_Fragement();
-                    fragment =main_class_fragement3.createInstance(MainActivity.this,places.get(2));
+                    fragment = main_class_fragement3.createInstance(MainActivity.this, places.get(2));
                     Replace_Fragments();
                     return true;
             }
@@ -100,23 +145,26 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void On_Click_Process(View view){
-        switch (view.getId()){
+    public void On_Click_Process(View view) {
+        switch (view.getId()) {
             case R.id.floatingActionButton:
-                Intent intent = new Intent(getApplicationContext(),Create_New_To_Do_List.class);
+                Intent intent = new Intent(getApplicationContext(), Create_New_To_Do_List.class);
                 startActivity(intent);
                 break;
 
         }
 
     }
-    private void Reference(){
+
+    private void Reference() {
         main_DataBase = new Main_DataBase(this);
         bottom_Navigation_View = findViewById(R.id.bottom_Navigation_View);
-
+         prefManager = new PrefManager(getApplicationContext());
+        traceBackgroundService = new TraceBackgroundService(getApplicationContext());
     }
+
     // Replace Fragments
-    public void Replace_Fragments(){
+    public void Replace_Fragments() {
 
         if (fragment != null) {
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -146,20 +194,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void Type_A_Task(){
+    private void TypeATask() {
 
-        // this task for cleaning and show today task
-
-        int diff ,hours;
+        int fixedHour = 4, diffHour;
+        // this task for cleaning and show today task 4 clock
         Calendar calendar = Calendar.getInstance();
-         hours = calendar.get(Calendar.HOUR_OF_DAY);
-            if(hours > 4)
-                diff = (24-(hours-4));
-            else {
-                diff = 4-hours;
-            }
+        int currentHour = calendar.get(Calendar.HOUR_OF_DAY);
+
+
+        if (currentHour >= fixedHour) {
+            diffHour = (24 - currentHour) + fixedHour;
+        } else {
+            diffHour = fixedHour - currentHour;
+        }
+
+
         OneTimeWorkRequest morning_Work =
-                new OneTimeWorkRequest.Builder(WorkManger_Class_A.class).addTag("Show Today Task").setInitialDelay(diff
+                new OneTimeWorkRequest.Builder(WorkManger_Class_A.class).addTag("Show Today Task").setInitialDelay(diffHour
                         , TimeUnit.HOURS).build();
         WorkManager.getInstance().enqueueUniqueWork("Show Today Task", ExistingWorkPolicy.KEEP, morning_Work);
 
@@ -168,25 +219,32 @@ public class MainActivity extends AppCompatActivity {
                     // Do something with the status
                     if (workInfo != null && workInfo.getState().isFinished()) {
                         // ...
-                        Type_A_Task();
+                        TypeATask();
                     }
                 });
+
+
     }
-    private void Type_B_Task(){
+
+    private void TypeBTask() {
 
         // this task for Showing Due Task
 
-        int diff ,hour;
+        int fixedHour = 20, diffHour;
+        // this task for cleaning and show today task 8 clock pm
         Calendar calendar = Calendar.getInstance();
-        hour = calendar.get(Calendar.HOUR_OF_DAY);
-        if(hour > 22)
-            diff = (24-(hour-22));
-        else {
-            diff = 22-hour;
+        int currentHour = calendar.get(Calendar.HOUR_OF_DAY);
+
+
+        if (currentHour >= fixedHour) {
+            diffHour = (24 - currentHour) + fixedHour;
+        } else {
+            diffHour = fixedHour - currentHour;
         }
+
         OneTimeWorkRequest morning_Work =
-                new OneTimeWorkRequest.Builder(WorkManger_Class_B.class).addTag("Showing Due Task").setInitialDelay(diff
-                        , TimeUnit.HOURS).build();
+                new OneTimeWorkRequest.Builder(WorkManger_Class_B.class).addTag("Showing Due Task").setInitialDelay(2
+                        , TimeUnit.DAYS).build();
         WorkManager.getInstance().enqueueUniqueWork("Showing Due Task", ExistingWorkPolicy.KEEP, morning_Work);
 
         WorkManager.getInstance().getWorkInfoByIdLiveData(morning_Work.getId())
@@ -194,66 +252,30 @@ public class MainActivity extends AppCompatActivity {
                     // Do something with the status
                     if (workInfo != null && workInfo.getState().isFinished()) {
                         // ...
-                        Type_B_Task();
+                        TypeBTask();
                     }
                 });
     }
-    private void Type_C_Task() {
 
-        if (!main_DataBase.check_For_Empty()) {
-
-            Calendar calendar = Calendar.getInstance();
-            int current_Year = calendar.get(Calendar.YEAR);
-            int current_Month = calendar.get(Calendar.MONTH);
-            int current_Day = calendar.get(Calendar.DAY_OF_MONTH);
-            int current_hour = calendar.get(Calendar.HOUR_OF_DAY);
-            int current_minute = calendar.get(Calendar.MINUTE), hour, minute, total_Minute = 0;
-            // for today date
-            String today_Date = current_Day + "-" + current_Month + "-" + current_Year;
-
-            Cursor cursor = main_DataBase.Get_The_Id_Name_Original_Time_From_Date_Done_OriginalTime(today_Date, current_hour, 0);
-            if (cursor != null && cursor.moveToFirst()) {
-                cursor.moveToFirst();
-                do {
-                    // if time is set
-                    if (!cursor.getString(2).isEmpty()) {
-                        String[] split = cursor.getString(2).split(":");
-                        hour = cursor.getInt(3);
-                            minute = Integer.parseInt(split[1].substring(0, 2));
-                    } else {
-                        hour = 16;
-                        minute = 0;
+    public boolean isServiceRunningInForeground(Context context, Class<?> serviceClass) {
+        try {
+            ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+            for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+                if (serviceClass.getName().equals(service.service.getClassName())) {
+                    if (service.foreground) {
+                        return true;
                     }
-
-                    total_Minute = ((hour - current_hour) * 60) + (minute - current_minute);
-
-                    // if is it in minus
-                } while (cursor.moveToNext() && total_Minute < 0);
-            }
-
-
-            if (total_Minute < 0 || total_Minute == 0) {
-                assert cursor != null;
-                if(cursor.moveToNext()){
-                    total_Minute = 1 ;
-                }else {
-                    total_Minute = ((24 - current_hour) * 60) + (60 - current_minute);
                 }
-
             }
-            OneTimeWorkRequest morning_Work =
-                    new OneTimeWorkRequest.Builder(WorkManger_Class_C.class).addTag("Alert Task").setInitialDelay(total_Minute
-                            , TimeUnit.MINUTES).build();
-            WorkManager.getInstance().enqueueUniqueWork("Alert Task", ExistingWorkPolicy.KEEP, morning_Work);
-
-            WorkManager.getInstance().getWorkInfoByIdLiveData(morning_Work.getId())
-                    .observe(this, workInfo -> {
-                        // Do something with the status
-                        if (workInfo != null && workInfo.getState().isFinished()) {
-                            // ...
-                            Type_C_Task();
-                        }
-                    });
+            return false;
+        } catch (Exception e) {
+            if (!ServicesWorking()) return true;
+            return false;
         }
+    }
+
+    public boolean ServicesWorking() {
+            traceBackgroundService.isBackgroundWorking();
+            return  !traceBackgroundService.isBackgroundServiceWorking();
     }
 }

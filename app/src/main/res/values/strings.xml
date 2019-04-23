@@ -59,7 +59,6 @@
     <string name="today_Bottom_Navigation">Today</string>
     <string name="later_Bottom_Navigation">Later</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     // Action Mode
@@ -74,7 +73,6 @@
 
     <string name="notification_title_name"> Reminder </string>
 
-    <!-- TODO: remove this placeholder text -->
 
 
     <!-- Notification Button -->
@@ -130,4 +128,19 @@
     <!--prefManager Shared-->
     <string name="shared_preference_name">Shared Preference</string>
     <string name="is_first_time_launch">IsFirstTimeLaunch</string>
+
+    <!--setting Foreground Service-->
+    <string name="stop_Foreground_Service">Stop Service</string>
+    <string name="why_This_Foreground_Service">Why This ? </string>
+
+    <!--Shared Preference-->
+    <string name="today_task_shared_preference">TodayTask Date</string>
+    <string name="due_task_shared_preference">DueTask Date</string>
+    <string name="background_service_working">Background Service Working</string>
+    <string name="foreground_service_working">Foreground Service Working</string>
+    <string name="background_restriction">Background Restriction</string>
+
+    <string name="custom_Foreground_Permission">Smart phone are more restrict about background Process from which our background task not working So if you want to us to run background task
+        follow the steps which is given on that Website .</string>
+    <string name="custom_Foreground_Permission_Follow">Follow It</string>
 </resources>

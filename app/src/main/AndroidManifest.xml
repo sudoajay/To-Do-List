@@ -6,6 +6,8 @@
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+
 
     <application
         android:allowBackup="true"
@@ -18,7 +20,8 @@
         <activity android:name="com.sudoajay.to_do_list.WelcomeScreen.WelcomeActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:configChanges="orientation"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            tools:ignore="InnerclassSeparator">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -43,8 +46,28 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+        <receiver
+            android:name=".AlarmManger.MyBroadCastReceiver"
+            android:directBootAware="true"
+            android:enabled="true"
+            android:exported="true"
+            tools:ignore="InnerclassSeparator,UnusedAttribute">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.LOCKED_BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+        <service android:name=".ForegroundService.Foreground"
+            tools:ignore="InnerclassSeparator" />
 
-
+        <service android:name=".ForegroundService.ForegroundServiceBoot"
+            tools:ignore="InnerclassSeparator" />
+        <service
+            android:name=".AlarmManger.MyService"
+            android:enabled="true"
+            android:exported="false"
+            android:process=":remote"
+            tools:ignore="InnerclassSeparator" />
     </application>
 
 

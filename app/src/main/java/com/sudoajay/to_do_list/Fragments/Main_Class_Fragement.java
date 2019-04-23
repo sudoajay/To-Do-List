@@ -15,6 +15,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.sudoajay.to_do_list.AlarmManger.CallAlarmManger;
 import com.sudoajay.to_do_list.Create_New_To_Do_List;
 import com.sudoajay.to_do_list.MainActivity;
 import java.util.ArrayList;
@@ -349,7 +351,7 @@ public class Main_Class_Fragement extends Fragment  implements View.OnClickListe
                 mainDataBase.deleteRow(array_Id.get(i)+"");
                 array_Id.remove(i);
                 tick.remove(i);
-
+                new CallAlarmManger(getContext());
             }
         }
         custom_adapter_recycleview.notifyDataSetChanged();
@@ -358,7 +360,6 @@ public class Main_Class_Fragement extends Fragment  implements View.OnClickListe
     // and this method duplicate the date
     private void createNewData(int i){
 
-        Log.i("getSomething"," --- " + i );
 
         // get the day of today
         Calendar c = Calendar.getInstance();
@@ -636,6 +637,6 @@ public class Main_Class_Fragement extends Fragment  implements View.OnClickListe
             check_Box_Array.remove(i);
             onRepeatId.remove(i);
             weeks.remove(i);
-
+            new CallAlarmManger(getContext());
     }
 }

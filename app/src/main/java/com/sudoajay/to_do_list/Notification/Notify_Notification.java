@@ -12,14 +12,16 @@ import android.content.res.Resources;
 import android.database.Cursor;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
+
+import com.sudoajay.to_do_list.DataBase.Main_DataBase;
 import com.sudoajay.to_do_list.MainActivity;
+import com.sudoajay.to_do_list.R;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import com.sudoajay.to_do_list.DataBase.Main_DataBase;
-import com.sudoajay.to_do_list.R;
 
 /**
  * Helper class for showing and canceling alert
@@ -36,81 +38,51 @@ public class Notify_Notification {
     private Context context;
     private NotificationManager notificationManager;
     private Main_DataBase mainDataBase;
-    private ArrayList<String> save_All_Date,task_Name;
+    private ArrayList<String> save_All_Date, task_Name;
     private ArrayList<Integer> array_Id;
-    private Intent update_Intent , edit_Intent;
     private int total_Size;
 
-
-    /**
-     * Shows the notification, or updates a previously shown notification of
-     * this type, with the given parameters.
-     * <p>
-     * TODO: Customize this method's arguments to present relevant content in
-     * the notification.
-     * <p>
-     * TODO: Customize the contents of this method to tweak the behavior and
-     * presentation of alert  notifications. Make
-     * sure to follow the
-     * <a href="https://developer.android.com/design/patterns/notifications.html">
-     * Notification design guidelines</a> when doing so.
-     *
-     * @see #cancel(Context)
-     */
-
     // there Are three Type of Notification
-    // * Alert
     // * Today List
     // * Due List
-
-    /*
-
-             if(which_Type.equalsIgnoreCase("Today List Alert")){
-
-            }else{
-
-            }
-     */
     public void notify(final Context context,
-                              final String notification_Hint , final String which_Type) {
+                       final String notification_Hint, final String which_Type) {
 
         // local variable
-        String text="",channel_id;
+        String text = "", channel_id;
         final Resources res = context.getResources();
         this.context = context;
-        String which_Type1 = which_Type;
-        final String title = notification_Hint+res.getString(
+        final String title = notification_Hint + res.getString(
                 R.string.notification_title_name);
+        Intent passIntent;
 
 
         // Grab the data From Database
         // Store Into Array for Execution
         Grab_The_Data_From_Database(which_Type);
-
+        passIntent = new Intent(context, MainActivity.class);
         // setup according Which Type
         // if There is no data match with query
-        if(which_Type.equalsIgnoreCase("Alert")){
-             channel_id = context.getString(R.string.Channel_Id_Alert); // channel_id
-                text = res.getString(R.string.alert_notification_para, task_Name.get(0));
+        if (which_Type.equalsIgnoreCase("Today List Alert")) {
+            channel_id = context.getString(R.string.Channel_Id_Today_List_Alert); // channel_id
+            text = res.getString(R.string.today_Alert_Notification, total_Size + "");
+            passIntent.putExtra("Passing", "TodayList");
 
-        }else  if(which_Type.equalsIgnoreCase("Today List Alert")){
-             channel_id = context.getString(R.string.Channel_Id_Today_List_Alert); // channel_id
-                text = res.getString(R.string.today_Alert_Notification, total_Size+"");
-
-        }else {
+        } else {
             channel_id = context.getString(R.string.Channel_Id_Due_List_Alert); // channel_id
-                text = res.getString(R.string.due_Alert_Notification, total_Size+"");
+            text = res.getString(R.string.due_Alert_Notification, total_Size + "");
+            passIntent.putExtra("Passing", "DueList");
         }
 
 
         // now check for null notification manger
         if (notificationManager == null) {
-            notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         }
 
         // this check for android Oero In which Channel Id Come as New Feature
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            int importance = NotificationManager.IMPORTANCE_HIGH;
             assert notificationManager != null;
             NotificationChannel mChannel = notificationManager.getNotificationChannel(channel_id);
             if (mChannel == null) {
@@ -119,7 +91,7 @@ public class Notify_Notification {
             }
         }
 
-        final NotificationCompat.Builder builder = new NotificationCompat.Builder(context,channel_id)
+        final NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channel_id)
 
                 // Set appropriate defaults for the notification light, sound,
                 // and vibration.
@@ -133,13 +105,13 @@ public class Notify_Notification {
 
                 // Use a default priority (recognized on devices running Android
                 // 4.1 or later)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-           //     .setSound(uri)
+                .setPriority(NotificationCompat.PRIORITY_MAX)
+                //     .setSound(uri)
                 // Provide a large icon, shown with the notification in the
                 // notification drawer on devices running Android 3.0 or later.
-              //  .setLargeIcon(picture)
+                //  .setLargeIcon(picture)
                 .setStyle(new NotificationCompat.InboxStyle()
-                        .addLine(task_Name.get(0)  + save_All_Date.get(0))
+                        .addLine(task_Name.get(0) + save_All_Date.get(0))
                         .addLine(task_Name.get(1) + save_All_Date.get(1))
                         .addLine(task_Name.get(2) + save_All_Date.get(2))
                         .addLine(task_Name.get(3) + save_All_Date.get(3))
@@ -157,7 +129,6 @@ public class Notify_Notification {
                 // should set the relevant time information using the setWhen
                 // method below. If this call is omitted, the notification's
                 // timestamp will by set to the time at which it was shown.
-                // TODO: Call setWhen if this notification relates to a past or
                 // upcoming event. The sole argument to this method should be
                 // the notification timestamp in milliseconds.
                 //.setWhen(...)
@@ -187,40 +158,41 @@ public class Notify_Notification {
 
         // check if there ia data with empty
         // more and view button classification
-        if(task_Name.size() > 5 && !task_Name.get(0).equals("")) {
+        if (task_Name.size() > 5 && !task_Name.get(0).equals("")) {
             builder.addAction(
                     R.drawable.more_white_icon,
                     res.getString(R.string.action_More),
                     PendingIntent.getActivity(
                             context,
                             0,
-                            new Intent(context, MainActivity.class),
+                            passIntent,
                             PendingIntent.FLAG_UPDATE_CURRENT)
             );
-        }else {
+        } else {
             builder.addAction(
                     R.drawable.view_list_icon,
                     res.getString(R.string.action_View),
                     PendingIntent.getActivity(
                             context,
                             0,
-                            new Intent(context, MainActivity.class),
+                            passIntent,
                             PendingIntent.FLAG_UPDATE_CURRENT)
             );
         }
 
-        if(which_Type.equalsIgnoreCase("Today List Alert")){
+        if (which_Type.equalsIgnoreCase("Today List Alert")) {
             builder.setSmallIcon(R.drawable.overdo_icon);
-        }else{
+        } else {
             builder.setSmallIcon(R.drawable.later_icon);
         }
 
-        if(total_Size > 0) {
+        if (total_Size > 0) {
             notify(context, builder.build());
         }
     }
+
     @TargetApi(Build.VERSION_CODES.ECLAIR)
-    private void notify(final Context context, final Notification notification ) {
+    private void notify(final Context context, final Notification notification) {
 
         notificationManager.notify(NOTIFICATION_TAG, 0, notification);
     }
@@ -228,7 +200,7 @@ public class Notify_Notification {
 
     /**
      * Cancels any notifications of this type previously shown using
-     * {@link #notify(Context, String,String)}.
+     * {@link #notify(Context, String, String)}.
      */
     @TargetApi(Build.VERSION_CODES.ECLAIR)
     private static void cancel(final Context context) {
@@ -242,101 +214,109 @@ public class Notify_Notification {
 
         Initialization();
         Grab_The_Data_From_DB(which_Type);
-        total_Size= task_Name.size();
+        total_Size = task_Name.size();
 
 
         // if array is not have size 5 fill it
-            for (int i = task_Name.size();i<5;i++){
-                array_Id.add(0);
-                task_Name.add("");
-                save_All_Date.add("");
-            }
+        for (int i = task_Name.size(); i < 5; i++) {
+            array_Id.add(0);
+            task_Name.add("");
+            save_All_Date.add("");
+        }
 
 
     }
-        private void Grab_The_Data_From_DB(final String which_Type){
-            // local variable
-            StringBuilder temp;
-            Cursor cursor;
-            boolean pass=true;
 
-            Calendar calendar = Calendar.getInstance();
-            int current_Year= calendar.get(Calendar.YEAR);
-            int current_Month= calendar.get(Calendar.MONTH);
-            int current_Day= calendar.get(Calendar.DAY_OF_MONTH);
-            int current_Hour = calendar.get(Calendar.HOUR_OF_DAY);
+    private void Grab_The_Data_From_DB(final String which_Type) {
+        // local variable
+        StringBuilder temp;
+        Cursor cursor;
+        boolean pass = false;
 
-            // for today date
-            String today_Date=current_Day + "-" + current_Month + "-" +current_Year;
+        Calendar calendar = Calendar.getInstance();
+        int current_Year = calendar.get(Calendar.YEAR);
+        int current_Month = calendar.get(Calendar.MONTH);
+        int current_Day = calendar.get(Calendar.DAY_OF_MONTH);
+        int current_Hour = calendar.get(Calendar.HOUR_OF_DAY);
+        Date todayDate = calendar.getTime();
+
+        // for today date
+        String today_Date = current_Day + "-" + current_Month + "-" + current_Year;
 
 
-            if(!mainDataBase.check_For_Empty()){
-                if(which_Type.equals("Today Alert")) {
-                     cursor = mainDataBase.Get_The_Data_From_Today_Time(0,today_Date);
-                }else if(which_Type.equalsIgnoreCase("Due List Alert")){
-                    cursor = mainDataBase.Get_The_Data_From_Done(0);
-                }else{
-                    cursor =mainDataBase.Get_All_Data_From_Date_Done_Time(today_Date,current_Hour,0);
-                }
-                 // calendar.get(Calendar.DATE)+"-"+
-                //                        calendar.get(Calendar.MONTH)+"-"+calendar.get(Calendar.YEAR)
-                if( cursor != null && cursor.moveToFirst() ){
-                    cursor.moveToFirst();
-                    do
-                    {
-                        if(which_Type.equals("Due List Alert")){
-                            String[] split = cursor.getString(2).split("-");
-                            String date = split[0]+"/"+split[1]+"/"+split[2];
-                            @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-                            try {
-                                Date str =formatter.parse(date);
+        if (!mainDataBase.check_For_Empty()) {
+            if (which_Type.equals("Today List Alert")) {
+                cursor = mainDataBase.Get_The_Data_From_Today_Time(0, today_Date);
+                pass = true;
+            } else {
+                cursor = mainDataBase.Get_The_Data_From_Done(0);
+            }
+            // calendar.get(Calendar.DATE)+"-"+
+            //                        calendar.get(Calendar.MONTH)+"-"+calendar.get(Calendar.YEAR)
 
-                                // after check date
-                                if(System.currentTimeMillis() < str.getTime())pass= false;
+            // complete formula to find due list
+            if (cursor != null && cursor.moveToFirst()) {
+                cursor.moveToFirst();
+                do {
+                    if (which_Type.equals("Due List Alert")) {
+                        String[] split = cursor.getString(2).split("-");
+                        String date = split[0] + "/" + (Integer.parseInt(split[1]) + 1) + "/" + split[2];
+                        @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+                        try {
 
-                                // today date check for time
-                                if(Integer.parseInt(split[0]) == current_Day
-                                        && Integer.parseInt(split[1]) == current_Month
-                                        && Integer.parseInt(split[2]) == current_Year &&
-                                        cursor.getInt(6) >= current_Hour ) pass = false;
-                            } catch (ParseException e) {
-                                e.printStackTrace();
+                            Date getDate = formatter.parse(date);
+
+                            if (getDate.before(todayDate)) {
+                                if (!getTime(todayDate).equals(getTime(getDate)))
+                                    pass = true;
+
                             }
 
+                        } catch (ParseException e) {
+                            e.printStackTrace();
                         }
 
+                    }
+                    if (pass) {
+                        array_Id.add(cursor.getInt(0));
+                        if (cursor.getString(1).length() < 20) {
+                            temp = new StringBuilder(cursor.getString(1));
+                            for (int i = temp.length() + 1; i <= 20; i++) {
 
-
-                        if(pass) {
-                            array_Id.add(cursor.getInt(0));
-                            if (cursor.getString(1).length() < 20) {
-                                temp = new StringBuilder(cursor.getString(1));
-                                for (int i = temp.length() + 1; i <= 20; i++) {
-
-                                    temp.append(" ");
-                                }
-                                task_Name.add(temp.toString());
-                            } else {
-                                task_Name.add(cursor.getString(1).substring(0, 20));
+                                temp.append(" ");
                             }
-                            if (!cursor.getString(3).isEmpty() ) {
-                                save_All_Date.add(cursor.getString(3));
-                            } else {
-                                save_All_Date.add("No Time");
-                            }
-
-
+                            task_Name.add(temp.toString());
+                        } else {
+                            task_Name.add(cursor.getString(1).substring(0, 20));
                         }
-                        pass =true;
-                    }while (cursor.moveToNext());
+                        if (!cursor.getString(3).isEmpty()) {
+                            save_All_Date.add(cursor.getString(3));
+                        } else {
+                            save_All_Date.add("No Time");
+                        }
+                        if (which_Type.equals("Due List Alert"))
+                            pass = false;
+                    }
+                } while (cursor.moveToNext());
                 cursor.close();
-                }
             }
         }
-        private void Initialization(){
+    }
+
+    private void Initialization() {
         save_All_Date = new ArrayList<>();
         task_Name = new ArrayList<>();
         array_Id = new ArrayList<>();
+    }
+
+    public static Date getTime(Date date) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        return cal.getTime();
     }
 
 
