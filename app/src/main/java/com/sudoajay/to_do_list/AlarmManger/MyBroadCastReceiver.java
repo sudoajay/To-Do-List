@@ -7,8 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Build;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.sudoajay.to_do_list.DataBase.Main_DataBase;
 import com.sudoajay.to_do_list.ForegroundService.ForegroundServiceBoot;
@@ -27,8 +25,6 @@ public class MyBroadCastReceiver extends BroadcastReceiver {
             if (Objects.requireNonNull(intent).getAction() != null) {
                 Type_C_Task(context);
             } else {
-                Toast.makeText(context.getApplicationContext(), "Alarm Manager just ran", Toast.LENGTH_LONG).show();
-                Log.d("onReceive", "Done W get");
 
                 // alert Notification
                 Alert_Notification alert_notification = new Alert_Notification();
@@ -77,7 +73,6 @@ public class MyBroadCastReceiver extends BroadcastReceiver {
 
                     total_Minute = ((hour - current_hour) * 60) + (minute - current_minute);
 
-                    Log.d("getTotalTime", total_Minute + "  ---  " + cursor.getString(2));
                 } while (cursor.moveToNext() && total_Minute <= 0);
 
 //                if there is no task for today

@@ -211,8 +211,6 @@ public class Create_New_To_Do_List extends AppCompatActivity {
                 timePickerDialog.setTitle("Please select time.");
                 timePickerDialog.show();
                 break;
-            case R.id.repeat_Image_View:
-                setCustomSpinner();
             case R.id.repeat_Off_Image_View:
             case R.id.endlessly_Edit_Text:
                 // Get Current Date

@@ -93,10 +93,6 @@ public class MainActivity extends AppCompatActivity {
             if (!traceBackgroundService.isBackgroundServiceWorking()) {
                 if (!isServiceRunningInForeground(getApplicationContext(), Foreground.class)) {
 
-                    // cancel the alarm manger
-                    CallAlarmManger callAlarmManger = new CallAlarmManger(getApplicationContext());
-                    callAlarmManger.cancelAlarm();
-
                     ForegroundDialog foregroundService = new ForegroundDialog(MainActivity.this, MainActivity.this);
                     foregroundService.call_Thread();
 
@@ -253,37 +249,6 @@ public class MainActivity extends AppCompatActivity {
                     if (workInfo != null && workInfo.getState().isFinished()) {
                         // ...
                         TypeBTask();
-                    }
-                });
-    }
-
-    private void TypeCTask() {
-
-        // this task for Showing Due Task
-
-        int fixedHour = 20, diffHour;
-        // this task for cleaning and show today task 8 clock pm
-        Calendar calendar = Calendar.getInstance();
-        int currentHour = calendar.get(Calendar.HOUR_OF_DAY);
-
-
-        if (currentHour >= fixedHour) {
-            diffHour = (24 - currentHour) + fixedHour;
-        } else {
-            diffHour = fixedHour - currentHour;
-        }
-
-        OneTimeWorkRequest morning_Work =
-                new OneTimeWorkRequest.Builder(WorkManger_Class_B.class).addTag("Showing Due Task").setInitialDelay(2
-                        , TimeUnit.DAYS).build();
-        WorkManager.getInstance().enqueueUniqueWork("Showing Due Task", ExistingWorkPolicy.KEEP, morning_Work);
-
-        WorkManager.getInstance().getWorkInfoByIdLiveData(morning_Work.getId())
-                .observe(this, workInfo -> {
-                    // Do something with the status
-                    if (workInfo != null && workInfo.getState().isFinished()) {
-                        // ...
-                        TypeCTask();
                     }
                 });
     }

@@ -112,15 +112,14 @@ public class TraceBackgroundService {
         @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
         try {
             Date getDate = dateFormat.parse(getTodayTask());
-            if (yesterDay.after(getDate)) {
-
+            if (yesterDay.after(getDate))
                 setBackgroundServiceWorking(false);
-            }
+
             getDate = dateFormat.parse(getDueTask());
-            if (yesterDay.after(getDate)) {
+            if (yesterDay.after(getDate))
 
                 setBackgroundServiceWorking(false);
-            }
+
 
         } catch (ParseException e) {
             setBackgroundServiceWorking(true);

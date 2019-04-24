@@ -56,7 +56,8 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/back_Image_View"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="RtlSymmetry" />
+                tools:ignore="RtlSymmetry"
+                android:layout_marginStart="10dp" />
 
             <ImageView
                 android:id="@+id/save_Image_View"

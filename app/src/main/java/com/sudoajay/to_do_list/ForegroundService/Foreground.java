@@ -11,11 +11,11 @@ import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
 
 import com.sudoajay.to_do_list.Background_Task.WorkManger_Class_A;
 import com.sudoajay.to_do_list.Background_Task.WorkManger_Class_B;
 import com.sudoajay.to_do_list.MainActivity;
+import com.sudoajay.to_do_list.Notification.Alert_Notification;
 import com.sudoajay.to_do_list.R;
 
 import java.text.DateFormat;
@@ -137,7 +137,9 @@ public class Foreground extends Service {
         if (DatesMatches(traceBackgroundService.getDueTask(), 2)) {
             WorkManger_Class_B.RunThis(getApplicationContext());
         }
-
+        // alert Notification
+        Alert_Notification alert_notification = new Alert_Notification();
+        alert_notification.notify(getApplicationContext(), "Alert ", 0);
         return START_STICKY;
     }
 
@@ -170,7 +172,6 @@ public class Foreground extends Service {
     }
 
     private boolean DatesMatches(final String date, final int type) {
-        Log.d("Letssee", date + " Date " + " type " + type);
         try {
 
             // set The Today Date
