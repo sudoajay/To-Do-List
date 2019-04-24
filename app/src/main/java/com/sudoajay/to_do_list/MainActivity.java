@@ -15,10 +15,8 @@ import android.widget.Toast;
 
 import androidx.work.ExistingWorkPolicy;
 import androidx.work.OneTimeWorkRequest;
-import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
 
-import com.google.common.util.concurrent.ListenableFuture;
 import com.sudoajay.to_do_list.AlarmManger.CallAlarmManger;
 import com.sudoajay.to_do_list.Background_Task.WorkManger_Class_A;
 import com.sudoajay.to_do_list.Background_Task.WorkManger_Class_B;
@@ -32,9 +30,7 @@ import com.sudoajay.to_do_list.WelcomeScreen.PrefManager;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 
@@ -69,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
             if (intent.hasExtra("Passing")) {
                 value = intent.getStringExtra("Passing");
             }
-            if(Objects.requireNonNull(intent.getAction()).equalsIgnoreCase("Stop_Foreground(Setting)")){
+            if (Objects.requireNonNull(intent.getAction()).equalsIgnoreCase("Stop_Foreground(Setting)")) {
                 Intent startIntent = new Intent(getApplicationContext(), Foreground.class);
                 startIntent.putExtra("com.sudoajay.whatapp_media_mover_to_sdcard.ForegroundDialog"
                         , "Stop_Foreground");
@@ -79,7 +75,8 @@ public class MainActivity extends AppCompatActivity {
 
 
         if (prefManager.isFirstTimeLaunch()) {
-            //        // task A  == Morning 4 Am
+
+            // Task A  == Morning 4 Am
             TypeATask();
 
             // Task B  == night 8 pm
@@ -88,15 +85,18 @@ public class MainActivity extends AppCompatActivity {
             // Type C Alert Notification
             new CallAlarmManger(getApplicationContext());
 
-        }else {
-
-//        Check if background Working or not
-            if(traceBackgroundService.isBackgroundServiceWorking()){
+        } else {
+            if (traceBackgroundService.isBackgroundServiceWorking()) {
                 traceBackgroundService.isBackgroundWorking();
             }
 
-            if(!traceBackgroundService.isBackgroundServiceWorking()){
+            if (!traceBackgroundService.isBackgroundServiceWorking()) {
                 if (!isServiceRunningInForeground(getApplicationContext(), Foreground.class)) {
+
+                    // cancel the alarm manger
+                    CallAlarmManger callAlarmManger = new CallAlarmManger(getApplicationContext());
+                    callAlarmManger.cancelAlarm();
+
                     ForegroundDialog foregroundService = new ForegroundDialog(MainActivity.this, MainActivity.this);
                     foregroundService.call_Thread();
 
@@ -159,7 +159,7 @@ public class MainActivity extends AppCompatActivity {
     private void Reference() {
         main_DataBase = new Main_DataBase(this);
         bottom_Navigation_View = findViewById(R.id.bottom_Navigation_View);
-         prefManager = new PrefManager(getApplicationContext());
+        prefManager = new PrefManager(getApplicationContext());
         traceBackgroundService = new TraceBackgroundService(getApplicationContext());
     }
 
@@ -257,6 +257,37 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
+    private void TypeCTask() {
+
+        // this task for Showing Due Task
+
+        int fixedHour = 20, diffHour;
+        // this task for cleaning and show today task 8 clock pm
+        Calendar calendar = Calendar.getInstance();
+        int currentHour = calendar.get(Calendar.HOUR_OF_DAY);
+
+
+        if (currentHour >= fixedHour) {
+            diffHour = (24 - currentHour) + fixedHour;
+        } else {
+            diffHour = fixedHour - currentHour;
+        }
+
+        OneTimeWorkRequest morning_Work =
+                new OneTimeWorkRequest.Builder(WorkManger_Class_B.class).addTag("Showing Due Task").setInitialDelay(2
+                        , TimeUnit.DAYS).build();
+        WorkManager.getInstance().enqueueUniqueWork("Showing Due Task", ExistingWorkPolicy.KEEP, morning_Work);
+
+        WorkManager.getInstance().getWorkInfoByIdLiveData(morning_Work.getId())
+                .observe(this, workInfo -> {
+                    // Do something with the status
+                    if (workInfo != null && workInfo.getState().isFinished()) {
+                        // ...
+                        TypeCTask();
+                    }
+                });
+    }
+
     public boolean isServiceRunningInForeground(Context context, Class<?> serviceClass) {
         try {
             ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
@@ -275,7 +306,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public boolean ServicesWorking() {
-            traceBackgroundService.isBackgroundWorking();
-            return  !traceBackgroundService.isBackgroundServiceWorking();
+        traceBackgroundService.isBackgroundWorking();
+        return !traceBackgroundService.isBackgroundServiceWorking();
     }
 }

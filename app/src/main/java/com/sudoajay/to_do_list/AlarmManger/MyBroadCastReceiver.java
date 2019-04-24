@@ -13,7 +13,6 @@ import android.widget.Toast;
 import com.sudoajay.to_do_list.DataBase.Main_DataBase;
 import com.sudoajay.to_do_list.ForegroundService.ForegroundServiceBoot;
 import com.sudoajay.to_do_list.ForegroundService.TraceBackgroundService;
-import com.sudoajay.to_do_list.MainActivity;
 import com.sudoajay.to_do_list.Notification.Alert_Notification;
 
 import java.util.Calendar;
@@ -25,7 +24,7 @@ public class MyBroadCastReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         TraceBackgroundService traceBackgroundService = new TraceBackgroundService(context);
         if (traceBackgroundService.isBackgroundServiceWorking()) {
-            if (intent.getAction() != null) {
+            if (Objects.requireNonNull(intent).getAction() != null) {
                 Type_C_Task(context);
             } else {
                 Toast.makeText(context.getApplicationContext(), "Alarm Manager just ran", Toast.LENGTH_LONG).show();
@@ -37,7 +36,7 @@ public class MyBroadCastReceiver extends BroadcastReceiver {
 
                 Type_C_Task(context);
             }
-        }else {
+        } else {
             Intent serviceIntent = new Intent(context, ForegroundServiceBoot.class);
             serviceIntent.putExtra("caller", "RebootReceiver");
             context.startService(serviceIntent);

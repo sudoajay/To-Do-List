@@ -19,6 +19,7 @@ public class TraceBackgroundService {
     private SharedPreferences.Editor editor;
     private Context _context;
 
+
     @SuppressLint("CommitPrefEdits")
     public TraceBackgroundService(final Context _context) {
         this._context = _context;
@@ -100,7 +101,7 @@ public class TraceBackgroundService {
         return dateFormat.format(calendar.getTime());
     }
 
-    public  void isBackgroundWorking() {
+    public void isBackgroundWorking() {
 
         // today date
         Calendar calendar = Calendar.getInstance();
@@ -113,19 +114,19 @@ public class TraceBackgroundService {
             Date getDate = dateFormat.parse(getTodayTask());
             if (yesterDay.after(getDate)) {
 
-               setBackgroundServiceWorking(false);
+                setBackgroundServiceWorking(false);
             }
             getDate = dateFormat.parse(getDueTask());
-             if (yesterDay.after(getDate)) {
+            if (yesterDay.after(getDate)) {
 
-               setBackgroundServiceWorking(false);
+                setBackgroundServiceWorking(false);
             }
 
         } catch (ParseException e) {
             setBackgroundServiceWorking(true);
         }
 
-       setBackgroundServiceWorking(true);
+        setBackgroundServiceWorking(true);
 
     }
 }

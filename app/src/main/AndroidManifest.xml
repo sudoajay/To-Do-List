@@ -62,12 +62,6 @@
 
         <service android:name=".ForegroundService.ForegroundServiceBoot"
             tools:ignore="InnerclassSeparator" />
-        <service
-            android:name=".AlarmManger.MyService"
-            android:enabled="true"
-            android:exported="false"
-            android:process=":remote"
-            tools:ignore="InnerclassSeparator" />
     </application>
 
 
