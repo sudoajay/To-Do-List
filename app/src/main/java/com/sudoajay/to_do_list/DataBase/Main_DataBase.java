@@ -99,7 +99,7 @@ public class Main_DataBase extends SQLiteOpenHelper {
     }
     public Cursor AlertNotificationDatabase(int done ,String date,int originalTime){
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
-        return sqLiteDatabase.rawQuery("select Task ,Time,Original_Time from DATABASE_TABLE_NAME  WHERE Done = ? AND Date = ? AND Original_Time >= ?" +
+        return sqLiteDatabase.rawQuery("select ID, Task ,Time,Original_Time from DATABASE_TABLE_NAME  WHERE Done = ? AND Date = ? AND Original_Time >= ?" +
                 "ORDER BY Original_Time ASC " ,new String []{done+"",date,originalTime+"" });
     }
 

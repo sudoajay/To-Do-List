@@ -30,7 +30,6 @@ import com.sudoajay.to_do_list.WelcomeScreen.PrefManager;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 
@@ -53,26 +52,25 @@ public class MainActivity extends AppCompatActivity {
 
         // Reference here
         Reference();
-
         if (getIntent().getExtras() != null) {
             Intent intent = getIntent();
             if (intent.hasExtra("Send_The_ID_Array")) {
-                int[] get_Id = intent.getIntArrayExtra("Send_The_ID");
+                ArrayList<Integer> get_Id = intent.getIntegerArrayListExtra("Send_The_ID_Array");
                 for (Integer fill : get_Id) {
+                    Toast.makeText(getApplicationContext(), fill + "  ", Toast.LENGTH_SHORT).show();
                     main_DataBase.Update_The_Table_For_Done(fill + "", 1);
                 }
             }
             if (intent.hasExtra("Passing")) {
                 value = intent.getStringExtra("Passing");
             }
-            if (Objects.requireNonNull(intent.getAction()).equalsIgnoreCase("Stop_Foreground(Setting)")) {
+            if (intent.getAction() != null && intent.getAction().equals("Stop_Foreground(Setting)")) {
                 Intent startIntent = new Intent(getApplicationContext(), Foreground.class);
                 startIntent.putExtra("com.sudoajay.whatapp_media_mover_to_sdcard.ForegroundDialog"
                         , "Stop_Foreground");
                 startService(startIntent);
             }
         }
-
 
         if (prefManager.isFirstTimeLaunch()) {
 
@@ -204,11 +202,10 @@ public class MainActivity extends AppCompatActivity {
             diffHour = fixedHour - currentHour;
         }
 
-
         OneTimeWorkRequest morning_Work =
-                new OneTimeWorkRequest.Builder(WorkManger_Class_A.class).addTag("Show Today Task").setInitialDelay(diffHour
-                        , TimeUnit.HOURS).build();
-        WorkManager.getInstance().enqueueUniqueWork("Show Today Task", ExistingWorkPolicy.KEEP, morning_Work);
+                new OneTimeWorkRequest.Builder(WorkManger_Class_A.class).addTag("Show Today Task").setInitialDelay(15
+                        , TimeUnit.MINUTES).build();
+        WorkManager.getInstance().enqueueUniqueWork("Show Today Task", ExistingWorkPolicy.REPLACE, morning_Work);
 
         WorkManager.getInstance().getWorkInfoByIdLiveData(morning_Work.getId())
                 .observe(this, workInfo -> {

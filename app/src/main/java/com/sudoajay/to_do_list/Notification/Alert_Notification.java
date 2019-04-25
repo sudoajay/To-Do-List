@@ -233,25 +233,26 @@ public class Alert_Notification {
             if (cursor != null && cursor.moveToFirst()) {
                 cursor.moveToFirst();
                 do {
-                    if (current_hour == cursor.getInt(2)) {
-                        if (!cursor.getString(1).isEmpty()) {
-                            String[] split = cursor.getString(1).split(":");
+                    if (current_hour == cursor.getInt(3)) {
+                        if (!cursor.getString(2).isEmpty()) {
+                            String[] split = cursor.getString(2).split(":");
                             getMinute = Integer.parseInt(split[1].substring(0, 2));
 
                             if (getMinute < current_Minute-1) pass = false;
                         }
-                    } else if (cursor.getString(1).isEmpty() && cursor.getInt(2) == 24) {
+                    } else if (cursor.getString(2).isEmpty() && cursor.getInt(3) == 24) {
                         if (current_hour != 16) pass = false;
                     } else {
                         pass = false;
                     }
                     if (pass) {
-                        taskName.add(cursor.getString(0));
-                        if (cursor.getInt(2) != 24)
-                            saveDate.add(cursor.getString(1));
+                        taskName.add(cursor.getString(1));
+                        if (cursor.getInt(3) != 24)
+                            saveDate.add(cursor.getString(2));
                         else {
                             saveDate.add("No Time Set");
                         }
+                        array_Id.add(cursor.getInt(0));
                     }
                     pass = true;
                 } while (cursor.moveToNext());
@@ -277,7 +278,7 @@ public class Alert_Notification {
     // complete action method
     private void Update_The_Done() {
         update_Intent = new Intent(context, MainActivity.class);
-        update_Intent.putExtra("Send_The_ID_Array", array_Id);
+        update_Intent.putIntegerArrayListExtra("Send_The_ID_Array", array_Id);
     }
 
     // Snooze action method

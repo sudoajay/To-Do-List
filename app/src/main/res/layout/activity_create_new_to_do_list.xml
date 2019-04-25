@@ -301,7 +301,6 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:contentDescription="@string/timer_icon"
-        android:onClick="On_Click_Process"
         android:padding="5dp"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"

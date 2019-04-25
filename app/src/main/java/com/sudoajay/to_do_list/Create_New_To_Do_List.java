@@ -387,7 +387,8 @@ public class Create_New_To_Do_List extends AppCompatActivity {
                         time_Edit_Text.getText().toString(), custom_Spinner.getSelectedIndex(), get_Repeat(),
                         getSelectedEndlesslyDate, 0, original_Time);
             }
-
+            // check the alarm manager
+            new CallAlarmManger(getApplicationContext());
 
             Calendar calendar = Calendar.getInstance();
             int current_Year = calendar.get(Calendar.YEAR);
