@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.BottomNavigationView;
@@ -57,7 +58,6 @@ public class MainActivity extends AppCompatActivity {
             if (intent.hasExtra("Send_The_ID_Array")) {
                 ArrayList<Integer> get_Id = intent.getIntegerArrayListExtra("Send_The_ID_Array");
                 for (Integer fill : get_Id) {
-                    Toast.makeText(getApplicationContext(), fill + "  ", Toast.LENGTH_SHORT).show();
                     main_DataBase.Update_The_Table_For_Done(fill + "", 1);
                 }
             }
@@ -71,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
                 startService(startIntent);
             }
         }
+
 
         if (prefManager.isFirstTimeLaunch()) {
 

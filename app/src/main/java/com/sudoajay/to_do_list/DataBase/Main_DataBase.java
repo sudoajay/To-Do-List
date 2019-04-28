@@ -63,9 +63,9 @@ public class Main_DataBase extends SQLiteOpenHelper {
         int count = cursor.getCount();
         return count <= 0;
     }
-    public Cursor Get_All_Date_And_ID_Done_Week(){
+    public Cursor GetAllData(){
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
-        return sqLiteDatabase.rawQuery("select Date ,ID ,Done,Repeat,customWeekday,Endlessly from DATABASE_TABLE_NAME ORDER BY Original_Time ASC "
+        return sqLiteDatabase.rawQuery("select Date ,ID ,Done,Repeat,customWeekday,Endlessly from DATABASE_TABLE_NAME ORDER BY Date ASC , Original_Time ASC  "
                 ,null);
     }
     public Integer deleteRow(String id){
@@ -80,6 +80,11 @@ public class Main_DataBase extends SQLiteOpenHelper {
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         return sqLiteDatabase.rawQuery("select ID from DATABASE_TABLE_NAME  WHERE Done = ?" ,new String []{done+"" });
     }
+    public Cursor GetTheId(final String task, final String date ){
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        return sqLiteDatabase.rawQuery("select Date ,ID ,Done,Repeat,customWeekday,Endlessly" +
+                " from DATABASE_TABLE_NAME  WHERE Task = ? AND Date = ? " ,new String []{task,date });
+    }
     public Cursor Get_The_Data_From_Today_Time(int done, String date){
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         return sqLiteDatabase.rawQuery("select * from DATABASE_TABLE_NAME WHERE Date = ? AND Done = ?  ORDER BY Original_Time ASC "  ,new String []{date , done+"" });
@@ -87,10 +92,6 @@ public class Main_DataBase extends SQLiteOpenHelper {
     public Cursor Get_The_Data_From_Done(int done){
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         return sqLiteDatabase.rawQuery("select * from DATABASE_TABLE_NAME WHERE Done = ?  ORDER BY Original_Time ASC "  ,new String []{ done+"" });
-    }
-    public Cursor Get_All_Data_From_Date_Done_Time(String date,int time,int done){
-        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
-        return sqLiteDatabase.rawQuery("select * from DATABASE_TABLE_NAME WHERE Date = ? And Original_Time >= ? AND Done = ? " ,new String []{ date, time+"" , done+"" });
     }
     public Cursor Get_The_Id_Name_Original_Time_From_Date_Done_OriginalTime( String date,int done){
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();

@@ -195,6 +195,7 @@ public class Notify_Notification {
     private void notify(final Context context, final Notification notification) {
 
         notificationManager.notify(NOTIFICATION_TAG, 0, notification);
+
     }
 
 
