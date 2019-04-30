@@ -60,7 +60,7 @@ public class Foreground extends Service {
                     // Set required fields, including the small icon, the
                     // notification title, and text.
                     .setContentTitle("Foreground Service")
-
+                    .setVibrate(new long[]{0L}) // no vibration
                     // All fields below this line are optional.
 
                     // Use a default priority (recognized on devices running Android
@@ -167,9 +167,6 @@ public class Foreground extends Service {
         return null;
     }
 
-    private void OnStop() {
-        stopSelf();
-    }
 
     private boolean DatesMatches(final String date, final int type) {
         try {

@@ -561,7 +561,7 @@ public class Main_Class_Fragement extends Fragment implements View.OnClickListen
             }
 
             // check for months pass
-            else if ((count) >= 30) {
+            else if ((count) > 30) {
                 date = Change_Month(dates, count);
             } else {
                 date = (count) + "-" + dates.get(1) + "-" + dates.get(2);

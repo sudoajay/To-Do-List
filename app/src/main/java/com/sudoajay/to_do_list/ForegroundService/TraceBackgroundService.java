@@ -117,15 +117,11 @@ public class TraceBackgroundService {
 
             getDate = dateFormat.parse(getDueTask());
             if (yesterDay.after(getDate))
-
                 setBackgroundServiceWorking(false);
-
 
         } catch (ParseException e) {
             setBackgroundServiceWorking(true);
         }
-
-        setBackgroundServiceWorking(true);
 
     }
 }

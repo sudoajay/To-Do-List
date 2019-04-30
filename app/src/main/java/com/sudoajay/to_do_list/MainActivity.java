@@ -4,13 +4,13 @@ import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -53,8 +53,9 @@ public class MainActivity extends AppCompatActivity {
 
         // Reference here
         Reference();
+        Intent intent = getIntent();
         if (getIntent().getExtras() != null) {
-            Intent intent = getIntent();
+
             if (intent.hasExtra("Send_The_ID_Array")) {
                 ArrayList<Integer> get_Id = intent.getIntegerArrayListExtra("Send_The_ID_Array");
                 for (Integer fill : get_Id) {
@@ -64,12 +65,13 @@ public class MainActivity extends AppCompatActivity {
             if (intent.hasExtra("Passing")) {
                 value = intent.getStringExtra("Passing");
             }
-            if (intent.getAction() != null && intent.getAction().equals("Stop_Foreground(Setting)")) {
-                Intent startIntent = new Intent(getApplicationContext(), Foreground.class);
-                startIntent.putExtra("com.sudoajay.whatapp_media_mover_to_sdcard.ForegroundDialog"
-                        , "Stop_Foreground");
-                startService(startIntent);
-            }
+        }
+        if (intent.getAction() != null && intent.getAction().equals("Stop_Foreground(Setting)")) {
+            Intent startIntent = new Intent(getApplicationContext(), Foreground.class);
+            startIntent.putExtra("com.sudoajay.whatapp_media_mover_to_sdcard.ForegroundDialog"
+                    , "Stop_Foreground");
+            startService(startIntent);
+
         }
 
 
