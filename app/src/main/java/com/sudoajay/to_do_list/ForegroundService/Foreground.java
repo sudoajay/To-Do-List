@@ -60,7 +60,8 @@ public class Foreground extends Service {
                     // Set required fields, including the small icon, the
                     // notification title, and text.
                     .setContentTitle("Foreground Service")
-                    .setVibrate(new long[]{0L}) // no vibration
+                    .setDefaults(Notification.DEFAULT_LIGHTS | Notification.DEFAULT_SOUND)
+                    .setVibrate(new long[]{0L})
                     // All fields below this line are optional.
 
                     // Use a default priority (recognized on devices running Android
