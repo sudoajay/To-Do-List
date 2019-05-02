@@ -71,7 +71,12 @@ public class MainActivity extends AppCompatActivity {
             startIntent.putExtra("com.sudoajay.whatapp_media_mover_to_sdcard.ForegroundDialog"
                     , "Stop_Foreground");
             startService(startIntent);
-
+        }
+        if(intent.getAction() != null && intent.getAction().equalsIgnoreCase("RunForegroundService")){
+            Intent startIntent = new Intent(getApplicationContext(), Foreground.class);
+            startIntent.putExtra("com.sudoajay.whatapp_media_mover_to_sdcard.ForegroundDialog"
+                    , "Start_Foreground");
+            startService(startIntent);
         }
 
 

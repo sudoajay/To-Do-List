@@ -51,12 +51,15 @@
             android:directBootAware="true"
             android:enabled="true"
             android:exported="true"
+            android:label="RestartServiceWhenStopped"
             tools:ignore="InnerclassSeparator,UnusedAttribute">
             <intent-filter>
+                <action android:name="RestartService"/>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.LOCKED_BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
+
         <service android:name=".ForegroundService.Foreground"
             tools:ignore="InnerclassSeparator" />
 

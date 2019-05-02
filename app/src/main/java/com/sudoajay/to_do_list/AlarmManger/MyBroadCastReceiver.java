@@ -34,7 +34,7 @@ public class MyBroadCastReceiver extends BroadcastReceiver {
             }
         } else {
             Intent serviceIntent = new Intent(context, ForegroundServiceBoot.class);
-            serviceIntent.putExtra("caller", "RebootReceiver");
+            serviceIntent.setAction("RebootReceiver");
             context.startService(serviceIntent);
         }
     }

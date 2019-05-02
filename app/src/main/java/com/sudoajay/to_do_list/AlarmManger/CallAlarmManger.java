@@ -9,8 +9,6 @@ import android.os.Build;
 public class CallAlarmManger {
 
     private Context context;
-    private AlarmManager alarmManager;
-    private PendingIntent pendingIntent;
 
     public CallAlarmManger(final Context context) {
         this.context = context;
@@ -18,10 +16,10 @@ public class CallAlarmManger {
     }
 
     private void Task() {
-        alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent alarmIntent = new Intent(context, MyBroadCastReceiver.class);
         alarmIntent.setAction("JustCallTask");
-        pendingIntent = PendingIntent.getBroadcast(context, 0, alarmIntent, 0);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, alarmIntent, 0);
 
         startAlarm(alarmManager, pendingIntent);
     }
@@ -37,9 +35,5 @@ public class CallAlarmManger {
             alarmManager.set(AlarmManager.RTC_WAKEUP, 0, pendingIntent);
         }
 
-    }
-
-    public void cancelAlarm() {
-        alarmManager.cancel(pendingIntent);
     }
 }

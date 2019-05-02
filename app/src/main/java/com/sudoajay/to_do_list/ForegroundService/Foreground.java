@@ -1,14 +1,17 @@
 package com.sudoajay.to_do_list.ForegroundService;
 
+import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.IBinder;
+import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 
@@ -31,6 +34,7 @@ public class Foreground extends Service {
 
     public static final String CHANNEL_ID = "Foreground Service";
     private TraceBackgroundService traceBackgroundService;
+    private PendingIntent pendingIntent;
 
     @Override
     public void onCreate() {
@@ -56,7 +60,6 @@ public class Foreground extends Service {
             stopIntent.setAction("Stop_Foreground(Setting)");
 
             NotificationCompat.Builder notification = new NotificationCompat.Builder(this, CHANNEL_ID)
-                    .setDefaults(Notification.DEFAULT_ALL)
                     // Set required fields, including the small icon, the
                     // notification title, and text.
                     .setContentTitle("Foreground Service")
@@ -66,7 +69,7 @@ public class Foreground extends Service {
 
                     // Use a default priority (recognized on devices running Android
                     // 4.1 or later)
-                    .setPriority(NotificationCompat.PRIORITY_MAX)
+                    .setPriority(NotificationCompat.PRIORITY_HIGH)
                     //     .setSound(uri)
                     // Provide a large icon, shown with the notification in the
                     // notification drawer on devices running Android 3.0 or later.
@@ -144,6 +147,7 @@ public class Foreground extends Service {
         return START_STICKY;
     }
 
+
     private void createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel serviceChannel = new NotificationChannel(
@@ -157,9 +161,21 @@ public class Foreground extends Service {
         }
     }
 
+
     @Override
     public void onDestroy() {
-        super.onDestroy();
+        startForeground();
+    }
+
+    @Override
+    public void onTaskRemoved(Intent rootIntent) {
+        startForeground();
+    }
+
+    private void startForeground() {
+        Intent serviceIntent = new Intent(getApplicationContext(), ForegroundServiceBoot.class);
+        serviceIntent.setAction("RebootReceiver");
+        getApplication().startService(serviceIntent);
     }
 
     @Nullable
@@ -174,6 +190,7 @@ public class Foreground extends Service {
 
             // set The Today Date
             Calendar todayCalender = Calendar.getInstance();
+            int todayHour = todayCalender.get(Calendar.HOUR);
             Date todayDate = todayCalender.getTime();
 
             // convert to Date
@@ -189,8 +206,16 @@ public class Foreground extends Service {
                     }
                 }
             }
-            if (format.format(todayDate).equals(format.format(curDate)))
-                return true;
+            if (format.format(todayDate).equals(format.format(curDate))) {
+                if (type == 1) {
+                    if (todayHour >= 4) // today task at 4 am
+                        return true;
+
+                } else {
+                    if (todayHour >= 20) // due task at 8 pm
+                        return true;
+                }
+            }
             return false;
         } catch (ParseException e) {
             return false;
